@@ -169,6 +169,9 @@ tr.missed td{background:#FFF1A8!important;color:#1E2A33!important}
 .pill{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:25;background:#FFF1A8;color:#1E2A33;border:2px solid #E0B400;border-radius:999px;padding:8px 16px;font-size:15.5px;box-shadow:0 3px 10px rgba(0,0,0,.25);max-width:calc(100% - 140px);text-align:center}
 .pill.paused{background:var(--surface);color:var(--ink);border-color:var(--red)}
 .pill .pgo{font:inherit;font-size:14.5px;font-weight:700;background:var(--red);color:#fff;border:0;border-radius:999px;padding:4px 10px;margin-left:6px;cursor:pointer}
+.lock .gotry{font-size:14px;padding:3px 10px;margin-left:6px}
+.sorter.required{border-top-color:var(--gold)}
+.sorter.required>.lbl{color:var(--gold)}
 .listen ol{list-style:none;padding:0;margin:0 0 10px}
 .listen li{border-left:4px solid var(--line);padding:9px 12px;margin:0 0 6px;background:var(--bg);border-radius:0 6px 6px 0;cursor:pointer;opacity:.6}
 .listen li.on{opacity:1;border-left-color:var(--terra);background:var(--terra-soft)}
@@ -267,8 +270,8 @@ tr.missed td{background:#FFF1A8!important;color:#1E2A33!important}
 <li>The most important form is the <strong>string quartet</strong>: two violins, a viola, and a cello, usually in four movements like a symphony. It's often compared to a lively conversation among four intelligent people.</li>
 <li>Other popular groups: the sonata for violin and piano, the <strong>piano trio</strong> (violin, cello, piano), and the <strong>string quintet</strong> (two violins, two violas, cello).</li>
 </ul>
-<div class="act sorter" data-options="Symphony|Concerto|Chamber music">
-<p class="lbl">Try it</p><h4>Symphony, concerto, or chamber music?</h4>
+<div class="act sorter required" data-options="Symphony|Concerto|Chamber music">
+<p class="lbl">Try it · required to unlock this room</p><h4>Symphony, concerto, or chamber music?</h4>
 <ol>
 <li data-a="Concerto"><span class="txt">A soloist plays a cadenza while the orchestra waits.</span></li>
 <li data-a="Chamber music"><span class="txt">Four players, no conductor, like a conversation.</span></li>
@@ -434,8 +437,8 @@ tr.missed td{background:#FFF1A8!important;color:#1E2A33!important}
 <a class="vlink" href="https://www.youtube.com/watch?v=QpYKVzErt-E" target="_blank" rel="noopener"><span class="play" aria-hidden="true"></span><span class="vt"><small>Watch on YouTube</small>Beethoven: Symphony No. 5, I. Allegro con brio (London Philharmonic Orchestra)</span></a>
 <p>Beethoven's String Quartet in C Minor, Op. 18, No. 4 (1798–1800) ends with a lively <strong>rondo</strong> in the pattern <strong>A B A C A B A</strong>. Its main theme sounds like a lively Romani folk dance in a minor key, and at the last return it speeds up into a wild, frenzied ending.</p>
 <a class="vlink" href="https://www.youtube.com/watch?v=KrPpK39XCF0" target="_blank" rel="noopener"><span class="play" aria-hidden="true"></span><span class="vt"><small>Watch on YouTube</small>Beethoven: String Quartet Op. 18, No. 4, IV. Allegro (animated graphical score)</span></a>
-<div class="act sorter" data-options="Haydn|Mozart|Beethoven">
-<p class="lbl">Try it</p><h4>Who am I?</h4>
+<div class="act sorter required" data-options="Haydn|Mozart|Beethoven">
+<p class="lbl">Try it · required to unlock this room</p><h4>Who am I?</h4>
 <ol>
 <li data-a="Haydn"><span class="txt">I served the Esterházy family, then became a celebrity in London.</span></li>
 <li data-a="Mozart"><span class="txt">I toured Europe as a child prodigy and wrote <em>The Magic Flute</em>.</span></li>
@@ -491,8 +494,8 @@ tr.missed td{background:#FFF1A8!important;color:#1E2A33!important}
 <tr><td>Emotion and imagination</td><td>Beethoven's powerful contrasts, like the Fifth Symphony</td><td>Goya and the first Romantic painters</td><td>German Romanticism and Goethe's <em>Faust</em></td></tr>
 <tr><td>Dance</td><td>Minuets, scherzos, and waltzes for Vienna's balls</td><td>Lancret's paintings of dancers</td><td>Noverre's story ballets, including one with Mozart's music</td></tr>
 </table></div>
-<div class="act sorter" data-options="Music|Art|Theater">
-<p class="lbl">Try it</p><h4>Which art form shows the idea?</h4>
+<div class="act sorter required" data-options="Music|Art|Theater">
+<p class="lbl">Try it · required to unlock this room</p><h4>Which art form shows the idea?</h4>
 <ol>
 <li data-a="Art"><span class="txt">Heroes: Napoleon on a rearing horse, crossing the Alps.</span></li>
 <li data-a="Music"><span class="txt">Heroes: a symphony first named "Bonaparte," then renamed "Heroic."</span></li>
@@ -829,14 +832,16 @@ document.querySelectorAll('.listen').forEach(function(box){
     var box = document.createElement('div'); box.className = 'lock'; box.id = 'lock-' + r.id; sec.appendChild(box); r.box = box;
     var next = ri === rooms.length - 1 ? 'Enter the final room →' : 'Enter room ' + (ri + 2) + ': ' + rooms[ri + 1].title + ' →';
     box.innerHTML = '<p class="lbl">🔒 Room ' + (ri + 1) + ' lock</p>' +
-      '<div class="gate"><h4>Keep reading! The lock appears after you finish this room.</h4>' +
+      '<div class="gate"><h4>Keep going! The lock appears after you finish this room.</h4>' +
       '<p class="gl"><span class="ck end">○</span> Scroll through the whole room</p>' +
       '<p class="gl"><span class="ck time">○</span> Spend at least ' + fmt(r.need) + ' reading this room <span class="tleft"></span></p>' +
+      (sec.querySelector('.sorter') ? '<p class="gl"><span class="ck try">○</span> Complete the <b>Try it</b> activity in this room <span class="tryleft"></span> <button type="button" class="btn gotry">Go to Try it ↑</button></p>' : '') +
       '<div class="meter"><span style="width:0%"></span></div></div>' +
       '<div class="qs" hidden></div>' +
       '<div class="jammed" hidden><p><strong>🚫 The lock is jammed!</strong> You missed this question:</p><p class="mq"></p><p>The part of the room with the answer is now <mark>highlighted</mark>. Reread it carefully. When you finish, the lock will give you new questions.</p><p class="gl"><span class="ck rr">○</span> Reread the highlighted part <span class="rleft"></span></p><div class="meter"><span style="width:0%"></span></div><button type="button" class="btn primary showme">Show me the part I missed ↑</button></div>' +
       '<div class="unlocked" hidden><p class="found">You found a letter of the escape code: <span class="letter">' + C.code[ri] + '</span></p><button type="button" class="btn primary go">' + next + '</button></div>';
     box.querySelector('.showme').onclick = function(){ var el = findPassage(r); if (el) el.scrollIntoView({behavior:'smooth', block:'center'}); };
+    var gt = box.querySelector('.gotry'); if (gt) gt.onclick = function(){ var t = sec.querySelector('.sorter'); if (t) t.scrollIntoView({behavior:'smooth', block:'start'}); };
     box.querySelector('.go').onclick = function(){ var el = document.getElementById(ri === rooms.length - 1 ? 'words' : rooms[ri + 1].id); if (el) el.scrollIntoView({behavior:'smooth'}); };
   });
   function norm(t){ return (t || '').replace(/[\u2018\u2019]/g, "'").replace(/\s+/g, ' ').toLowerCase(); }
@@ -878,7 +883,8 @@ document.querySelectorAll('.listen').forEach(function(box){
     }; }); });
   }
   function lockState(r){
-    var b = r.box, solved = st.solved[r.id] || teacher, ready = teacher || (st.end[r.id] && (st.read[r.id] || 0) >= r.need), jam = !solved && !!st.miss[r.id];
+    var sec2 = document.getElementById(r.id), tItems = sec2.querySelectorAll('.sorter li'), tDone = sec2.querySelectorAll('.sorter li.ok').length, tryOk = tDone === tItems.length;
+    var b = r.box, solved = st.solved[r.id] || teacher, ready = teacher || (st.end[r.id] && (st.read[r.id] || 0) >= r.need && tryOk), jam = !solved && !!st.miss[r.id];
     b.classList.toggle('done', !!solved);
     b.querySelector('.lbl').textContent = (solved ? '🔓 ' : '🔒 ') + 'Room ' + (rooms.indexOf(r) + 1) + ' lock' + (solved ? ': unlocked' : '');
     b.querySelector('.gate').hidden = !!(solved || ready);
@@ -894,6 +900,8 @@ document.querySelectorAll('.listen').forEach(function(box){
       b.querySelector('.ck.time').textContent = t >= r.need ? '✓' : '○'; b.querySelector('.ck.time').classList.toggle('yes', t >= r.need);
       b.querySelector('.tleft').textContent = t >= r.need ? '' : '(' + fmt(r.need - t) + ' left)';
       b.querySelector('.meter span').style.width = Math.min(100, t / r.need * 100) + '%';
+      var ck = b.querySelector('.ck.try'); if (ck){ ck.textContent = tryOk ? '✓' : '○'; ck.classList.toggle('yes', tryOk);
+        b.querySelector('.tryleft').textContent = tryOk ? '' : '(' + tDone + ' of ' + tItems.length + ' done)'; b.querySelector('.gotry').hidden = tryOk; }
     }
     document.querySelectorAll('#' + r.id + ' .missed.lm').forEach(function(x){ if (!jam || !r.passage || x !== r.passage.el) x.classList.remove('missed','lm'); });
     if (jam){ var m = st.miss[r.id], el = findPassage(r); if (el) el.classList.add('missed','lm');
