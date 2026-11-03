@@ -252,9 +252,9 @@ footer{text-align:center;font-size:14px;color:var(--muted);padding:20px 0 90px}
 .dark .word{white-space:normal;max-width:46%;text-align:center;font-size:17px;line-height:1.2}
 </style></head>
 <body>
-<div class="topbar"><div class="in"><span class="t">Riot at the Théâtre</span><span class="pbar" aria-hidden="true"><i id="pfill"></i></span><span class="pct" id="pct">0% of the tokens</span></div></div>
+<div class="topbar"><div class="in"><span class="t">Riot at the Théâtre</span><span class="pbar" aria-hidden="true"><i id="pfill"></i></span><span class="pct" id="pct">0% of the keys</span></div></div>
 <div class="wrap2"><div class="stage" id="stage">
-<div class="hud"><div class="slots" id="slots" aria-label="Tokens won"></div><span class="sp"></span>
+<div class="hud"><div class="slots" id="slots" aria-label="Keys won"></div><span class="sp"></span>
 <button type="button" class="hbtn" id="doorsBtn">🚪 Doors</button><button type="button" class="hbtn" id="wordsBtn">📖 Words</button><button type="button" class="hbtn" id="submitBtn">📤 Submit</button><button type="button" class="hbtn" id="soundBtn" aria-label="Sound on">🔊</button><button type="button" class="hbtn" id="exitBtn">Exit</button></div>
 <div id="screen" aria-live="polite"></div>
 <div class="curtain l"></div><div class="curtain r"></div>
@@ -420,7 +420,7 @@ function story(){ cur = {name: "story"};
     '<p class="lede">In the chaos, a phantom rises from the orchestra pit: the <b>Phantom of the Old Rules</b>. He wants to wipe out modern art forever. Only a secret password can banish him.</p>' +
     '<div class="btns"><button class="btn gold" id="go" data-focus>Continue</button></div>', function(){ on("go", plea); }, {cls: "center"}); }
 function plea(){ cur = {name: "plea"};
-  show(speaker(SVG.diaghilev, "Serge Diaghilev, impresario", "Thank goodness you’re here! Behind each of the nine doors of my theater is a room full of modern art. Read the program notes in each room, then win its token. Every token hides one letter of the password that banishes the Phantom. Will you help us?") +
+  show(speaker(SVG.diaghilev, "Serge Diaghilev, impresario", "Thank goodness you’re here! Behind each of the nine doors of my theater is a room full of modern art. Read the program notes in each room, then win the key to its door. Every key hides one letter of the password that banishes the Phantom. Will you help us?") +
     '<div class="btns"><button class="btn ghost" id="no">No thanks, I’ll pass</button><button class="btn gold" id="yes" data-focus>Of course!</button></div>',
     function(){ on("no", sad); on("yes", gift); }, {cls: "center"}); }
 function sad(){ show(speaker(SVG.diaghilev, "Serge Diaghilev", "Ouch! I thought you loved the arts… What will become of the avant-garde?") +
@@ -428,15 +428,15 @@ function sad(){ show(speaker(SVG.diaghilev, "Serge Diaghilev", "Ouch! I thought 
 function gift(){ show(speaker(SVG.diaghilev, "Serge Diaghilev", "I knew you wouldn’t fail me! Here is how it works:") +
     '<ol class="how"><li>Open any door, in any order.</li><li>Read the program notes all the way to the end. Your reading time counts only while the notes are open and this tab is in front.</li>' +
     '<li>Then face the room’s challenge: three questions. One wrong answer sends you back to reread the <mark>highlighted</mark> part of the notes, and then you get new questions.</li>' +
-    '<li>Each token you win shows one letter of the password. Win all nine, banish the Phantom, and see your grades.</li>' +
+    '<li>Each key you win shows one letter of the password. Win all nine, banish the Phantom, and see your grades.</li>' +
     '<li>Finally, take the Canvas quiz <b>“' + L.final + '.”</b> Use <b>Submit</b> (top of the game) to send your answers to your teacher. Your progress saves in this browser.</li></ol>' +
     '<div class="btns"><button class="btn gold" id="go" data-focus>Go to the theater doors</button></div>', function(){ on("go", doors); }, {cls: "center"}); }
 
 function doors(){ cur = {name: "doors"};
   var n = stops.filter(solved).length, all = n === stops.length;
-  var html = '<h2>' + (all ? "All nine tokens are yours" : "The theater doors") + '</h2><p class="sub">' + (all ? "The Phantom is waiting in the orchestra pit." : "Open any door. Tokens won: " + n + " of 9.") + '</p><div class="doors">' +
+  var html = '<h2>' + (all ? "All nine keys are yours" : "The theater doors") + '</h2><p class="sub">' + (all ? "The Phantom is waiting in the orchestra pit." : "Open any door. Keys won: " + n + " of 9.") + '</p><div class="doors">' +
     stops.map(function(s, i){ var g = solved(s), started = st.read[s.id] || st.wrong[s.id];
-      var tag = g ? "Token won: " + L.code[i] : (st.miss[s.id] ? "Reread needed" : started ? "In progress" : "Enter");
+      var tag = g ? "Key won: " + L.code[i] : (st.miss[s.id] ? "Reread needed" : started ? "In progress" : "Enter");
       return '<button type="button" class="door' + (g ? " done" : "") + '" data-i="' + i + '"><span class="dicon">' + s.icon + '</span><span class="dname">' + (i + 1) + ". " + s.title + '</span><span class="dsub">' + s.room + '</span><span class="tag">' + tag + "</span></button>"; }).join("") + "</div>" +
     (all ? '<div class="btns"><button class="btn velvet" id="boss" data-focus>Face the Phantom</button></div>' : "");
   show(html, function(){ $$(".door", screen).forEach(function(d){ d.onclick = function(){ intro(+d.dataset.i); }; }); on("boss", finale); });
@@ -444,7 +444,7 @@ function doors(){ cur = {name: "doors"};
 function intro(i){ var s = stops[i];
   if (solved(s) || st.read[s.id] || st.miss[s.id]) return notes(i);
   cur = {name: "intro", i: i};
-  show('<div class="bigicon">' + s.icon + '</div><h2>Door ' + (i + 1) + ": " + s.title + '</h2><p class="lede">You step into ' + s.room.toLowerCase() + '. Read the program notes to the end, then face the challenge to win this room’s token.</p>' +
+  show('<div class="bigicon">' + s.icon + '</div><h2>Door ' + (i + 1) + ": " + s.title + '</h2><p class="lede">You step into ' + s.room.toLowerCase() + '. Read the program notes to the end, then face the challenge to win the key to this door.</p>' +
     '<div class="btns"><button class="btn gold" id="go" data-focus>Read the program notes</button><button class="btn ghost" id="back">Back to the doors</button></div>',
     function(){ on("go", function(){ notes(i); }); on("back", doors); }, {cls: "center"}); }
 
@@ -461,7 +461,7 @@ function ready(s){ return teacher || (st.end[s.id] && (st.read[s.id] || 0) >= s.
 function gateUI(){
   if (cur.name !== "notes") return; var s = stops[cur.i], g = $("#gate"); if (!g) return;
   var html;
-  if (solved(s)) html = '<p class="lbl">🔓 Token won! Its letter: <span class="letter">' + L.code[s.i] + '</span></p><div class="btns"><button class="btn gold" id="gdoors">Back to the doors</button>' + (teacher ? '<button class="btn ghost" id="gchal">Preview the challenge</button>' : "") + "</div>";
+  if (solved(s)) html = '<p class="lbl">🔓 Key won! Its letter: <span class="letter">' + L.code[s.i] + '</span></p><div class="btns"><button class="btn gold" id="gdoors">Back to the doors</button>' + (teacher ? '<button class="btn ghost" id="gchal">Preview the challenge</button>' : "") + "</div>";
   else if (st.miss[s.id]){ var m = st.miss[s.id];
     html = '<p class="lbl">🧭 Wrong turn! Reread before you try again.</p><p>You missed: <b>“' + esc(s.bank[m.q][0]) + '”</b></p><p>The answer is in the <mark>highlighted</mark> part of these notes.</p>' +
       '<p class="gl"><span class="ck">○</span> Reread the highlighted part (' + fmt(m.need - (m.seen || 0)) + ' left)</p><div class="meter"><span style="width:' + Math.min(100, (m.seen || 0) / m.need * 100) + '%"></span></div><div class="btns"><button class="btn" id="gshow">Show me the highlighted part</button></div>'; }
@@ -499,27 +499,27 @@ function ask(s, idx, n){
 }
 function jam(s, b){ cur = {name: "jam", i: s.i};
   var t = s.skin.type === "speaker" ? speaker(SVG[s.skin.who], s.skin.name, s.skin.taunt) : '<p class="lede">' + s.skin.taunt + "</p>";
-  show('<h2>Wrong turn!</h2>' + t + '<p class="lede">You missed: <b>“' + b[0] + '”</b></p><p>The token stays hidden. The answer is <mark>highlighted</mark> in the program notes. Reread it; when the timer finishes, you will get new questions.</p>' +
+  show('<h2>Wrong turn!</h2>' + t + '<p class="lede">You missed: <b>“' + b[0] + '”</b></p><p>The key stays hidden. The answer is <mark>highlighted</mark> in the program notes. Reread it; when the timer finishes, you will get new questions.</p>' +
     '<div class="btns"><button class="btn gold" id="go" data-focus>Reread the notes</button><button class="btn ghost" id="back">Back to the doors</button></div>',
     function(){ on("go", function(){ notes(s.i, {focus: true}); }); on("back", doors); }, {cls: "center"}); }
 function won(s){ cur = {name: "won", i: s.i}; sWin();
-  show('<div class="bigicon">' + s.icon + '</div><h2>You won the token of ' + s.room.toLowerCase() + '!</h2><p class="lede">Its letter of the password: <span class="letter">' + L.code[s.i] + "</span></p>" +
+  show('<div class="bigicon">' + s.icon + '</div><h2>You won the key to ' + s.room.toLowerCase() + '!</h2><p class="lede">Its letter of the password: <span class="letter">' + L.code[s.i] + "</span></p>" +
     '<div class="btns"><button class="btn gold" id="go" data-focus>Back to the doors</button></div>', function(){ on("go", doors); }, {cls: "center"}); }
 
 /* ---------- finale + results ---------- */
 function finale(){ cur = {name: "finale"};
   if (!stops.every(solved)) return doors();
   show('<div class="bossrow"><div class="boss">' + SVG.phantom + '</div>' + '<div class="bubble"><span class="who">The Phantom of the Old Rules</span>How dare you bring that noise into my theater! Melodies must be pretty. Chords must resolve. You will never find the password!</div></div>' +
-    '<p class="lede">Your tokens spell the password. Type it to banish the Phantom.</p><div class="code">' + L.code.split("").map(function(c){ return "<span>" + c + "</span>"; }).join("") + '</div>' +
+    '<p class="lede">Your keys spell the password. Type it to banish the Phantom.</p><div class="code">' + L.code.split("").map(function(c){ return "<span>" + c + "</span>"; }).join("") + '</div>' +
     '<form id="pwf" class="pwf" onsubmit="return false"><input id="pw" autocomplete="off" aria-label="Password" placeholder="Type the password" data-focus><button class="btn velvet" id="pwgo">Banish him!</button></form><p class="feedback" id="pwfb"></p>',
-    function(){ var f = function(){ if ($("#pw").value.trim().toUpperCase() === L.code){ st.done = true; save(); results(); } else { sBad(); $("#pwfb").textContent = "The Phantom laughs. Check the letters on your tokens and try again."; } };
+    function(){ var f = function(){ if ($("#pw").value.trim().toUpperCase() === L.code){ st.done = true; save(); results(); } else { sBad(); $("#pwfb").textContent = "The Phantom laughs. Check the letters on your keys and try again."; } };
       on("pwgo", f); }, {cls: "center"}); }
 function results(){ cur = {name: "results"}; sWin();
   var rows = stops.map(function(s, i){ return "<tr><td>" + (i + 1) + ". " + s.title + "</td><td>" + L.code[i] + "</td><td>" + (st.wrong[s.id] || 0) + "</td><td>" + (teacher ? "—" : grade(s)) + "</td></tr>"; }).join("");
   var avg = Math.round(stops.reduce(function(a, s){ return a + grade(s); }, 0) / stops.length);
   show('<h1 class="big">The Phantom is banished!</h1><p class="lede">The password <b class="pwd">' + L.code + '</b> echoes through the theater, and the Old Rules dissolve into a single, unresolved chord. The riot is over.</p>' +
     '<p>History agrees with you: the same audience that booed in 1913 soon cheered <i>The Rite of Spring</i> as a masterpiece.</p>' +
-    '<div class="program"><h3>Your grades</h3><div class="tablewrap"><table><thead><tr><th>Token</th><th>Clue</th><th>Wrong answers</th><th>Grade</th></tr></thead><tbody>' + rows +
+    '<div class="program"><h3>Your grades</h3><div class="tablewrap"><table><thead><tr><th>Door key</th><th>Clue</th><th>Wrong answers</th><th>Grade</th></tr></thead><tbody>' + rows +
     '<tr><td colspan="3"><b>Overall average</b></td><td><b>' + (teacher ? "—" : avg) + "</b></td></tr></tbody></table></div>" +
     '<h3>Now take your graded quiz in Canvas</h3><ol><li>In this Canvas module, open the quiz <b>“' + L.final + '.”</b></li><li>Question 1 asks for the password you just used: the treasure word.</li><li>Keep this page open in another tab during the quiz, so you can use the Words to Know below.</li><li>Then press <b>Submit</b> at the top of the game to send your answers to your teacher.</li></ol>' +
     '<h3>📖 Words to Know</h3>' + wordsBlock() + "</div>" +
@@ -545,9 +545,9 @@ function buildReport(){
         if (r.done && r.first === "ok") right++; R.push("- " + cleanTxt($(".txt", li)) + "  ->  " + res); }); R.push(""); }); });
   R.push("Try it items correct on the first try: " + right + " of " + total); R.push("");
   var n = stops.filter(function(s){ return st.solved[s.id]; }).length;
-  R.push("== Breakout: " + n + " of 9 tokens won" + (st.done ? " (Phantom banished!)" : "") + " ==");
-  stops.forEach(function(s, i){ R.push("Door " + (i + 1) + " (" + s.title + "): " + (st.solved[s.id] ? "token won" : "not won yet") + ", reading time " + fmt(st.read[s.id] || 0) + ", wrong tries " + (st.wrong[s.id] || 0) + (st.solved[s.id] ? ", grade " + grade(s) + "/100" : "")); });
-  R.push(n === 9 ? "Overall breakout grade: " + Math.round(stops.reduce(function(a, s){ return a + grade(s); }, 0) / 9) + "/100" : "Overall grade: not available until all 9 tokens are won");
+  R.push("== Breakout: " + n + " of 9 keys won" + (st.done ? " (Phantom banished!)" : "") + " ==");
+  stops.forEach(function(s, i){ R.push("Door " + (i + 1) + " (" + s.title + "): " + (st.solved[s.id] ? "key won" : "not won yet") + ", reading time " + fmt(st.read[s.id] || 0) + ", wrong tries " + (st.wrong[s.id] || 0) + (st.solved[s.id] ? ", grade " + grade(s) + "/100" : "")); });
+  R.push(n === 9 ? "Overall breakout grade: " + Math.round(stops.reduce(function(a, s){ return a + grade(s); }, 0) / 9) + "/100" : "Overall grade: not available until all 9 keys are won");
   R.push(""); R.push("== Written answers ==");
   stops.forEach(function(s){ box.innerHTML = s.tpl.innerHTML; $$(".discuss", box).forEach(function(d){ var a = ""; try { a = localStorage.getItem(KEY + "-disc-" + d.dataset.k) || ""; } catch(e){}
     R.push("Q: " + cleanTxt($("p", d))); R.push("A: " + (a.trim() || "(no answer)")); R.push(""); }); });
@@ -664,7 +664,7 @@ document.addEventListener("keydown", function(e){ if (e.key === "Escape"){ var l
 function hud(){
   $("#slots").innerHTML = stops.map(function(s, i){ var g = solved(s); return '<span class="slot' + (g ? " got" : "") + '" title="' + s.title + '">' + (g ? L.code[i] : s.icon) + "</span>"; }).join("");
   var pct = Math.round(stops.filter(solved).length / stops.length * 100);
-  $("#pfill").style.width = pct + "%"; $("#pct").textContent = pct + "% of the tokens";
+  $("#pfill").style.width = pct + "%"; $("#pct").textContent = pct + "% of the keys";
 }
 var pill = $("#pill"), pillGo = null;
 pill.onclick = function(){ if (pillGo) pillGo(); };
