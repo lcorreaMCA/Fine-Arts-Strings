@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>21st-Century Arts: Snakes and Ladders</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bungee&display=swap" rel="stylesheet"><style>
+:root{color-scheme:light;--bg:#eef0fa;--surface:#ffffff;--ink:#1c1f3b;--muted:#545a7a;--line:#cfd4ea;--night:#262a66;--deep:#1a1d4d;--butter:#ffe6a1;--mint:#bceae5;--peach:#ffcdb9;--sky:#cad7ff;--pink:#d92f73;--gold:#ffc23d;--snake:#2c9c57;--spot:#a6e36f;--wood:#c9772f;--accent:#3b3fa8;--ok:#1f7a45;--ok-soft:#d8f2e2;--red:#b3263c;--red-soft:#f8dde2;--hl:#fff176;
+--display:"Bungee","Arial Black","Trebuchet MS",sans-serif;--body:"Atkinson Hyperlegible","Segoe UI",Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#11132e;--surface:#1c1f42;--ink:#e8eaf8;--muted:#a9aecb;--line:#343869;--accent:#a9adff;--ok:#7fd6a0;--ok-soft:#1d3a2c;--red:#ff8a9c;--red-soft:#4a1c26}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#11132e;--surface:#1c1f42;--ink:#e8eaf8;--muted:#a9aecb;--line:#343869;--accent:#a9adff;--ok:#7fd6a0;--ok-soft:#1d3a2c;--red:#ff8a9c;--red-soft:#4a1c26}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px);scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18.5px;line-height:1.6}
+h1,h2,h3,h4{font-family:var(--display);font-weight:400;line-height:1.15}
+h2{font-size:clamp(24px,3.8vw,34px);margin:.2em 0 .5em;color:var(--accent)}
+h3{font-size:21px;color:var(--accent);margin:1.2em 0 .4em}
+h4{font-size:18px;margin:.2em 0 .5em}
+a{color:var(--pink)}
+p{margin:.7em 0}
+.sm{font-size:15.5px;color:var(--muted)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+/* top bar */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:50;padding-top:env(safe-area-inset-top,0px);background:var(--deep);color:#e8eaf8;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.topbar .in{max-width:940px;margin:0 auto;padding:8px 18px;display:flex;align-items:center;gap:12px;font-size:15px}
+.topbar .t{font-family:var(--display);color:var(--gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar .pbar{flex:1;height:10px;border-radius:2px;background:rgba(255,255,255,.12);overflow:hidden;min-width:60px}
+.topbar .pbar i{display:block;height:100%;width:0;background:repeating-linear-gradient(90deg,var(--gold) 0 10px,#ffd877 10px 12px);transition:width .5s}
+.topbar .pct{white-space:nowrap;font-weight:700}
+.teacherbar{background:var(--gold);color:#1c1f3b;font-size:15px;padding:8px 18px;text-align:center;font-weight:700}
+.teacherbar a{color:#1c1f3b}
+/* stage */
+.wrap2{max-width:940px;margin:0 auto;padding:64px 10px 30px}
+.stage{position:relative;border-radius:14px;overflow:hidden;background:var(--night);background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:22px 22px;border:5px solid var(--deep);box-shadow:0 10px 28px rgba(20,22,60,.35);color:#eceefb}
+.hud{position:relative;z-index:2;display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 10px;background:rgba(0,0,0,.25);border-bottom:2px solid rgba(255,255,255,.08)}
+.slots{display:flex;gap:4px;flex-wrap:wrap}
+.slot{width:32px;height:34px;border-radius:4px;display:grid;place-items:center;background:rgba(255,255,255,.06);border:1.5px dashed rgba(255,255,255,.35);font-size:15px}
+.slot.got{border:2px solid var(--gold);background:var(--pink);font-family:var(--display);font-size:18px;color:#fff}
+.hud .sp{flex:1}
+.hbtn{font:700 15px var(--body);background:rgba(255,255,255,.08);color:#eceefb;border:1.5px solid rgba(255,255,255,.28);border-radius:6px;padding:5px 11px;cursor:pointer}
+.hbtn:hover{background:rgba(255,194,61,.22)}
+#screen{position:relative;z-index:1;min-height:520px;padding:22px 20px 26px}
+#screen.center{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#screen.center .lede{max-width:640px}
+#screen h2{color:var(--gold)}
+.stage .wipe{position:absolute;inset:0;z-index:3;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(26,29,77,.96) 0 6px,rgba(38,42,102,.96) 6px 12px);transform:scaleY(0);transform-origin:top;transition:transform .3s ease-in}
+.stage.closing .wipe{transform:scaleY(1)}
+.big{font-size:clamp(40px,8.5vw,84px);color:#fff;margin:.05em 0;line-height:.95;display:flex;flex-direction:column;align-items:center}
+.big span:first-child{color:var(--spot);text-shadow:0 5px 0 var(--snake)}
+.big span:last-child{color:var(--gold);text-shadow:0 5px 0 var(--wood)}
+.big .amp{font-size:.45em;color:var(--pink);text-shadow:none;margin:.1em 0}
+.tagline{font-family:var(--display);letter-spacing:.04em;color:#c9cdf5;margin:.3em 0 0;font-size:18px}
+.lede{font-size:20px}
+.date{color:#c9cdf5;margin:0;font-style:italic}
+.btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:16px 0 4px}
+.btn{font:700 16px var(--body);padding:8px 16px;border-radius:6px;border:2px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer}
+.btn:hover{background:rgba(59,63,168,.08)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.right{background:var(--ok-soft);border-color:var(--ok);color:var(--ink)}
+.btn.wrong{background:var(--red-soft);border-color:var(--red);color:var(--ink)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#1c1f3b;font-family:var(--display);font-weight:400;font-size:17px;padding:10px 22px;box-shadow:0 4px 0 #b9821a}
+.btn.gold:hover{background:#ffd264}
+.btn.pink{background:var(--pink);border-color:var(--pink);color:#fff;font-family:var(--display);font-weight:400;font-size:17px;padding:10px 22px;box-shadow:0 4px 0 #8f1748}
+.btn.ghost{border-color:rgba(255,255,255,.55);color:#eceefb}
+.btn.ghost:hover{background:rgba(255,255,255,.08)}
+.btn.ghost2{border-color:var(--line);color:var(--muted);font-size:14px}
+/* speaker */
+.speaker{display:flex;gap:16px;align-items:center;text-align:left;max-width:660px;margin:12px auto 0}
+.speaker svg{flex:0 0 112px;width:112px;height:124px}
+.bubble{background:#fffdf3;color:#1c1f3b;border-radius:10px;padding:14px 18px;font-size:18.5px;position:relative;border:3px solid var(--deep);box-shadow:4px 4px 0 rgba(0,0,0,.25)}
+.bubble .who{font-family:var(--display);color:var(--pink);font-size:14px;display:block}
+@media (max-width:600px){.speaker{flex-direction:column;text-align:center}.speaker svg{flex-basis:auto;width:90px;height:100px}}
+.how{text-align:left;max-width:660px;margin:14px auto;background:rgba(0,0,0,.22);border-radius:10px;padding:12px 18px 12px 38px}
+.how li{margin:.35em 0}
+.how mark{color:#1c1f3b}
+/* tokens */
+.tokpick{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:16px 0}
+.tok{font:inherit;background:#fffdf3;color:#1c1f3b;border:3px solid var(--deep);border-radius:10px;padding:10px 16px;cursor:pointer;min-width:122px;display:flex;flex-direction:column;align-items:center;box-shadow:0 4px 0 var(--deep)}
+.tok .e{font-size:44px;line-height:1.1}
+.tok b{font-family:var(--display);font-weight:400;font-size:16px}
+.tok:hover{border-color:var(--gold);box-shadow:0 4px 0 var(--deep),0 0 0 4px rgba(255,194,61,.45)}
+/* board */
+#screen.boardscr{padding:16px 14px 22px}
+.bwrap{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:16px;align-items:start}
+@media (max-width:760px){.bwrap{grid-template-columns:1fr}}
+.board{background:var(--deep);border-radius:10px;padding:8px;border:3px solid #10123a;box-shadow:inset 0 0 0 2px rgba(255,255,255,.08)}
+.grid{position:relative;display:grid;gap:3px}
+.cell{position:relative;border-radius:4px;background:var(--butter);color:#2a2c55;border:0;padding:0;font:inherit;display:block;min-height:0}
+.cell.c0{background:var(--butter)}.cell.c1{background:var(--mint)}.cell.c2{background:var(--peach)}.cell.c3{background:var(--sky)}
+.cell .n{position:absolute;left:3px;top:1px;font-size:clamp(9px,1.4vw,12.5px);font-weight:700;opacity:.7}
+.cell.special,.cell.finish{z-index:3}
+.cell.special{background:var(--pink);color:#fff;cursor:pointer;box-shadow:inset 0 0 0 3px var(--gold)}
+.cell.special .n{opacity:.9}
+.cell.special .si{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(15px,2.6vw,26px)}
+.cell.special.done{background:#7a2a86}
+.cell.special.done .si{font-family:var(--display);color:var(--gold);font-size:clamp(17px,2.8vw,28px)}
+.cell.finish{background:repeating-conic-gradient(#fff 0 25%,#1c1f3b 0 50%) 0 0/14px 14px;box-shadow:inset 0 0 0 3px var(--gold)}
+.cell.finish .n{background:var(--gold);color:#1c1f3b;border-radius:3px;padding:0 3px;opacity:1}
+.cell.finish .si{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(15px,2.6vw,26px)}
+.cell .toks{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;font-size:clamp(18px,3.2vw,30px);line-height:1}
+.cell:has(.me){z-index:4}
+.cell .toks span.me{filter:drop-shadow(0 2px 0 #fff) drop-shadow(0 3px 2px rgba(0,0,0,.5));animation:bob 1.4s ease-in-out infinite}
+.toks span.me.pop{animation:pop .5s ease-out}
+@keyframes bob{50%{transform:translateY(-3px)}}
+@keyframes pop{0%{transform:scale(.2)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
+.over{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;overflow:visible;opacity:.95}
+.ladder{filter:drop-shadow(0 3px 2px rgba(0,0,0,.4))}
+.ladder .rail{stroke:var(--wood);stroke-width:9;stroke-linecap:round}
+.ladder .rung{stroke:#e59a55;stroke-width:6;stroke-linecap:round}
+.snake .body{fill:none;stroke:var(--snake);stroke-width:20;stroke-linecap:round;filter:drop-shadow(0 3px 2px rgba(0,0,0,.35))}
+.snake .spots{fill:none;stroke:var(--spot);stroke-width:8;stroke-linecap:butt;stroke-dasharray:8 14}
+.snake .head{fill:var(--snake);stroke:#14532d;stroke-width:3}
+.snake .eye{fill:#fff;stroke:#1c1f3b;stroke-width:2}
+.snake .tongue{fill:none;stroke:#e02e4d;stroke-width:3.5;stroke-linecap:square}
+.startpad{margin-top:6px;border-radius:4px;background:rgba(255,255,255,.08);border:2px dashed rgba(255,255,255,.3);display:flex;align-items:center;gap:10px;padding:4px 10px;min-height:40px;position:relative}
+.startpad .si{font-family:var(--display);color:var(--gold);font-size:15px}
+.startpad .toks{position:static;display:flex;font-size:26px}
+.side{background:rgba(0,0,0,.26);border-radius:10px;padding:12px 14px}
+.die{width:82px;height:82px;margin:4px auto 8px;border-radius:12px;background:#fffdf3;border:3px solid var(--deep);display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);padding:10px;box-shadow:0 5px 0 #10123a}
+.die i{width:13px;height:13px;border-radius:2px;background:var(--pink);place-self:center;visibility:hidden}
+.die.roll{animation:shake .5s}
+@keyframes shake{20%{transform:rotate(-14deg) scale(1.05)}50%{transform:rotate(12deg)}80%{transform:rotate(-6deg)}}
+.side .btn{width:100%;margin:4px 0}
+.next{font-size:16px;margin:8px 0;background:rgba(255,255,255,.07);border-radius:6px;padding:8px 10px}
+.next b{color:var(--gold)}
+.stats{font-size:15px;line-height:1.55;margin:8px 0;color:#d4d7f6}
+.stats b{color:var(--gold)}
+.log{font-size:14.5px;line-height:1.4;max-height:160px;overflow:auto;margin:8px 0 0;padding:0;list-style:none}
+.log li{padding:3px 0;border-bottom:1px dashed rgba(255,255,255,.15)}
+@media (max-width:760px){.side{display:grid;grid-template-columns:96px 1fr;gap:4px 14px;align-items:start}.side .die{grid-row:span 3;margin:0}.side .log{grid-column:1/-1}}
+/* hazard */
+.claim{font-size:clamp(20px,3vw,25px);font-weight:700;background:#fffdf3;color:#1c1f3b;border-radius:8px;padding:12px 18px;max-width:620px;border-left:8px solid var(--gold);margin:16px auto 0}
+.answers.two{flex-direction:row;justify-content:center;max-width:460px}
+.answers.two .ans{flex:1;text-align:center;font-family:var(--display);font-weight:400}
+/* notes */
+#screen.notes{padding:14px 10px 20px}
+.program{background:var(--surface);color:var(--ink);border-radius:10px;padding:16px 26px 22px;max-width:780px;margin:0 auto;box-shadow:0 6px 0 rgba(0,0,0,.25);border:2px solid var(--line);text-align:left}
+@media (max-width:600px){.program{padding:12px 14px 18px}}
+.program h2{color:var(--accent)!important}
+.ptop{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:15px;color:var(--muted);border-bottom:2px dotted var(--line);padding-bottom:6px;margin-bottom:6px}
+.bigicon{font-size:58px;line-height:1}
+.endmark{height:2px}
+.listen,.conn,.explorer,.discuss,.tryit,.lab{border-radius:8px;padding:12px 16px;margin:18px 0}
+.lh{font-family:var(--display);font-size:16.5px;margin:0 0 4px;color:var(--accent)}
+.listen{background:rgba(59,63,168,.07);border:1px solid var(--accent)}
+.listen .who{font-size:15px;color:var(--muted)}
+.listen .lf{margin:.4em 0 0;font-weight:700;font-size:16px}
+.listen ul{margin:.2em 0 .2em 1.1em;padding:0;font-size:17px}
+.listen .heard{margin-top:6px}
+.listen .heard.on{background:var(--ok-soft);border-color:var(--ok);color:var(--ink)}
+.conn{background:rgba(255,194,61,.15);border-left:6px solid var(--gold)}
+.conn p:last-child{margin-bottom:0}
+.explorer{background:var(--bg);border:1px solid var(--line)}
+.explorer .card{display:none}.explorer .card.on{display:block}
+.explorer .card h4{color:var(--pink);font-size:22px}
+.exnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px}
+.exnav .count{font-size:15px;color:var(--muted)}
+.discuss{background:var(--bg);border:1px dashed var(--muted)}
+.discuss p{margin:0 0 6px;font-weight:700}
+.discuss textarea{width:100%;font:inherit;font-size:17px;padding:8px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.lab{background:rgba(44,156,87,.08);border:2px solid var(--snake)}
+.lab .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.lab .btn[aria-pressed="true"]{background:var(--accent);color:#fff}
+.lab .out{min-height:1.3em}
+.singin{font:inherit;padding:7px 12px;border-radius:6px;border:2px solid var(--line);background:var(--surface);color:var(--ink);width:min(260px,100%)}
+.beatgrid{display:grid;grid-template-columns:64px repeat(8,minmax(0,1fr));gap:5px;align-items:center;max-width:520px;margin:8px 0}
+.beatgrid .bl{font-size:14px;font-weight:700}
+.pad{aspect-ratio:1;border-radius:4px;border:2px solid var(--line);background:var(--surface);cursor:pointer;padding:0}
+.pad:nth-of-type(4n+1){border-color:var(--muted)}
+.pad.on{background:var(--pink);border-color:var(--pink)}
+.pad.now{outline:3px solid var(--gold);outline-offset:1px}
+/* try it */
+.tryit{background:var(--bg);border:2px solid var(--pink)}
+.tryit ol{padding-left:1.2em;margin:6px 0}
+.tryit li{margin:12px 0}
+.tryit .opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.tryit li.ok .txt::after{content:" ✓";color:var(--ok);font-weight:700}
+.tryit .tfb{font-weight:700;color:var(--pink);min-height:1.2em}
+.tryit[data-mode="keys"] .opts .btn{border-radius:6px;min-width:64px;background:var(--surface);color:var(--ink);border:2px solid var(--line);border-bottom-width:5px;padding:7px 14px}
+.tryit[data-mode="keys"] .opts .btn:hover:not(:disabled){border-color:var(--accent)}
+.tryit[data-mode="keys"] .opts .btn.right{background:var(--ok-soft);border-color:var(--ok)}
+.tryit[data-mode="keys"] .opts .btn.wrong{background:var(--red-soft);border-color:var(--red)}
+.gate{margin-top:24px;border-radius:8px;border:2px solid var(--line);padding:14px 18px;background:var(--bg)}
+.gate .lbl{font-family:var(--display);font-size:17px;color:var(--accent);margin:0 0 6px}
+.gate .gl{margin:4px 0;font-size:17px}
+.gate .ck{display:inline-block;width:1.3em;font-weight:700}
+.gate .ck.yes{color:var(--ok)}
+.gate .letter{font-family:var(--display);font-size:30px;color:var(--pink);padding:0 6px}
+.meter{height:10px;border-radius:2px;background:var(--line);overflow:hidden;margin:8px 0}
+.meter span{display:block;height:100%;background:var(--pink);width:0}
+mark,.missed{background:var(--hl)!important;color:#1c1f3b!important;box-shadow:0 0 0 4px var(--hl);border-radius:3px}
+.missed *{color:#1c1f3b!important}
+.reviewed{transition:background 2s;background:var(--ok-soft)}
+/* challenge */
+.progress{font-size:15px;color:#c9cdf5;margin:0}
+.pips{display:flex;gap:6px;justify-content:center;margin:8px 0}
+.pip{width:14px;height:14px;border-radius:2px;border:2px solid var(--gold)}
+.pip.on{background:var(--gold)}
+.answers{display:flex;flex-direction:column;gap:10px;width:100%;max-width:580px;margin:16px auto 0}
+.ans{font:700 18px var(--body);text-align:left;padding:12px 16px;border-radius:8px;border:3px solid var(--deep);background:#fffdf3;color:#1c1f3b;cursor:pointer;box-shadow:0 4px 0 #10123a}
+.ans:hover:not(:disabled){background:#fff1c4}
+.ans.right{background:#cfeedb;border-color:#1f7a45}
+.ans.wrong{background:#f8dde2;border-color:#b3263c}
+.ans:disabled{cursor:default}
+.letter{font-family:var(--display);font-size:44px;color:var(--gold);padding:0 8px}
+.feedback{min-height:1.3em;font-weight:700;color:#ffe3a3;max-width:620px}
+/* table */
+.tablewrap{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:16px;min-width:520px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:var(--bg)}
+/* finale */
+.bossrow{display:flex;gap:14px;align-items:center;max-width:660px;text-align:left}
+.bossrow svg{flex:0 0 130px;width:130px;height:144px}
+@media (max-width:600px){.bossrow{flex-direction:column;text-align:center}}
+.code{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+.code span{width:38px;height:46px;border-radius:4px;border:2px solid var(--gold);display:grid;place-items:center;font-family:var(--display);font-size:24px;color:#fff;background:var(--pink)}
+.pwf{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.pwf input{font:700 20px var(--body);padding:8px 14px;border-radius:6px;border:3px solid var(--gold);background:#fffdf3;color:#1c1f3b;letter-spacing:.12em;width:220px}
+.pwf input::placeholder{letter-spacing:0;color:#6b6e8a}
+/* words */
+.wsearch{width:100%;font:inherit;padding:8px 12px;border-radius:6px;border:2px solid var(--line);background:var(--surface);color:var(--ink);margin:6px 0 10px}
+dl.words{margin:0}
+dl.words > div{padding:6px 0;border-bottom:1px solid var(--line)}
+dl.words dt{font-weight:700;color:var(--accent)}
+dl.words dd{margin:0}
+/* submit form */
+.form{display:flex;gap:12px;flex-wrap:wrap}
+.form label{display:flex;flex-direction:column;font-weight:700;font-size:16px;flex:1;min-width:180px}
+.form input{font:inherit;padding:8px 10px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+#stOut{width:100%;min-height:200px;font:14px/1.4 Consolas,monospace;margin-top:8px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.program .btns{justify-content:flex-start}
+/* modal, pill, footer */
+.modal{position:fixed;inset:0;z-index:80;background:rgba(10,12,40,.6);display:none;align-items:center;justify-content:center;padding:20px}
+.modal.show{display:flex}
+.modal .card{background:var(--surface);color:var(--ink);border-radius:10px;padding:18px 22px;max-width:420px;text-align:center;border:4px solid var(--deep)}
+.pill{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:var(--deep);color:#eceefb;border:2px solid var(--gold);border-radius:6px;padding:8px 16px;font-size:15px;cursor:pointer;max-width:92vw;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+footer{text-align:center;font-size:14px;color:var(--muted);padding:10px 16px 26px}
+.floatbtns{position:fixed;right:12px;bottom:calc(64px + env(safe-area-inset-bottom,0px));z-index:55;display:none;flex-direction:column;gap:6px}
+body.reading .floatbtns{display:flex}
+.floatbtns button{font:700 14px var(--body);border-radius:6px;border:2px solid var(--gold);background:var(--deep);color:#eceefb;padding:6px 12px;cursor:pointer}
+</style></head>
+<body>
+<div class="topbar"><div class="in"><span class="t">Snakes &amp; Ladders: The Digital Stage</span><span class="pbar" aria-hidden="true"><i id="pfill"></i></span><span class="pct" id="pct">0 of 7 letters</span></div></div>
+<div class="wrap2"><div class="stage" id="stage">
+<div class="hud"><div class="slots" id="slots" aria-label="Password letters found"></div><span class="sp"></span>
+<button type="button" class="hbtn" id="boardBtn">🎲 Board</button><button type="button" class="hbtn" id="wordsBtn">📖 Words</button><button type="button" class="hbtn" id="submitBtn">📤 Submit</button><button type="button" class="hbtn" id="soundBtn" aria-label="Sound on">🔊</button><button type="button" class="hbtn" id="exitBtn">Exit</button></div>
+<div id="screen" aria-live="polite"></div>
+<div class="wipe" aria-hidden="true"></div>
+</div></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle"><div class="card"><h3 id="mTitle">Leave the game?</h3><p>Your progress is saved in this browser. You can come back to the board anytime.</p><div class="btns" style="justify-content:center"><button class="btn pink" id="stayBtn">Stay</button><button class="btn" id="leaveBtn">Leave</button></div></div></div>
+<footer>Fine Arts Survey, Mount Carmel Academy. Graded quiz: “21st-Century Arts: Final Check”</footer>
+<div class="floatbtns"><button type="button" id="goTop" aria-label="Back to top">↑ Top</button><button type="button" id="goBoard">🎲 Board</button></div>
+<div class="pill" id="pill" hidden></div>
+
+<template id="tpl-digital">
+<p id="dig-1">In the 1980s and 1990s, people bought music on records, cassettes, and CDs, and they watched music videos on MTV, which began in 1981. Then the 21st century arrived, and the technology changed fast. In 2001 the iPod promised “1,000 songs in your pocket.” <b>YouTube</b> opened in 2005, the first <b>iPhone</b> arrived in 2007, and <b>Spotify</b> began <b>streaming</b> music in 2008. Streaming means playing music or video straight from the internet instead of owning a copy.</p>
+<p id="dig-2">Art made by living artists in our own time is called <b>contemporary art</b>. Like the postmodernists you met in the last lesson, contemporary artists use many styles at once. What is new is how much of their work depends on technology: computers, phones, the internet, projectors, and even <b>artificial intelligence</b>.</p>
+<p id="dig-3">Technology plays three roles in 21st-century art. It is a <b>tool</b> for making art: one laptop can be a whole recording studio. It is a <b>stage</b> for sharing art: a song can go viral online before any radio station plays it. And it raises new <b>questions</b>: If a computer helps make a song, who is the artist? If anyone can copy a file, who owns it?</p>
+<p id="dig-5">Technology also decides what you hear next. Streaming apps use <b>algorithms</b>, step-by-step computer rules, to recommend songs based on what you and people like you have played and skipped. In 2018 the writer Liz Pelly found that Spotify’s recommendations repeated the gender bias of its most popular playlists, such as RapCaviar, which featured mostly men. The money is uneven too: one industry report found that in 2013 the most popular 1% of recordings earned 84% of all streaming and subscription money.</p>
+<p id="dig-4">In this game, music comes first, but every square also connects music to visual art, theater, or dance. Watch for the 🔗 connection boxes.</p>
+<div class="conn" id="dig-6"><p class="lh">🔗 Connection: visual art</p><p>Contemporary art is not all screens and software. The Vietnamese artist <b>Tuan Andrew Nguyen</b>, born in Saigon in 1976, makes films and sculptures together with Vietnamese communities around the world, including communities in <b>Louisiana</b>, to tell stories of colonization, war, and migration that official histories left out. The PBS series <i>Art in the Twenty-First Century</i> (made by Art21) follows him in its 2025 episode “Between Worlds.”</p><p class="sm"><a href="https://art21.org/watch/art-in-the-twenty-first-century/s12/tuan-andrew-nguyen-in-between-worlds/" target="_blank" rel="noopener">Optional: watch Tuan Andrew Nguyen on Art21</a> (about 15 minutes, for later)</p></div>
+<div class="explorer" data-k="timeline"><p class="lh">🔍 Click through a timeline of the digital age</p><div class="cards">
+<div class="card"><h4>2001</h4><p>Apple’s iPod goes on sale. Wikipedia also begins.</p></div>
+<div class="card"><h4>2004</h4><p>GarageBand, free music-making software, comes on Apple computers.</p></div>
+<div class="card"><h4>2005</h4><p>YouTube opens. Anyone can now post a video for the whole world.</p></div>
+<div class="card"><h4>2007</h4><p>The first iPhone arrives, and Hatsune Miku, a singing computer voice, is released in Japan.</p></div>
+<div class="card"><h4>2008</h4><p>Spotify starts streaming music.</p></div>
+<div class="card"><h4>2010</h4><p>Eric Whitacre’s first Virtual Choir joins 185 singers who never met. The iPad comes out.</p></div>
+<div class="card"><h4>2015</h4><p>Lin-Manuel Miranda’s hip-hop musical <i>Hamilton</i> opens on Broadway.</p></div>
+<div class="card"><h4>2018</h4><p>teamLab Borderless, a museum of moving digital art, opens in Tokyo.</p></div>
+<div class="card"><h4>2018</h4><p>Eight of the ten most-watched music videos on YouTube are in Spanish.</p></div>
+<div class="card"><h4>2019</h4><p>“Old Town Road” goes viral on TikTok and breaks a Billboard record.</p></div>
+<div class="card"><h4>2020</h4><p>The COVID-19 pandemic closes theaters and concert halls, and the arts move online.</p></div>
+<div class="card"><h4>2022</h4><p>AI tools that make pictures and writing from a typed request become available to the public.</p></div>
+<div class="card"><h4>2023</h4><p>“Heart on My Sleeve,” a song with fake AI voices of Drake and the Weeknd, goes viral and is pulled from streaming services.</p></div>
+</div><div class="exnav"><button type="button" class="btn prev">← Back</button><span class="count"></span><button type="button" class="btn next">Next →</button></div></div>
+<div class="tryit" id="try-digital" data-mode="keys"><p class="lh">⌨️ Try it: Sort the clues</p><p class="sm">Press the key that fits each clue.</p><ol>
+<li data-a="After 2000" data-p="dig-1" data-opts="Before 2000|After 2000"><span class="txt">The first iPhone arrives</span><div class="opts"></div></li>
+<li data-a="Before 2000" data-p="dig-1" data-opts="Before 2000|After 2000"><span class="txt">MTV starts playing music videos</span><div class="opts"></div></li>
+<li data-a="After 2000" data-p="dig-1" data-opts="Before 2000|After 2000"><span class="txt">Spotify begins streaming music</span><div class="opts"></div></li>
+<li data-a="Algorithm" data-p="dig-5" data-opts="Algorithm|Playlist|Loop|Hologram"><span class="txt">The computer rules a streaming app uses to pick your next song</span><div class="opts"></div></li>
+<li data-a="Tool" data-p="dig-3" data-opts="Tool|Stage|Question"><span class="txt">A laptop used as a recording studio</span><div class="opts"></div></li>
+<li data-a="Stage" data-p="dig-3" data-opts="Tool|Stage|Question"><span class="txt">A song goes viral online before any radio plays it</span><div class="opts"></div></li>
+<li data-a="Question" data-p="dig-3" data-opts="Tool|Stage|Question"><span class="txt">If a computer helps make a song, who is the artist?</span><div class="opts"></div></li>
+</ol><p class="tfb"></p></div>
+<div class="discuss" data-k="digital"><p>💬 Which technology do you use most to enjoy music or art: a phone, a streaming app, a video site, a game, or something else? Does it change the way you listen or look? Explain.</p><textarea rows="3" placeholder="Type your answer here. It saves automatically in this browser."></textarea></div>
+</template>
+
+<template id="tpl-studio">
+<p id="stu-1">For most of the 20th century, making a professional record meant renting an expensive studio full of machines, with engineers to run them. Today a laptop can do the same job. A <b>digital audio workstation</b>, or <b>DAW</b>, is software for recording, editing, and mixing music. GarageBand (2004), Ableton Live, and FL Studio are popular DAWs.</p>
+<p id="stu-2">A DAW lets a musician record one <b>track</b> at a time and stack the tracks in layers, copy and paste a part, fix a wrong note, or build a beat from short repeating patterns called <b>loops</b>. A <b>MIDI controller</b>, such as a small keyboard or a set of pads, sends notes to the computer using MIDI, a computer language for music invented in 1983. That means one small keyboard can play the sound of a piano, a string orchestra, or a drum kit.</p>
+<div class="lab beat"><p class="lh">🥁 Lab: Build a loop</p><p class="sm">Tap squares to turn sounds on, then press Play. Each row is one track, like in a DAW. The loop repeats until you press Stop.</p><div class="beatgrid"></div><div class="row"><button type="button" class="btn bplay">▶ Play</button><button type="button" class="btn bclear">Clear</button><button type="button" class="btn bdemo">Load a starter beat</button></div></div>
+<p id="stu-3">This changed who gets to be a <b>producer</b>, the person who shapes how a recording sounds. <b>Billie Eilish</b> and her brother <b>Finneas O’Connell</b> recorded her first album, <i>When We All Fall Asleep, Where Do We Go?</i> (2019), in Finneas’s small bedroom in their family’s house in Los Angeles. In 2020, at age 18, Billie became the youngest artist ever to win the four biggest Grammy Awards in one night: Album, Record, and Song of the Year, and Best New Artist.</p>
+<p id="stu-4">Even a phone can be a studio. The singer and guitarist <b>Steve Lacy</b> made beats on his iPhone, including the beat for Kendrick Lamar’s song “PRIDE.” (2017). Producers who work this way are often called <b>bedroom producers</b>.</p>
+<div class="conn" id="stu-5"><p class="lh">🔗 Connection: visual art and theater</p><p>Painters went digital too. The British painter <b>David Hockney</b>, born in 1937, began drawing with his finger on an iPhone around 2009 and later on an iPad. In the spring of 2020, at age 82, he made more than 100 iPad paintings of spring arriving at his home in Normandy, France. They were printed large and shown at the Royal Academy in London in 2021. Theater set designers moved from paper to software too. Programs such as AutoCAD, SketchUp, and Vectorworks let them build a 3D model of a set and change it in minutes instead of redrawing it by hand.</p></div>
+<div class="listen" data-k="studio"><p class="lh">🎬 Watch a producer at work</p><p><a href="https://www.youtube.com/results?search_query=Finneas+breaks+down+producing+bad+guy+Billie+Eilish" target="_blank" rel="noopener">Finneas explains how he produced Billie Eilish’s “bad guy”</a> <span class="who">YouTube search results; pick a video from an official channel</span></p><p class="lf">Watch and listen for:</p><ul><li>how many separate tracks are stacked in the DAW</li><li>everyday sounds he recorded and turned into music</li><li>how small and simple the equipment is</li></ul><button type="button" class="btn heard">I watched it</button></div>
+<div class="tryit" id="try-studio" data-mode="keys"><p class="lh">⌨️ Try it: Name the tool</p><p class="sm">Press the key that answers each clue.</p><ol>
+<li data-a="DAW" data-p="stu-1" data-opts="DAW|Loop|MIDI controller|Producer"><span class="txt">Software for recording, editing, and mixing music</span><div class="opts"></div></li>
+<li data-a="Loop" data-p="stu-2" data-opts="DAW|Loop|MIDI controller|Producer"><span class="txt">A short pattern that repeats</span><div class="opts"></div></li>
+<li data-a="MIDI controller" data-p="stu-2" data-opts="DAW|Loop|MIDI controller|Producer"><span class="txt">A small keyboard or set of pads that sends notes to the computer</span><div class="opts"></div></li>
+<li data-a="Producer" data-p="stu-3" data-opts="DAW|Loop|MIDI controller|Producer"><span class="txt">The person who shapes how a recording sounds</span><div class="opts"></div></li>
+<li data-a="A bedroom" data-p="stu-3" data-opts="A bedroom|A concert hall|A church|A large studio"><span class="txt">Where Billie Eilish’s first album was recorded</span><div class="opts"></div></li>
+<li data-a="An iPad" data-p="stu-5" data-opts="An iPad|Oil paint|Spray paint|A film camera"><span class="txt">What David Hockney used for his 2020 paintings of spring</span><div class="opts"></div></li>
+</ol><p class="tfb"></p></div>
+<div class="discuss" data-k="studio"><p>💬 Describe the loop you built in the lab. Which sounds did you use, and what mood does it have?</p><textarea rows="3" placeholder="Type your answer here. It saves automatically in this browser."></textarea></div>
+</template>
+
+<template id="tpl-tune">
+<p id="tun-1"><b>Pitch correction</b> is software that nudges a singer’s notes up or down until they are exactly in tune. The most famous pitch-correction program is <b>Auto-Tune</b>, released in 1997. It was invented by <b>Andy Hildebrand</b>, an engineer who had used math to study sound waves deep underground while searching for oil.</p>
+<p id="tun-2">Used gently, Auto-Tune is almost impossible to hear, and many recordings use it to fix small mistakes. But on <b>Cher</b>’s song “Believe” (1998), the producers turned the setting to its most extreme. Her notes jumped instantly from pitch to pitch, and her voice sounded like a robot. Listeners loved the strange sound, and it became an effect of its own.</p>
+<p id="tun-3">In the 2000s, the singer <b>T-Pain</b> made the robotic Auto-Tune sound his trademark, and many rap and pop artists copied it. Some musicians pushed back: in 2009, Jay-Z released a song called “D.O.A. (Death of Auto-Tune).” The argument continues today. Is pitch correction cheating, or is it just another instrument, like the electric guitar once was?</p>
+<div class="lab tune"><p class="lh">🎚️ Lab: Tune the voice</p><p class="sm">Play the same short melody three ways. Listen for the wobbly notes, the smooth fix, and the robot jumps.</p><div class="row"><button type="button" class="btn tn" data-v="raw">Natural (a little off)</button><button type="button" class="btn tn" data-v="fix">Gently corrected</button><button type="button" class="btn tn" data-v="robot">Robot effect</button></div><p class="out sm" aria-live="polite"></p></div>
+<p id="tun-4">Machines changed the voice even earlier. The <b>vocoder</b>, invented at Bell Labs in the 1930s to send voices over telephone lines, turns a voice into a robotic, synthesizer-like sound. Musicians from the German band Kraftwerk to the French duo Daft Punk later used vocoders in their songs.</p>
+<div class="conn" id="tun-5"><p class="lh">🔗 Connection: visual art</p><p>Photos get “tuned” too. Apps can smooth skin, change colors, or erase objects from a picture, and many people now ask how much editing is too much. Some artists do the opposite. In <b>glitch art</b>, they break digital files on purpose and turn the errors, such as broken pixels, streaks, and scrambled colors, into art.</p></div>
+<div class="listen" data-k="tune"><p class="lh">🎧 Listen to a famous effect</p><p><a href="https://www.youtube.com/results?search_query=Cher+Believe+official+music+video" target="_blank" rel="noopener">Cher: “Believe” (1998), official music video</a> <span class="who">YouTube search results, about 4 minutes</span></p><p class="lf">Listen for:</p><ul><li>the moments when her voice jumps between notes like a robot</li><li>the parts where her voice sounds natural</li><li>the electronic dance beat underneath</li></ul><button type="button" class="btn heard">I listened</button></div>
+<div class="tryit" id="try-tune" data-mode="keys"><p class="lh">⌨️ Try it: Hidden fix or obvious effect?</p><p class="sm">Press the key that fits each clue.</p><ol>
+<li data-a="Hidden fix" data-p="tun-2" data-opts="Hidden fix|Obvious effect"><span class="txt">A tiny correction on one note that listeners never notice</span><div class="opts"></div></li>
+<li data-a="Obvious effect" data-p="tun-2" data-opts="Hidden fix|Obvious effect"><span class="txt">Cher’s voice jumping from note to note in “Believe”</span><div class="opts"></div></li>
+<li data-a="Obvious effect" data-p="tun-3" data-opts="Hidden fix|Obvious effect"><span class="txt">T-Pain’s robotic trademark sound</span><div class="opts"></div></li>
+<li data-a="Andy Hildebrand" data-p="tun-1" data-opts="Andy Hildebrand|T-Pain|Cher|Jay-Z"><span class="txt">Who invented Auto-Tune?</span><div class="opts"></div></li>
+<li data-a="Telephone lines" data-p="tun-4" data-opts="Telephone lines|Movies|Pianos|Video games"><span class="txt">The vocoder was first invented to send voices over…</span><div class="opts"></div></li>
+<li data-a="Glitch art" data-p="tun-5" data-opts="Glitch art|Pop art|Digital painting|Photography"><span class="txt">Art that turns broken pixels and digital errors into something beautiful</span><div class="opts"></div></li>
+</ol><p class="tfb"></p></div>
+<div class="discuss" data-k="tune"><p>💬 Is using Auto-Tune cheating, or is it a musical instrument? Give at least one reason for your opinion.</p><textarea rows="3" placeholder="Type your answer here. It saves automatically in this browser."></textarea></div>
+</template>
+
+<template id="tpl-viral">
+<p id="vir-1">You met <b>sampling</b> in the hip-hop of the 1970s: borrowing a short recorded piece of an older song to build a new one. A <b>remix</b> is a new version of a song, made by changing its beat, its parts, or its singers. A <b>mashup</b> combines two or more songs into one track. With a DAW and the internet, anyone can sample, remix, and share music with the world.</p>
+<p id="vir-2">In 2018, <b>Montero Lamar Hill</b>, a 19-year-old from the Atlanta area who calls himself <b>Lil Nas X</b>, bought a beat online for about <b>$30</b>. A teenage producer in the Netherlands called YoungKio had made it from a sample of banjo music by the rock band <b>Nine Inch Nails</b>. Lil Nas X rapped and sang over it about riding a horse, and he called his country-rap song “Old Town Road.”</p>
+<p id="vir-3">The song spread through <b>TikTok</b>, where people made short videos of themselves turning into cowboys. Billboard removed it from its country chart, saying it was not country enough, and that started a big argument about who decides what a genre is. Then Lil Nas X released a remix with the country singer <b>Billy Ray Cyrus</b>. In 2019, “Old Town Road” spent <b>19 weeks</b> at number one on the Billboard Hot 100, a record at the time.</p>
+<p id="vir-4">Because the beat uses Nine Inch Nails’ music, the band’s Trent Reznor and Atticus Ross are listed as songwriters of “Old Town Road.” Borrowing music the right way means asking permission and giving <b>credit</b>.</p>
+<p id="vir-6">The internet also carries music across borders and languages. In 2018, eight of the ten most-watched music videos on YouTube worldwide were in Spanish, and the top two were reggaeton songs by Latin artists from the United States, Puerto Rico, and Colombia. That year Beyoncé joined the Colombian singer <b>J Balvin</b> on stage at the Coachella festival to perform their remix of his song “Mi Gente.”</p>
+<div class="lab remix"><p class="lh">🔁 Lab: Remix an old tune</p><p class="sm">“Oh! Susanna” is an American song from 1848, so anyone may use it. Play the original, then try three remixes.</p><div class="row"><button type="button" class="btn rx" data-v="orig">Original</button><button type="button" class="btn rx" data-v="fast">Sped up</button><button type="button" class="btn rx" data-v="slow">Slow and low</button><button type="button" class="btn rx" data-v="beat">Add a trap beat</button></div><p class="out sm" aria-live="polite"></p></div>
+<div class="conn" id="vir-5"><p class="lh">🔗 Connection: dance</p><p>Dances go viral too, and credit matters there as well. In 2019, <b>Jalaiah Harmon</b>, a 14-year-old dancer from the Atlanta area, created the “Renegade” dance. Millions of people copied it on TikTok, usually without knowing who made it, until a 2020 <i>New York Times</i> article told her story. Soon after, she was invited to perform it at the NBA All-Star Game.</p></div>
+<div class="listen" data-k="viral"><p class="lh">🎬 Watch the remix</p><p><a href="https://www.youtube.com/results?search_query=Lil+Nas+X+Old+Town+Road+remix+Billy+Ray+Cyrus+official+video" target="_blank" rel="noopener">Lil Nas X and Billy Ray Cyrus: “Old Town Road (Remix),” official video</a> <span class="who">YouTube search results, about 5 minutes</span></p><p class="lf">Listen for:</p><ul><li>the banjo sample that starts the beat</li><li>the mix of country sounds and rap drums</li><li>what changes when Billy Ray Cyrus joins in</li></ul><button type="button" class="btn heard">I watched it</button></div>
+<div class="tryit" id="try-viral" data-mode="keys"><p class="lh">⌨️ Try it: Sample, remix, or mashup?</p><p class="sm">Press the key that fits each clue.</p><ol>
+<li data-a="Sample" data-p="vir-1" data-opts="Sample|Remix|Mashup"><span class="txt">A short recorded piece of an older song used to build a new one</span><div class="opts"></div></li>
+<li data-a="Mashup" data-p="vir-1" data-opts="Sample|Remix|Mashup"><span class="txt">Two or more songs combined into one track</span><div class="opts"></div></li>
+<li data-a="Remix" data-p="vir-3" data-opts="Sample|Remix|Mashup"><span class="txt">“Old Town Road” with Billy Ray Cyrus added</span><div class="opts"></div></li>
+<li data-a="Sample" data-p="vir-2" data-opts="Sample|Remix|Mashup"><span class="txt">The Nine Inch Nails banjo inside the “Old Town Road” beat</span><div class="opts"></div></li>
+<li data-a="$30" data-p="vir-2" data-opts="$30|$300|$3,000|$30,000"><span class="txt">About how much did Lil Nas X pay for the beat?</span><div class="opts"></div></li>
+<li data-a="Jalaiah Harmon" data-p="vir-5" data-opts="Jalaiah Harmon|Lil Nas X|Billie Eilish|Billy Ray Cyrus"><span class="txt">Who created the “Renegade” dance?</span><div class="opts"></div></li>
+</ol><p class="tfb"></p></div>
+<div class="discuss" data-k="viral"><p>💬 Jalaiah Harmon’s dance spread without her name on it. Why does credit matter to artists? What should people do when they copy a dance, song, or picture they find online?</p><textarea rows="3" placeholder="Type your answer here. It saves automatically in this browser."></textarea></div>
+</template>
+
+<template id="tpl-choir">
+<p id="cho-1">In 2009, the American composer <b>Eric Whitacre</b> saw a video of a young woman singing one of his choral pieces alone in front of her webcam. It gave him an idea: what if hundreds of singers did the same thing, each recording a part at home, and all their videos were joined into one choir?</p>
+<p id="cho-2">In 2010 he released his first <b>Virtual Choir</b>: <b>185 singers</b> from <b>12 countries</b> singing his piece <i>Lux Aurumque</i> (Latin for “light and gold”). Each singer put on headphones and watched a video of Whitacre conducting, then recorded a part alone and uploaded the video. Finally, an editor lined up every voice and every video so they sounded and looked like one choir.</p>
+<p id="cho-3">The choirs kept growing. In 2020, while the COVID-19 pandemic kept people at home, Virtual Choir 6 sang Whitacre’s “Sing Gently” with <b>17,572 singers</b> from <b>129 countries</b>.</p>
+<p id="cho-4">Why not just sing together on a video call? Because of <b>latency</b>, the tiny delay as sound travels across the internet. Even a delay of a fraction of a second makes singers fall out of time with each other. That is why virtual choirs record separately and are lined up later.</p>
+<div class="lab choir"><p class="lh">🎶 Lab: Hear the latency problem</p><p class="sm">Turn on the four voices of a choir. Play them in sync, then play them the way they would sound on a live video call.</p><div class="row"><button type="button" class="btn layer" data-l="0" aria-pressed="true">Soprano</button><button type="button" class="btn layer" data-l="1" aria-pressed="true">Alto</button><button type="button" class="btn layer" data-l="2" aria-pressed="true">Tenor</button><button type="button" class="btn layer" data-l="3" aria-pressed="true">Bass</button></div><div class="row"><button type="button" class="btn cs" data-v="sync">▶ In sync (recorded and lined up)</button><button type="button" class="btn cs" data-v="lag">▶ With latency (live video call)</button></div></div>
+<div class="conn" id="cho-5"><p class="lh">🔗 Connection: theater</p><p>The pandemic closed theaters around the world in March 2020. Broadway stayed dark for 18 months, until September 2021. Many theaters streamed recorded shows instead; London’s National Theatre put a free play on YouTube each week. In July 2020, a filmed version of <b>Lin-Manuel Miranda</b>’s musical <i>Hamilton</i> (2015), which tells the story of the founding father Alexander Hamilton with hip-hop, R&amp;B, and Broadway songs, came out on Disney+, so millions of people saw it at home. But going online can also leave people out. A 2025 study of theater audiences in Nigeria found that 68% of people aged 18 to 35 preferred livestreamed or online plays, yet only 22% of the people surveyed in rural areas had reliable internet. This gap is called the <b>digital divide</b>.</p></div>
+<div class="listen" data-k="choir"><p class="lh">🎬 Watch the first Virtual Choir</p><p><a href="https://www.youtube.com/results?search_query=Eric+Whitacre+Virtual+Choir+Lux+Aurumque" target="_blank" rel="noopener">Eric Whitacre’s Virtual Choir: <i>Lux Aurumque</i> (2010)</a> <span class="who">YouTube search results, about 6 minutes</span></p><p class="lf">Watch and listen for:</p><ul><li>how the singers’ faces appear one by one</li><li>how smoothly the separate recordings blend</li><li>where the singers are from (watch the screen)</li></ul><button type="button" class="btn heard">I watched it</button></div>
+<div class="tryit" id="try-choir" data-mode="keys"><p class="lh">⌨️ Try it: Build a virtual choir</p><p class="sm">Number the steps, then answer the number clues.</p><ol>
+<li data-a="1st" data-p="cho-2" data-opts="1st|2nd|3rd|4th"><span class="txt">Put on headphones and watch the conductor’s video</span><div class="opts"></div></li>
+<li data-a="2nd" data-p="cho-2" data-opts="1st|2nd|3rd|4th"><span class="txt">Record your part alone</span><div class="opts"></div></li>
+<li data-a="3rd" data-p="cho-2" data-opts="1st|2nd|3rd|4th"><span class="txt">Upload your video</span><div class="opts"></div></li>
+<li data-a="4th" data-p="cho-2" data-opts="1st|2nd|3rd|4th"><span class="txt">An editor lines up every voice and video</span><div class="opts"></div></li>
+<li data-a="185" data-p="cho-2" data-opts="12|185|1,000|17,572"><span class="txt">How many singers were in the first Virtual Choir?</span><div class="opts"></div></li>
+<li data-a="129" data-p="cho-3" data-opts="12|50|129|185"><span class="txt">How many countries did the singers of Virtual Choir 6 come from?</span><div class="opts"></div></li>
+</ol><p class="tfb"></p></div>
+<div class="discuss" data-k="choir"><p>💬 Would you rather sing in a choir in person or in a virtual choir? What would you gain, and what would you lose?</p><textarea rows="3" placeholder="Type your answer here. It saves automatically in this browser."></textarea></div>
+</template>
+
+<template id="tpl-ai">
+<p id="ai-0">AI music is older than you might think. Composers have used rules, dice, and machines to make music for centuries, and the first computer music was played in 1951. Click through the history below.</p>
+<div class="explorer" data-k="aihistory"><p class="lh">🔍 Machines that make music: a short history</p><div class="cards">
+<div class="card"><h4>1650</h4><p>Athanasius Kircher, a German scholar, publishes a mathematical system for composing music meant to stir particular emotions.</p></div>
+<div class="card"><h4>1700s</h4><p>Musical dice games are popular: you roll dice to choose which short musical bars come next, building a new piece at home.</p></div>
+<div class="card"><h4>1843</h4><p>Mathematician and musician Ada Lovelace writes that Charles Babbage’s planned computer could work with music, but doubts a machine could ever truly “originate” anything.</p></div>
+<div class="card"><h4>1951</h4><p>The Ferranti Mark 1 computer at the University of Manchester, England, plays music in the earliest known recording of a computer performing music.</p></div>
+<div class="card"><h4>1957</h4><p>Lejaren Hiller and Leonard Isaacson use the ILLIAC I computer to generate the <i>Illiac Suite</i>, an early piece composed by a computer following rules.</p></div>
+<div class="card"><h4>2019</h4><p>Holly Herndon’s album <i>PROTO</i> features an AI she called Spawn, trained partly on the voices of her own audiences.</p></div>
+</div><div class="exnav"><button type="button" class="btn prev">← Back</button><span class="count"></span><button type="button" class="btn next">Next →</button></div></div>
+<p id="ai-1">Some 21st-century singers are not people at all. <b>Vocaloid</b> is singing software made by the Yamaha company: you type in a melody and words, and it sings them in a voice built from recordings of a real singer. In 2007, the Japanese company Crypton Future Media released a Vocaloid voice called <b>Hatsune Miku</b>, made from the voice of the actress <b>Saki Fujita</b>. It came with a cartoon character: a 16-year-old girl with long turquoise pigtails.</p>
+<p id="ai-2">Fans, not the company, made Miku famous. Thousands of amateur composers wrote songs for her and posted them online. Today she “performs” concerts with a live band while her animated image is projected onto a clear screen on stage, so she seems to float like a <b>hologram</b>. In 2014 she even opened concerts for Lady Gaga.</p>
+<div class="lab sing"><p class="lh">🗣️ Lab: A machine that sings</p><p class="sm">Type a word or a name. This little machine finds the vowels and sings each one on a new note, a bit like a very simple Vocaloid.</p><div class="row"><input class="singin" maxlength="24" aria-label="Word for the machine to sing" placeholder="Type a word" value="Mount Carmel"><button type="button" class="btn sgo">Sing it</button></div><p class="out sm" aria-live="polite"></p></div>
+<p id="ai-3">Since 2022, <b>AI</b> (artificial intelligence) tools that create pictures, writing, and music from a short typed request have become available to the public. AI systems learn by studying huge amounts of existing art, music, and writing, called <b>training data</b>. Many artists have objected that their work was used to train these systems without their permission or any payment.</p>
+<p id="ai-6">In April 2023, an anonymous TikTok user called Ghostwriter977 released “Heart on My Sleeve,” a song with AI vocals made to sound like the rapper <b>Drake</b> and the singer <b>the Weeknd</b>, who had nothing to do with it. It drew millions of views and plays within days. Then it was pulled from Spotify, Apple Music, and YouTube after a copyright claim by Universal Music Group, the record company of both stars. An AI copy of a real person’s voice is called a <b>voice clone</b>.</p>
+<p id="ai-4">Musicians are deciding how to use these tools. The American composer <b>Holly Herndon</b> had already used an AI she called Spawn on her 2019 album <i>PROTO</i>. She trained an AI on her own voice and in 2021 released <b>Holly+</b>, a “digital twin” of her voice that other people can use to sing. The Recording Academy, which gives the Grammy Awards, decided in 2023 that <b>only human creators</b> can be nominated. A song made with some help from AI can be considered only if people did a meaningful part of the work.</p>
+<p id="ai-7">Some composers are trying to use AI more fairly. For his 2025 orchestra piece <i>Techno-utopia</i>, the British composer <b>Robert Laidlow</b> trained AI only on about 2,500 hours of BBC Radio 3 broadcasts by one orchestra, the BBC Philharmonic, used with permission, instead of on music gathered from the whole internet. The pianist also plays an instrument with four magnets inside, built with a lab in Iceland, that moves through the AI’s “map” of orchestra sounds and pulls the live orchestra’s music apart. Laidlow points out a problem many people miss: most recordings are owned by record companies, not by the artists, so a company can allow AI to train on a song even if the singer never agreed.</p>
+<div class="conn" id="ai-5"><p class="lh">🔗 Connection: visual art</p><p>In 2022, the Museum of Modern Art (MoMA) in New York showed <i>Unsupervised</i> by the Turkish-American artist <b>Refik Anadol</b>. He trained an AI on images of more than 200 years of art in MoMA’s collection, and the AI created a giant, ever-changing digital “painting” that flowed across a wall of the museum’s lobby.</p></div>
+<div class="listen" data-k="ai"><p class="lh">🎬 Watch a hologram concert</p><p><a href="https://www.youtube.com/results?search_query=Hatsune+Miku+Magical+Mirai+official+live" target="_blank" rel="noopener">Hatsune Miku live at <i>Magical Mirai</i></a> <span class="who">YouTube search results; pick an official clip, about 4 minutes</span></p><p class="lf">Watch and listen for:</p><ul><li>the live band playing beside the projected singer</li><li>how the audience reacts to a singer who is not a person</li><li>whether the voice sounds human, robotic, or both</li></ul><button type="button" class="btn heard">I watched it</button></div>
+<div class="tryit" id="try-ai" data-mode="keys"><p class="lh">⌨️ Try it: Human or machine?</p><p class="sm">Press the key that answers each clue.</p><ol>
+<li data-a="Yamaha" data-p="ai-1" data-opts="Yamaha|Apple|Spotify|Disney"><span class="txt">Which company makes the Vocaloid software?</span><div class="opts"></div></li>
+<li data-a="Saki Fujita" data-p="ai-1" data-opts="Saki Fujita|Holly Herndon|Billie Eilish|Cher"><span class="txt">Whose recorded voice is Hatsune Miku built from?</span><div class="opts"></div></li>
+<li data-a="1951" data-p="ai-0" data-opts="1843|1951|2007|2022"><span class="txt">When was the first computer music played?</span><div class="opts"></div></li>
+<li data-a="Drake and the Weeknd" data-p="ai-6" data-opts="Drake and the Weeknd|Billie Eilish|Hatsune Miku|Cher"><span class="txt">Whose voices did “Heart on My Sleeve” copy with AI?</span><div class="opts"></div></li>
+<li data-a="Record companies" data-p="ai-7" data-opts="Record companies|The singers|The fans|Radio stations"><span class="txt">According to Robert Laidlow, who owns most recordings?</span><div class="opts"></div></li>
+<li data-a="Her own voice" data-p="ai-4" data-opts="Her own voice|Hatsune Miku|A piano|Bird songs"><span class="txt">What did Holly Herndon train her AI on?</span><div class="opts"></div></li>
+<li data-a="Only humans" data-p="ai-4" data-opts="Only humans|Only AI|Humans or AI|Only bands"><span class="txt">Since 2023, who can be nominated for a Grammy?</span><div class="opts"></div></li>
+<li data-a="MoMA’s collection" data-p="ai-5" data-opts="MoMA’s collection|Pop songs|Video games|Weather maps"><span class="txt">What did Refik Anadol’s AI learn from?</span><div class="opts"></div></li>
+</ol><p class="tfb"></p></div>
+<div class="discuss" data-k="ai"><p>💬 Should a song made mostly by AI be allowed to win a Grammy? Explain your opinion with at least one reason.</p><textarea rows="3" placeholder="Type your answer here. It saves automatically in this browser."></textarea></div>
+</template>
+
+<template id="tpl-worlds">
+<p id="wor-1"><b>Immersive art</b> surrounds you, so you step inside it instead of looking at it in a frame. In Tokyo, the art group <b>teamLab</b>, founded in 2001, opened <b>teamLab Borderless</b> in 2018: dark rooms filled with projected digital flowers, waterfalls, and lights that drift from room to room and change when visitors touch them or walk past. More than two million people visited in its first year, a world record for a museum devoted to a single art group.</p>
+<p id="wor-2">Music in video games has to be immersive too. In a movie the music never changes, but in a game nobody knows what the player will do next. So composers write <b>adaptive music</b>, which changes as you play. It may add drums when an enemy appears, grow quiet while you explore, or switch to a victory theme when you win. Composers often write it in <b>layers</b>, like the tracks in a DAW, and the game turns the layers on and off.</p>
+<div class="lab adapt"><p class="lh">🎮 Lab: Adaptive music</p><p class="sm">Press Play, then switch the game state. Listen to the layers change while the music keeps going.</p><div class="row"><button type="button" class="btn aplay">▶ Play</button><button type="button" class="btn ast" data-s="explore" aria-pressed="true">🌲 Explore</button><button type="button" class="btn ast" data-s="danger" aria-pressed="false">⚔️ Danger</button><button type="button" class="btn ast" data-s="win" aria-pressed="false">🏆 Victory</button></div><p class="out sm" aria-live="polite">Layers playing: none yet</p></div>
+<p id="wor-3">Game music now fills concert halls, and orchestras around the world give whole concerts of music from games such as <i>The Legend of Zelda</i> and <i>Final Fantasy</i>. In 2013, <b>Austin Wintory</b>’s score for the game <i>Journey</i> (2012) became the first video game soundtrack ever nominated for a Grammy. In 2023, the Grammys added an award just for video game music. Its first winner was the composer <b>Stephanie Economou</b>, for <i>Assassin’s Creed Valhalla: Dawn of Ragnarök</i>.</p>
+<div class="conn" id="wor-4"><p class="lh">🔗 Connection: dance</p><p>The British choreographer <b>Wayne McGregor</b> worked with Google Arts &amp; Culture to train an AI on videos from his dance company’s 25-year archive. The tool, called <b>Living Archive</b> (2019), suggests new movements in McGregor’s style, and his dancers try them out and build them into new choreography.</p></div>
+<div class="conn" id="wor-5"><p class="lh">🔗 Connection: theater</p><p>Theaters use computers too. Automated stage machinery can move scenery smoothly and fly large objects, even a full-size car over the audience in a stage production of <i>Chitty Chitty Bang Bang</i>. A person still runs the control desk, though, because live actors never do exactly the same thing every night. In interactive theater, sensors let performers trigger sounds and projected images with their own movements.</p></div>
+<div class="listen" data-k="worlds"><p class="lh">🎧 Hear game music live</p><p><a href="https://www.youtube.com/results?search_query=Austin+Wintory+Journey+Apotheosis+live+orchestra" target="_blank" rel="noopener">Austin Wintory: “Apotheosis” from <i>Journey</i>, played live by an orchestra</a> <span class="who">YouTube search results, about 5 minutes</span></p><p class="lf">Listen for:</p><ul><li>the solo cello that carries the main theme</li><li>how the music grows from quiet to huge</li><li>moments that sound like flying or reaching a mountaintop</li></ul><button type="button" class="btn heard">I listened</button></div>
+<div class="tryit" id="try-worlds" data-mode="keys"><p class="lh">⌨️ Try it: Level up</p><p class="sm">Press the key that answers each clue.</p><ol>
+<li data-a="2018" data-p="wor-1" data-opts="2001|2010|2018|2023"><span class="txt">In what year did teamLab Borderless open?</span><div class="opts"></div></li>
+<li data-a="More than 2 million" data-p="wor-1" data-opts="About 2,000|About 200,000|More than 2 million|About 200 million"><span class="txt">How many people visited teamLab Borderless in its first year?</span><div class="opts"></div></li>
+<li data-a="Adaptive music" data-p="wor-2" data-opts="Adaptive music|Film music|Chance music|A mashup"><span class="txt">Music that changes as you play a game</span><div class="opts"></div></li>
+<li data-a="Journey" data-p="wor-3" data-opts="Journey|Zelda|Fortnite|Final Fantasy"><span class="txt">Which game’s score was the first nominated for a Grammy?</span><div class="opts"></div></li>
+<li data-a="Stephanie Economou" data-p="wor-3" data-opts="Stephanie Economou|Austin Wintory|Holly Herndon|Billie Eilish"><span class="txt">Who won the first Grammy for video game music?</span><div class="opts"></div></li>
+<li data-a="A person at the control desk" data-p="wor-5" data-opts="A person at the control desk|The actors|An AI|The audience"><span class="txt">Who still controls automated stage machinery during a show?</span><div class="opts"></div></li>
+<li data-a="Suggests new movements" data-p="wor-4" data-opts="Suggests new movements|Plays music|Films the audience|Sells tickets"><span class="txt">What does Wayne McGregor’s Living Archive do?</span><div class="opts"></div></li>
+</ol><p class="tfb"></p></div>
+<div class="discuss" data-k="worlds"><p>💬 Design an adaptive soundtrack for a game set in your school or neighborhood. What would the music sound like while you explore, when danger appears, and when you win?</p><textarea rows="3" placeholder="Type your answer here. It saves automatically in this browser."></textarea></div>
+</template>
+
+<template id="tpl-words">
+<div><dt>Adaptive music</dt><dd>Music in a video game that changes as you play, often by turning layers on and off.</dd></div>
+<div><dt>Algorithm</dt><dd>A set of step-by-step computer rules, such as the ones streaming apps use to recommend songs.</dd></div>
+<div><dt>Artificial intelligence (AI)</dt><dd>Computer systems that learn from huge amounts of examples and can create text, pictures, or music.</dd></div>
+<div><dt>Auto-Tune</dt><dd>The best-known pitch-correction software, released in 1997 and invented by Andy Hildebrand.</dd></div>
+<div><dt>Contemporary art</dt><dd>Art made by living artists in our own time.</dd></div>
+<div><dt>Credit</dt><dd>Naming the person who created a song, dance, or artwork when you use or share it.</dd></div>
+<div><dt>Digital audio workstation (DAW)</dt><dd>Software for recording, editing, and mixing music, such as GarageBand or Ableton Live.</dd></div>
+<div><dt>Digital divide</dt><dd>The gap between people who have reliable internet and technology and people who do not.</dd></div>
+<div><dt>Glitch art</dt><dd>Art made by breaking digital files on purpose and turning the errors into images.</dd></div>
+<div><dt>Hologram</dt><dd>An image that seems to float in the air in three dimensions; Hatsune Miku’s concerts use projections that look like one.</dd></div>
+<div><dt>Immersive art</dt><dd>Art that surrounds you, so you step inside it, such as teamLab Borderless.</dd></div>
+<div><dt>Latency</dt><dd>The tiny delay as sound or video travels across the internet.</dd></div>
+<div><dt>Loop</dt><dd>A short musical pattern that repeats.</dd></div>
+<div><dt>Mashup</dt><dd>Two or more songs combined into one track.</dd></div>
+<div><dt>MIDI controller</dt><dd>A keyboard or set of pads that sends notes to a computer using MIDI, a computer language for music.</dd></div>
+<div><dt>Pitch correction</dt><dd>Software that moves a singer’s notes up or down until they are exactly in tune.</dd></div>
+<div><dt>Producer</dt><dd>The person who shapes how a recording sounds.</dd></div>
+<div><dt>Remix</dt><dd>A new version of a song made by changing its beat, its parts, or its singers.</dd></div>
+<div><dt>Sampling</dt><dd>Borrowing a short recorded piece of an older song to build a new one.</dd></div>
+<div><dt>Streaming</dt><dd>Playing music or video straight from the internet instead of owning a copy.</dd></div>
+<div><dt>Training data</dt><dd>The art, music, or writing an AI system studies in order to learn.</dd></div>
+<div><dt>Track</dt><dd>One recorded layer of a song, such as the drums or the voice, in a DAW.</dd></div>
+<div><dt>Viral</dt><dd>Spreading very quickly online as people share something again and again.</dd></div>
+<div><dt>Virtual choir</dt><dd>A choir of singers who record their parts separately, often in different countries, joined together by an editor.</dd></div>
+<div><dt>Voice clone</dt><dd>An AI copy of a real person’s voice, like the fake Drake and the Weeknd voices in “Heart on My Sleeve.”</dd></div>
+<div><dt>Vocaloid</dt><dd>Yamaha’s singing software, which sings typed-in words and melodies in a voice built from a real singer’s recordings.</dd></div>
+</template>
+
+<script>
+window.SVGS = {"bot": "<svg viewBox=\"0 0 150 170\" aria-hidden=\"true\"><rect x=\"70\" y=\"4\" width=\"10\" height=\"22\" fill=\"#cad7ff\"/><rect x=\"62\" y=\"0\" width=\"26\" height=\"12\" rx=\"3\" fill=\"#ffc23d\"/><rect x=\"22\" y=\"24\" width=\"106\" height=\"78\" rx=\"10\" fill=\"#cad7ff\" stroke=\"#1a1d4d\" stroke-width=\"5\"/><rect x=\"36\" y=\"38\" width=\"78\" height=\"46\" rx=\"6\" fill=\"#1a1d4d\"/><rect x=\"50\" y=\"50\" width=\"16\" height=\"16\" fill=\"#a6e36f\"/><rect x=\"84\" y=\"50\" width=\"16\" height=\"16\" fill=\"#a6e36f\"/><rect x=\"60\" y=\"72\" width=\"30\" height=\"5\" fill=\"#a6e36f\"/><rect x=\"10\" y=\"50\" width=\"12\" height=\"26\" rx=\"3\" fill=\"#d92f73\"/><rect x=\"128\" y=\"50\" width=\"12\" height=\"26\" rx=\"3\" fill=\"#d92f73\"/><rect x=\"40\" y=\"106\" width=\"70\" height=\"52\" rx=\"8\" fill=\"#ffe6a1\" stroke=\"#1a1d4d\" stroke-width=\"5\"/><rect x=\"54\" y=\"118\" width=\"14\" height=\"14\" fill=\"#d92f73\"/><rect x=\"74\" y=\"118\" width=\"22\" height=\"6\" fill=\"#1a1d4d\"/><rect x=\"74\" y=\"128\" width=\"16\" height=\"6\" fill=\"#1a1d4d\"/><path d=\"M40 122 l-22 18 M110 122 l22 -18\" stroke=\"#1a1d4d\" stroke-width=\"7\" stroke-linecap=\"round\"/><circle cx=\"16\" cy=\"142\" r=\"7\" fill=\"#ffc23d\"/><circle cx=\"134\" cy=\"102\" r=\"7\" fill=\"#ffc23d\"/></svg>", "glitch": "<svg viewBox=\"0 0 150 170\" aria-hidden=\"true\"><path d=\"M96 86 v20 h-58 v22 h82 v22 h-92\" fill=\"none\" stroke=\"#2c9c57\" stroke-width=\"18\"/><path d=\"M96 86 v20 h-58 v22 h82 v22 h-92\" fill=\"none\" stroke=\"#a6e36f\" stroke-width=\"5\" stroke-dasharray=\"6 10\"/><rect x=\"58\" y=\"22\" width=\"76\" height=\"66\" fill=\"#2c9c57\" stroke=\"#14532d\" stroke-width=\"4\"/><rect x=\"68\" y=\"34\" width=\"18\" height=\"18\" fill=\"#fff\"/><rect x=\"106\" y=\"34\" width=\"18\" height=\"18\" fill=\"#fff\"/><rect x=\"74\" y=\"40\" width=\"9\" height=\"9\" fill=\"#d92f73\"/><rect x=\"112\" y=\"40\" width=\"9\" height=\"9\" fill=\"#d92f73\"/><rect x=\"72\" y=\"64\" width=\"48\" height=\"8\" fill=\"#14532d\"/><rect x=\"80\" y=\"72\" width=\"8\" height=\"9\" fill=\"#fff\"/><rect x=\"104\" y=\"72\" width=\"8\" height=\"9\" fill=\"#fff\"/><path d=\"M134 62 h8 l6 -6 M142 62 l6 6\" stroke=\"#e02e4d\" stroke-width=\"4\" fill=\"none\"/><rect x=\"44\" y=\"12\" width=\"10\" height=\"10\" fill=\"#ff5ea8\"/><rect x=\"136\" y=\"10\" width=\"8\" height=\"8\" fill=\"#5ee3ff\"/><rect x=\"36\" y=\"84\" width=\"8\" height=\"8\" fill=\"#ffc23d\"/><rect x=\"128\" y=\"100\" width=\"10\" height=\"6\" fill=\"#5ee3ff\"/></svg>"};
+window.LESSON = {"code": "DIGITAL", "key": "snakes-21st-century-v1", "title": "21st-Century Arts: Snakes and Ladders", "final": "21st-Century Arts: Final Check", "end": 50, "ladders": {"8": 11, "20": 23, "29": 32}, "snakes": {"17": 4, "25": 15, "37": 24, "44": 27, "48": 35}, "stops": [{"id": "digital", "title": "Welcome to the digital age", "place": "The welcome screen", "icon": "🌐", "sq": 5, "taunt": "Bzzt! Wrong answer detected. Rebooting you back three squares!", "bank": [["What is contemporary art?", "Art made by living artists in our own time", ["Art made only on computers", "Art from the 1900s"], "dig-2"], ["What does streaming mean?", "Playing music or video straight from the internet instead of owning a copy", ["Recording music in a stream or river", "Buying a CD at a store"], "dig-1"], ["Which came first?", "MTV music videos (1981)", ["YouTube (2005)", "Spotify (2008)"], "dig-1"], ["In what year did the first iPhone arrive?", "2007", ["2001", "2015"], "dig-1"], ["Which is an example of technology as a STAGE for art?", "A song going viral online", ["A laptop used as a studio", "Asking who owns a copied file"], "dig-3"], ["Which is an example of technology as a TOOL for art?", "One laptop used as a whole recording studio", ["A song spreading on a video site", "A concert streamed to the world"], "dig-3"], ["Which question does new technology raise?", "If a computer helps make a song, who is the artist?", ["How do you tune a violin?", "Who built the first piano?"], "dig-3"], ["What do the 🔗 boxes in this game show?", "Connections from music to visual art, theater, or dance", ["Links to buy music", "Hints for the final password"], "dig-4"], ["What is an algorithm in a streaming app?", "Step-by-step computer rules that recommend what you hear next", ["A kind of digital microphone", "A playlist made by a radio DJ"], "dig-5"], ["What did Liz Pelly find about Spotify’s recommendations in 2018?", "They repeated the gender bias of playlists that featured mostly men", ["They only recommended classical music", "They played every artist equally"], "dig-5"], ["Where does Tuan Andrew Nguyen make art with Vietnamese communities?", "Around the world, including in Louisiana", ["Only inside a computer", "Only in museums in Paris"], "dig-6"]], "facts": [["Spotify began streaming music in 2008.", true, "Fact! Spotify started streaming in 2008."], ["Contemporary art means art made before 1900.", false, "Glitch! Contemporary art is art made by living artists in our own time."], ["YouTube opened in 2005.", true, "Fact! YouTube opened in 2005."], ["MTV began playing music videos after 2000.", false, "Glitch! MTV began in 1981."], ["In 2013 the most popular 1% of recordings earned most of the streaming money.", true, "Fact! One report found they earned 84% of it."], ["Streaming apps recommend songs completely at random.", false, "Glitch! They use algorithms based on what people play and skip."]]}, {"id": "studio", "title": "The bedroom studio", "place": "The bedroom studio", "icon": "🎛️", "sq": 12, "taunt": "Your answer is out of tune with my database. Back three squares!", "bank": [["What is a DAW?", "Software for recording, editing, and mixing music", ["A kind of electric guitar", "A video-sharing website"], "stu-1"], ["What is a loop?", "A short musical pattern that repeats", ["A cable that connects speakers", "The last note of a song"], "stu-2"], ["What does a MIDI controller do?", "Sends notes from a keyboard or pads to the computer", ["Records sound with a microphone", "Streams songs to your phone"], "stu-2"], ["What is a producer?", "The person who shapes how a recording sounds", ["The person who sells concert tickets", "The fastest singer in a band"], "stu-3"], ["Where did Billie Eilish and Finneas record her first album?", "In Finneas’s small bedroom", ["In a famous London studio", "In a concert hall"], "stu-3"], ["What did Billie Eilish win in 2020, at age 18?", "The four biggest Grammy Awards in one night", ["An award for best music video", "A prize for classical music"], "stu-3"], ["What did Steve Lacy use to make the beat for “PRIDE.”?", "His iPhone", ["A grand piano", "A big recording studio"], "stu-4"], ["What did David Hockney paint with in 2020?", "An iPad", ["Spray paint", "Oil paint on canvas"], "stu-5"], ["What do set designers use AutoCAD, SketchUp, and Vectorworks for?", "Building 3D models of a stage set on the computer", ["Recording singers", "Selling theater tickets"], "stu-5"]], "facts": [["A DAW is software for recording, editing, and mixing music.", true, "Fact! GarageBand and Ableton Live are DAWs."], ["Billie Eilish recorded her first album in a big Hollywood studio.", false, "Glitch! She and Finneas recorded it in his small bedroom."], ["MIDI is a computer language for music invented in 1983.", true, "Fact! MIDI lets keyboards and computers talk to each other."], ["David Hockney stopped painting when computers arrived.", false, "Glitch! He started painting on an iPhone and an iPad."]]}, {"id": "tune", "title": "Tuned by machine", "place": "The voice lab", "icon": "🎤", "sq": 19, "taunt": "Hmm, that note was flat. No Auto-Tune can save you. Back three squares!", "bank": [["What is pitch correction?", "Software that moves a singer’s notes until they are exactly in tune", ["A way to make songs louder", "Tuning a piano by ear"], "tun-1"], ["Who invented Auto-Tune?", "Andy Hildebrand", ["T-Pain", "Cher"], "tun-1"], ["What was Andy Hildebrand’s job before Auto-Tune?", "Using math to study sound waves underground to find oil", ["Singing in a rock band", "Building pianos"], "tun-1"], ["What happened on Cher’s song “Believe” (1998)?", "Extreme Auto-Tune made her voice jump like a robot, and it became an effect", ["She sang with no instruments at all", "The song was recorded on a phone"], "tun-2"], ["Which singer made the robotic Auto-Tune sound his trademark in the 2000s?", "T-Pain", ["Jay-Z", "Finneas"], "tun-3"], ["What was Jay-Z’s 2009 song “D.O.A.” about?", "The “death” of Auto-Tune", ["The birth of hip-hop", "A virtual choir"], "tun-3"], ["What was the vocoder first invented for?", "Sending voices over telephone lines", ["Tuning orchestras", "Recording movies"], "tun-4"], ["What is glitch art?", "Art made by breaking digital files on purpose and using the errors", ["Paintings of computers", "Photos edited to look perfect"], "tun-5"]], "facts": [["Auto-Tune was released in 1997.", true, "Fact! Andy Hildebrand released it in 1997."], ["Auto-Tune can only make voices sound like robots.", false, "Glitch! Used gently, it fixes small mistakes you can barely hear."], ["The vocoder was invented in the 1930s.", true, "Fact! It came from Bell Labs in the 1930s."], ["Glitch artists work hard to remove every digital error.", false, "Glitch! Glitch artists break files on purpose and use the errors."]]}, {"id": "viral", "title": "Gone viral: remix and the internet", "place": "The remix room", "icon": "🔁", "sq": 26, "taunt": "Ha! That answer got zero likes. Scroll back three squares!", "bank": [["What is a remix?", "A new version of a song with a changed beat, parts, or singers", ["Two songs played at the same time by accident", "A live concert recording"], "vir-1"], ["What is a mashup?", "Two or more songs combined into one track", ["A song with no words", "A dance made on TikTok"], "vir-1"], ["How did “Old Town Road” begin?", "Lil Nas X bought a beat online for about $30", ["A record company hired an orchestra", "He wrote it for a movie"], "vir-2"], ["Whose banjo music is sampled in the “Old Town Road” beat?", "Nine Inch Nails", ["Billy Ray Cyrus", "Kraftwerk"], "vir-2"], ["Where did “Old Town Road” spread first?", "On TikTok", ["On the radio", "In a movie theater"], "vir-3"], ["Why did Billboard take the song off its country chart?", "It said the song was not country enough", ["The song was too long", "The singer was too young"], "vir-3"], ["How long was “Old Town Road” number one on the Billboard Hot 100?", "19 weeks", ["1 week", "52 weeks"], "vir-3"], ["Why are Nine Inch Nails members listed as songwriters of “Old Town Road”?", "The beat uses their music, so they get credit", ["They sang on the remix", "They bought the song"], "vir-4"], ["What happened after the New York Times told Jalaiah Harmon’s story?", "She performed the “Renegade” at the NBA All-Star Game", ["She stopped dancing", "TikTok banned the dance"], "vir-5"], ["In 2018, eight of YouTube’s ten most-watched music videos were in which language?", "Spanish", ["English", "Korean"], "vir-6"], ["Which remix did Beyoncé perform with J Balvin at Coachella in 2018?", "“Mi Gente”", ["“Old Town Road”", "“Renegade”"], "vir-6"]], "facts": [["Lil Nas X paid about $30 for the “Old Town Road” beat.", true, "Fact! He bought it online from the producer YoungKio."], ["A mashup is one song played very fast.", false, "Glitch! A mashup combines two or more songs into one track."], ["“Old Town Road” spent 19 weeks at number one.", true, "Fact! In 2019 that was a record."], ["Jalaiah Harmon was a famous adult star when she created the “Renegade.”", false, "Glitch! She was a 14-year-old dancer, and at first few people knew her name."], ["In 2018 most of YouTube’s top ten music videos were in Spanish.", true, "Fact! Eight of the ten were in Spanish."]]}, {"id": "choir", "title": "Together, apart", "place": "The video-call stage", "icon": "🎶", "sq": 33, "taunt": "Your answer arrived with too much latency. Back three squares!", "bank": [["What is a virtual choir?", "Singers who record separately, joined together by an editor", ["A choir of robots", "A choir that only sings online games’ music"], "cho-2"], ["What gave Eric Whitacre the idea for a virtual choir?", "A video of a young woman singing his music alone at her webcam", ["A TV talent show", "A broken microphone"], "cho-1"], ["How many singers were in the first Virtual Choir (2010)?", "185", ["12", "17,572"], "cho-2"], ["What does Lux Aurumque mean?", "Light and gold", ["Sing gently", "Voices together"], "cho-2"], ["What did each singer watch while recording?", "A video of Whitacre conducting", ["The other singers live", "A karaoke screen with lyrics only"], "cho-2"], ["How many singers sang in Virtual Choir 6 (2020)?", "17,572", ["185", "1,200"], "cho-3"], ["Why don’t virtual choirs sing together live on a video call?", "Latency: the internet delay makes singers fall out of time", ["Video calls cannot play music", "It is against the law"], "cho-4"], ["How did millions of people see Hamilton at home in 2020?", "A filmed version came out on Disney+", ["It was played on the radio", "Every theater stayed open"], "cho-5"], ["What is the digital divide?", "The gap between people who have reliable internet and people who do not", ["A split screen on a video call", "The delay in a virtual choir"], "cho-5"]], "facts": [["The first Virtual Choir had 185 singers from 12 countries.", true, "Fact! It sang Lux Aurumque in 2010."], ["Latency is a kind of microphone.", false, "Glitch! Latency is the tiny delay as sound travels across the internet."], ["Broadway was closed for 18 months during the pandemic.", true, "Fact! It closed in March 2020 and reopened in September 2021."], ["Virtual choir singers all sing at the same moment on one video call.", false, "Glitch! They record separately, and an editor lines them up."], ["A 2025 study found that most rural audience members in Nigeria had reliable internet.", false, "Glitch! Only 22% of the rural people surveyed did. That gap is the digital divide."]]}, {"id": "ai", "title": "Artificial voices", "place": "The robot recital hall", "icon": "🤖", "sq": 40, "taunt": "Error 404: correct answer not found. Back three squares!", "bank": [["What is Vocaloid?", "Singing software that sings typed-in words in a voice built from a real singer", ["A robot that plays the violin", "A video game"], "ai-1"], ["Who is Hatsune Miku?", "A Vocaloid voice with a cartoon character, released in 2007", ["A real Japanese pop singer", "The inventor of Auto-Tune"], "ai-1"], ["Who made Hatsune Miku famous?", "Fans who wrote and posted songs for her", ["A Hollywood movie studio", "The Grammy Awards"], "ai-2"], ["How does Hatsune Miku appear at her concerts?", "Projected onto a clear screen, like a hologram", ["As a robot on stage", "Only as a voice with no picture"], "ai-2"], ["How do AI systems learn to make art and music?", "By studying huge amounts of existing art, music, and writing", ["By taking art classes", "By copying one single song"], "ai-3"], ["Why have many artists objected to AI tools?", "Their work was used to train AI without permission or payment", ["AI tools are too slow", "AI only makes black-and-white pictures"], "ai-3"], ["What is Holly+?", "Holly Herndon’s AI “digital twin” of her own voice", ["A new streaming app", "A Grammy category"], "ai-4"], ["What did the Recording Academy decide in 2023?", "Only human creators can be nominated for a Grammy", ["AI songs win a special prize", "Grammys will be voted on by AI"], "ai-4"], ["What was Refik Anadol’s Unsupervised?", "An ever-changing AI “painting” made from MoMA’s collection", ["A sculpture of a robot", "A play about computers"], "ai-5"], ["When was the earliest known recording of a computer playing music made?", "1951, in Manchester, England", ["2007, in Japan", "1843, in London"], "ai-0"], ["What was “Heart on My Sleeve” (2023)?", "A song with AI voice clones of Drake and the Weeknd", ["Hatsune Miku’s first hit", "A virtual choir piece"], "ai-6"], ["Why was “Heart on My Sleeve” pulled from streaming services?", "Universal Music Group, the stars’ record company, made a copyright claim", ["Drake sang it badly", "It was too long"], "ai-6"], ["What did Robert Laidlow train the AI for Techno-utopia on?", "BBC Radio 3 recordings of one orchestra, used with permission", ["Every song on the internet", "Recordings of Hatsune Miku"], "ai-7"], ["What problem does Robert Laidlow point out about copyright?", "Most recordings are owned by record companies, not by the artists", ["AI cannot read sheet music", "Orchestras refuse to be recorded"], "ai-7"]], "facts": [["Hatsune Miku’s voice was built from the voice of the actress Saki Fujita.", true, "Fact! Vocaloid voices start with recordings of a real singer."], ["Hatsune Miku is a real person who sings in disguise.", false, "Glitch! She is a software voice with a cartoon character."], ["In 2023 the Recording Academy said only human creators can be nominated for Grammys.", true, "Fact! AI can help, but people must do a meaningful part of the work."], ["Refik Anadol’s Unsupervised was painted by hand with oil paint.", false, "Glitch! An AI trained on MoMA’s collection created it."], ["People were making music with dice games back in the 1700s.", true, "Fact! Musical dice games chose which bars came next."], ["Drake and the Weeknd recorded “Heart on My Sleeve” together.", false, "Glitch! Their voices were faked with AI, and they had nothing to do with it."]]}, {"id": "worlds", "title": "Step inside the art", "place": "The infinite game world", "icon": "🎮", "sq": 46, "taunt": "Game over! Well, not quite. Respawn three squares back!", "bank": [["What is immersive art?", "Art that surrounds you, so you step inside it", ["Art you can only see underwater", "Paintings hung in a frame"], "wor-1"], ["What is teamLab Borderless?", "Rooms of projected digital art that respond to visitors", ["A concert hall for orchestras", "A video game about Tokyo"], "wor-1"], ["What is adaptive music?", "Game music that changes as you play", ["Music that never changes", "Music played only at the end of a game"], "wor-2"], ["How do composers usually build adaptive music?", "In layers that the game turns on and off", ["By improvising live during each game", "By choosing notes with dice"], "wor-2"], ["Whose score was the first video game soundtrack nominated for a Grammy?", "Austin Wintory’s, for Journey", ["Stephanie Economou’s, for Assassin’s Creed", "Finneas’s, for bad guy"], "wor-3"], ["Who won the first Grammy for video game music, in 2023?", "Stephanie Economou", ["Austin Wintory", "Eric Whitacre"], "wor-3"], ["What did Wayne McGregor train an AI on?", "Videos from his dance company’s 25-year archive", ["Every song by Billie Eilish", "Paintings in MoMA"], "wor-4"], ["What does Living Archive do?", "Suggests new dance movements in McGregor’s style", ["Plays music for dancers", "Records the audience"], "wor-4"], ["Why does a person still run the control desk for automated stage machinery?", "Live actors never do exactly the same thing every night", ["The machines are too heavy", "The audience asks for it"], "wor-5"]], "facts": [["teamLab Borderless opened in Tokyo in 2018.", true, "Fact! Its digital artworks move from room to room."], ["Adaptive music always sounds exactly the same.", false, "Glitch! It changes as you play the game."], ["Journey was the first video game score nominated for a Grammy.", true, "Fact! Austin Wintory’s score was nominated in 2013."], ["The Grammys have never given an award for video game music.", false, "Glitch! They added one in 2023, won by Stephanie Economou."], ["In interactive theater, sensors can let performers trigger sounds and images by moving.", true, "Fact! Their movements control the media."]]}]};
+</script>
+<script>
+(function(){
+var L = window.LESSON, KEY = L.key, stops = L.stops, DRAW = 3, END = L.end, TEACHER_EMAIL = "lcorrea@mcacubs.org";
+var LAD = L.ladders, SNK = L.snakes, NL = L.code.length;
+var teacher = /[?&]teacher=1/.test(location.search);
+var $ = function(s, r){ return (r || document).querySelector(s); };
+var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+var RM = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+function fmt(s){ s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + ":" + ("0" + (s % 60)).slice(-2); }
+function words(el){ return ((el.innerText || el.textContent || "").trim().split(/\s+/).length) || 1; }
+function rereadNeed(el){ return Math.min(40, Math.max(10, Math.round(words(el) / 200 * 60))); }
+function go(el, center){ if (el) el.scrollIntoView({behavior: RM ? "auto" : "smooth", block: center ? "center" : "start"}); }
+function visible(el){ if (!el || !document.body.contains(el)) return false; var r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight && r.height > 0; }
+function esc(t){ return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); }
+function rnd(n){ return 1 + Math.floor(Math.random() * n); }
+
+var TOKENS = [{e: "🎧", n: "Headphones"}, {e: "🎸", n: "Guitar"}, {e: "🎹", n: "Keyboard"}, {e: "🎮", n: "Controller"}];
+var SQ = {}; stops.forEach(function(s, i){ SQ[s.sq] = i; });
+
+/* ---------- state ---------- */
+var st = {};
+try { st = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch(e){}
+["read","end","solved","wrong","miss","set","ti","tlock","heard","used"].forEach(function(k){ st[k] = st[k] || {}; });
+st.pos = st.pos || 0; st.rolls = st.rolls || 0; st.log = st.log || []; st.haz = st.haz || [];
+function save(){ if (teacher) return; try { localStorage.setItem(KEY, JSON.stringify(st)); } catch(e){} }
+function solved(s){ return !!(st.solved[s.id] || teacher); }
+function grade(s){ return Math.max(50, 100 - 10 * (st.wrong[s.id] || 0)); }
+function lsGet(k){ try { return localStorage.getItem(k) || ""; } catch(e){ return ""; } }
+
+stops.forEach(function(s, i){ s.i = i; s.tpl = document.getElementById("tpl-" + s.id);
+  var tmp = document.createElement("div"); tmp.innerHTML = s.tpl.innerHTML; tmp.style.cssText = "position:absolute;left:-9999px;width:700px"; document.body.appendChild(tmp);
+  s.need = teacher ? 0 : Math.min(240, Math.max(30, Math.round(words(tmp) / 200 * 60 * 0.5)));
+  s.tries = $$(".tryit", tmp).map(function(t){ return {id: t.id, n: $$("li", t).length, title: (($(".lh", t) || {}).textContent || "").trim()}; });
+  s.listens = $$(".listen", tmp).map(function(x){ return x.dataset.k; });
+  s.discs = $$(".discuss", tmp).map(function(x){ return x.dataset.k; });
+  tmp.remove(); });
+
+function triesDone(s){ var n = 0, t = 0; s.tries.forEach(function(x){ var S = st.ti[x.id] || {}; t += x.n; for (var k = 0; k < x.n; k++) if (S[k] && S[k].done) n++; }); return [n, t]; }
+function listensDone(s){ return s.listens.filter(function(k){ return st.heard[k]; }).length; }
+function discsDone(s){ return s.discs.filter(function(k){ return lsGet(KEY + "-disc-" + k).trim().split(/\s+/).filter(Boolean).length >= 3; }).length; }
+function activitiesDone(s){ var t = triesDone(s); return t[0] === t[1] && listensDone(s) === s.listens.length && discsDone(s) === s.discs.length; }
+function me(){ return TOKENS[st.token || 0]; }
+
+if (teacher){ var tb = document.createElement("div"); tb.className = "teacherbar";
+  tb.innerHTML = "🧑‍🏫 <strong>Teacher preview:</strong> every challenge square is open and solved, the timers are off, and nothing is saved. <a href=\"" + location.pathname + "\">Switch to the student view</a>";
+  $(".topbar").appendChild(tb); }
+
+/* ---------- sound ---------- */
+var ac = null, soundOn = true;
+function AC(){ try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); if (ac.state === "suspended") ac.resume(); } catch(e){} return ac; }
+function mf(n){ return 440 * Math.pow(2, (n - 69) / 12); }
+function tone(notes, dur, type, gap, force, dest, vol){ if (!soundOn && !force) return; var a = AC(); if (!a) return;
+  notes.forEach(function(n, k){ if (n == null) return; var t = a.currentTime + 0.02 + k * gap, o = a.createOscillator(), g = a.createGain();
+    o.type = type || "triangle"; o.frequency.value = mf(n);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol || 0.15, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g).connect(dest || a.destination); o.start(t); o.stop(t + dur + 0.05); }); }
+var noiseBuf = null;
+function noise(when, dur, freq, vol, type){ var a = AC(); if (!a) return;
+  if (!noiseBuf){ noiseBuf = a.createBuffer(1, a.sampleRate * 0.5, a.sampleRate); var d = noiseBuf.getChannelData(0); for (var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+  var s = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain(); s.buffer = noiseBuf; f.type = type || "bandpass"; f.frequency.value = freq; f.Q.value = 1.2;
+  var t = a.currentTime + 0.02 + when; g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  s.connect(f).connect(g).connect(a.destination); s.start(t); s.stop(t + dur + 0.02); }
+function kick(when, vol){ var a = AC(); if (!a) return; var t = a.currentTime + 0.02 + when, o = a.createOscillator(), g = a.createGain();
+  o.type = "sine"; o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(45, t + 0.18);
+  g.gain.setValueAtTime(vol || 0.8, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.25); o.connect(g).connect(a.destination); o.start(t); o.stop(t + 0.3); }
+var sGood = function(){ tone([67,71,74,79], 0.18, "triangle", 0.08); };
+var sBad = function(){ tone([50,49,48], 0.35, "sawtooth", 0.12, false, null, 0.1); };
+var sWin = function(){ tone([60,64,67,72,76,79], 0.3, "triangle", 0.09); };
+var sStep = function(){ if (soundOn) tone([84], 0.05, "square", 0, false, null, 0.03); };
+var sClimb = function(){ tone([60,62,64,65,67,69,71,72], 0.12, "square", 0.07, false, null, 0.05); };
+var sSlide = function(){ var a = AC(); if (!a || !soundOn) return; var t = a.currentTime + 0.02, o = a.createOscillator(), g = a.createGain(); o.type = "sawtooth";
+  o.frequency.setValueAtTime(900, t); o.frequency.exponentialRampToValueAtTime(90, t + 0.9); g.gain.setValueAtTime(0.08, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 1);
+  o.connect(g).connect(a.destination); o.start(t); o.stop(t + 1.05); };
+$("#soundBtn").onclick = function(){ soundOn = !soundOn; this.textContent = soundOn ? "🔊" : "🔈"; this.setAttribute("aria-label", soundOn ? "Sound on" : "Sound off"); };
+var stoppers = [];
+function stopLabs(){ stoppers.forEach(function(f){ try { f(); } catch(e){} }); stoppers = []; }
+
+/* ---------- screens ---------- */
+var screen = $("#screen"), stage = $("#stage"), cur = {name: "title"}, busy = false;
+function show(html, after, opts){
+  opts = opts || {}; stopLabs();
+  var paint = function(){ screen.innerHTML = html; screen.className = opts.cls || ""; document.body.classList.toggle("reading", opts.cls === "notes"); if (after) after(); hud(); tickUI();
+    if (!opts.keepScroll){ var top = stage.getBoundingClientRect().top + window.scrollY - $(".topbar").offsetHeight - 8; window.scrollTo(0, Math.max(0, top)); }
+    var f = $("[data-focus]", screen); if (f) f.focus({preventScroll: true}); };
+  if (RM || opts.instant){ paint(); return; }
+  stage.classList.add("closing"); setTimeout(function(){ paint(); stage.classList.remove("closing"); }, 320);
+}
+function on(id, fn){ var el = document.getElementById(id); if (el) el.onclick = fn; }
+function speaker(svg, who, text){ return '<div class="speaker">' + svg + '<div class="bubble"><span class="who">' + who + "</span>" + text + "</div></div>"; }
+var SVG = window.SVGS;
+function anyProgress(){ return st.token !== undefined; }
+
+function title(){ cur = {name: "title"};
+  show('<p class="date">A board game about the arts and technology in the 21st century</p><h1 class="big"><span>Snakes</span><span class="amp">&amp;</span><span>Ladders</span></h1><p class="tagline">The Digital Stage</p><p class="lede">Roll the die, climb the ladders, dodge the glitch snakes, and find the seven-letter password that reboots the arts.</p>' +
+    '<div class="btns"><button class="btn gold" id="go" data-focus>Start the game</button>' + (anyProgress() ? '<button class="btn ghost" id="cont">Back to the board</button>' : "") + "</div>",
+    function(){ on("go", story); on("cont", board); }, {instant: true, cls: "center"}); }
+function story(){ cur = {name: "story"};
+  show('<h2>The story</h2><p class="lede">You open a strange app called <b>The Digital Stage</b>. The screen flickers, and you are pulled inside a giant game board where every square holds a song, a painting, a dance, or a play from the 21st century.</p>' +
+    '<p class="lede">But something is wrong. A huge pixel snake called <b>The Glitch</b> has scrambled the server. Songs skip, paintings melt into static, and dancers freeze mid-step.</p>' +
+    '<div class="btns"><button class="btn gold" id="go" data-focus>Continue</button></div>', function(){ on("go", plea); }, {cls: "center"}); }
+function plea(){ cur = {name: "plea"};
+  show(speaker(SVG.bot, "Patch, the repair bot", "Beep! You found me! I can reboot the Digital Stage, but I need a secret seven-letter password. Each of the seven challenge squares on the board hides one letter. Will you help?") +
+    '<div class="btns"><button class="btn ghost" id="no">No thanks, I’ll log off</button><button class="btn gold" id="yes" data-focus>I’m in!</button></div>',
+    function(){ on("no", sad); on("yes", pick); }, {cls: "center"}); }
+function sad(){ show(speaker(SVG.bot, "Patch, the repair bot", "Log off? The Glitch locked the exit button! The only way out is to reach square 50 with the password.") +
+    '<div class="btns"><button class="btn gold" id="go" data-focus>Fine, I’ll play!</button></div>', function(){ on("go", pick); }, {cls: "center"}); }
+function pick(){ cur = {name: "pick"};
+  show('<h2>Choose your game piece</h2><p class="lede">You play solo: just you against the board.</p><div class="tokpick">' +
+    TOKENS.map(function(t, k){ return '<button type="button" class="tok" data-k="' + k + '"' + (k === 0 ? " data-focus" : "") + '><span class="e" aria-hidden="true">' + t.e + "</span><b>" + t.n + "</b></button>"; }).join("") + "</div>",
+    function(){ $$(".tok", screen).forEach(function(b){ b.onclick = function(){ var fresh = st.token === undefined; st.token = +b.dataset.k; if (fresh){ st.pos = 0; st.rolls = 0; st.log = []; st.haz = []; } save(); how(); }; }); }, {cls: "center"}); }
+function how(){ cur = {name: "how"};
+  show(speaker(SVG.bot, "Patch, the repair bot", "Great choice, " + me().n + "! Here is how the board works.") +
+    '<ol class="how"><li>Roll the die and move toward square 50.</li>' +
+    '<li>The seven pink squares are challenge squares. When you reach one, you stop there, even if you rolled more.</li>' +
+    '<li>Read the notes to the end and finish every activity in them: the Try it, the video or listening, and the written answer. Reading time counts only while the notes are open and this tab is in front.</li>' +
+    '<li>Then face The Glitch: three questions. A wrong answer slides you <b>back 3 squares</b> and sends you to reread the <mark>highlighted</mark> part. Roll your way back for new questions.</li>' +
+    '<li>Each challenge you win reveals one letter of the password.</li>' +
+    '<li>🪜 Land at the foot of a ladder? Answer <b>Fact or glitch?</b> correctly to climb. 🐍 Land on a snake’s head? Answer correctly to dodge it, or slide down.</li>' +
+    '<li>At the end, take the Canvas quiz <b>“' + L.final + '.”</b> Use <b>Submit</b> (top of the game) to send your answers to your teacher. Your progress saves in this browser.</li></ol>' +
+    '<div class="btns"><button class="btn gold" id="go" data-focus>Go to the board</button></div>', function(){ on("go", board); }, {cls: "center"}); }
+
+/* ---------- board ---------- */
+function cols(){ return window.innerWidth < 600 ? 5 : 10; }
+var COLS = cols();
+function rc(n){ var c = COLS, rows = END / c, r = Math.floor((n - 1) / c), k = (n - 1) % c, col = r % 2 === 0 ? k : c - 1 - k; return {row: rows - 1 - r, col: col}; }
+function nextStop(doneFn){ for (var i = 0; i < stops.length; i++){ if (!doneFn(stops[i])) return stops[i]; } return null; }
+function playerCap(){ var s = nextStop(function(x){ return !!st.solved[x.id] || teacher; }); return s && s.sq >= st.pos ? s.sq : END; }
+function onStop(){ var i = SQ[st.pos]; return i !== undefined && !solved(stops[i]) ? stops[i] : null; }
+function addLog(t){ st.log.unshift(t); st.log = st.log.slice(0, 12); }
+function ladderSVG(a, b){ var dx = b.x - a.x, dy = b.y - a.y, len = Math.sqrt(dx * dx + dy * dy), ux = dx / len, uy = dy / len, px = -uy * 15, py = ux * 15, h = "";
+  var s0 = {x: a.x + ux * 18, y: a.y + uy * 18}, s1 = {x: b.x - ux * 18, y: b.y - uy * 18};
+  h += '<line class="rail" x1="' + (s0.x + px) + '" y1="' + (s0.y + py) + '" x2="' + (s1.x + px) + '" y2="' + (s1.y + py) + '"/>';
+  h += '<line class="rail" x1="' + (s0.x - px) + '" y1="' + (s0.y - py) + '" x2="' + (s1.x - px) + '" y2="' + (s1.y - py) + '"/>';
+  var L2 = len - 36, n = Math.max(2, Math.round(L2 / 26));
+  for (var k = 0; k <= n; k++){ var t = k / n, x = s0.x + (s1.x - s0.x) * t, y = s0.y + (s1.y - s0.y) * t; h += '<line class="rung" x1="' + (x + px) + '" y1="' + (y + py) + '" x2="' + (x - px) + '" y2="' + (y - py) + '"/>'; }
+  return '<g class="ladder">' + h + "</g>"; }
+function snakeSVG(hd, tl, k){ var dx = tl.x - hd.x, dy = tl.y - hd.y, len = Math.sqrt(dx * dx + dy * dy), px = -dy / len, py = dx / len, w = Math.min(46, 18 + len * 0.08), sgn = k % 2 ? 1 : -1;
+  var c1 = {x: hd.x + dx * 0.3 + px * w * sgn, y: hd.y + dy * 0.3 + py * w * sgn}, c2 = {x: hd.x + dx * 0.7 - px * w * sgn, y: hd.y + dy * 0.7 - py * w * sgn};
+  var d = "M" + hd.x + " " + hd.y + " C" + c1.x + " " + c1.y + " " + c2.x + " " + c2.y + " " + tl.x + " " + tl.y;
+  var ang = Math.atan2(c1.y - hd.y, c1.x - hd.x) * 180 / Math.PI + 180;
+  return '<g class="snake"><path class="body" d="' + d + '"/><path class="spots" d="' + d + '"/><g transform="translate(' + hd.x + " " + hd.y + ") rotate(" + ang + ')"><rect class="head" x="-17" y="-14" width="30" height="28" rx="6"/><rect class="eye" x="-6" y="-10" width="7" height="7"/><rect class="eye" x="-6" y="3" width="7" height="7"/><path class="tongue" d="M13 0 h10 l5 -5 M23 0 l5 5"/></g></g>'; }
+function overlay(){ var c = COLS, rows = END / c, W = c * 100, H = rows * 100, ctr = function(n){ var p = rc(n); return {x: p.col * 100 + 50, y: p.row * 100 + 50}; }, h = "", k = 0;
+  Object.keys(LAD).forEach(function(b){ h += ladderSVG(ctr(+b), ctr(LAD[b])); });
+  Object.keys(SNK).forEach(function(s){ h += snakeSVG(ctr(+s), ctr(SNK[s]), k++); });
+  return '<svg class="over" viewBox="0 0 ' + W + " " + H + '" aria-hidden="true">' + h + "</svg>"; }
+function cellsHTML(){
+  var h = "", c = COLS;
+  for (var n = 1; n <= END; n++){ var p = rc(n), i = SQ[n], s = i !== undefined ? stops[i] : null, cls = "cell c" + ((p.row + p.col) % 4), inner = '<span class="n">' + n + "</span>", lab = "";
+    if (LAD[n]) lab = ", ladder up to " + LAD[n]; if (SNK[n]) lab = ", snake down to " + SNK[n];
+    if (n === END){ cls = "cell finish"; inner = '<span class="n">50</span><span class="si" aria-hidden="true">🏁</span>'; }
+    if (s){ cls = "cell special" + (solved(s) ? " done" : ""); inner = '<span class="n">' + n + '</span><span class="si" aria-hidden="true">' + (solved(s) ? L.code[i] : s.icon) + "</span>"; }
+    var tag = s ? "button" : "div", attr = s ? ' type="button" data-i="' + i + '" aria-label="Challenge square ' + n + ": " + esc(s.title) + (solved(s) ? ", solved" : "") + '"' : (lab ? ' aria-label="Square ' + n + lab + '"' : "");
+    h += "<" + tag + ' class="' + cls + '" style="grid-row:' + (p.row + 1) + ";grid-column:" + (p.col + 1) + '" data-n="' + n + '"' + attr + ">" + inner + '<span class="toks"></span></' + tag + ">"; }
+  return '<div class="grid" style="grid-template-columns:repeat(' + c + ',1fr);grid-template-rows:repeat(' + (END / c) + ',1fr);aspect-ratio:' + c + "/" + (END / c) + '">' + h + overlay() + '</div><div class="startpad" data-n="0"><span class="si">▶ Start</span><span class="toks"></span></div>'; }
+function placeTokens(){ var b = $("#board"); if (!b) return;
+  $$(".toks", b).forEach(function(t){ t.innerHTML = ""; });
+  var c = $('[data-n="' + Math.min(st.pos, END) + '"] .toks', b); if (c) c.innerHTML = '<span class="me" aria-hidden="true">' + me().e + "</span>"; }
+function dieFace(n){ var on = {1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]}[n] || [];
+  return [0,1,2,3,4,5,6,7,8].map(function(k){ return '<i style="visibility:' + (on.indexOf(k) > -1 ? "visible" : "hidden") + '"></i>'; }).join(""); }
+function hazStats(){ var lad = st.haz.filter(function(h){ return h.t === "ladder"; }), snk = st.haz.filter(function(h){ return h.t === "snake"; });
+  return {lu: lad.filter(function(h){ return h.ok; }).length, lt: lad.length, sd: snk.filter(function(h){ return h.ok; }).length, stt: snk.length}; }
+function sidePanel(){
+  var s = onStop(), n = stops.filter(solved).length, hs = hazStats(), html = '<div class="die" id="die" aria-hidden="true">' + dieFace(st.lastRoll || 1) + "</div>";
+  if (st.pos >= END) html += '<button class="btn gold" id="toEnd" data-focus>Reboot the stage</button>';
+  else if (s) html += '<p class="next">You are on a challenge square: <b>' + s.icon + " " + s.title + "</b></p>" + '<button class="btn pink" id="enter" data-focus>Enter ' + s.place.toLowerCase() + "</button>";
+  else { var nx = nextStop(solved);
+    html += '<button class="btn gold" id="roll" data-focus' + (busy ? " disabled" : "") + ">Roll the die</button>" +
+      '<p class="next">' + (nx ? "Next challenge: <b>" + nx.icon + " square " + nx.sq + "</b>" : "All seven letters found! Roll to reach square 50.") + "</p>"; }
+  html += '<p class="stats">You are on square <b>' + st.pos + "</b><br>Letters found: " + n + " of " + NL + "<br>Rolls: " + st.rolls + "<br>🪜 Ladders climbed: " + hs.lu + " of " + hs.lt + "<br>🐍 Snakes dodged: " + hs.sd + " of " + hs.stt + "</p>" +
+    '<ul class="log" aria-live="polite">' + st.log.slice(0, 6).map(function(l){ return "<li>" + l + "</li>"; }).join("") + "</ul>";
+  if (teacher) html += '<div class="btns"><button class="btn ghost" id="tfin">Preview the finale</button><button class="btn ghost" id="thaz">Preview a snake question</button></div>';
+  return html; }
+function board(){ cur = {name: "board"}; if (st.token === undefined) return pick(); COLS = cols();
+  show('<div class="bwrap"><div class="board" id="board" role="group" aria-label="Game board, squares 1 to 50">' + cellsHTML() + '</div><div class="side" id="side"></div></div>', function(){
+    placeTokens(); paintSide();
+    $$("#board .cell.special").forEach(function(c){ c.onclick = function(){ var i = +c.dataset.i, s = stops[i];
+      if (teacher || st.solved[s.id] || st.read[s.id]) return notes(i);
+      if (st.pos === s.sq) return intro(i);
+      flash("Reach square " + s.sq + " to open " + s.place.toLowerCase() + "."); }; }); }, {cls: "boardscr"}); }
+window.addEventListener("resize", function(){ if (cur.name === "board" && cols() !== COLS && !busy) board(); });
+function paintSide(){ var sd = $("#side"); if (!sd) return; sd.innerHTML = sidePanel(); on("roll", roll); on("enter", function(){ intro(onStop().i); }); on("toEnd", finale); on("tfin", finale); on("thaz", function(){ hazard(+Object.keys(SNK)[0], true); }); }
+var flashT = null; function flash(t){ var p = $("#pill"); p.hidden = false; p.textContent = t; clearTimeout(flashT); flashT = setTimeout(function(){ p.hidden = true; flashT = null; }, 2600); }
+function walk(to, done){ var step = function(){ if (st.pos === to){ done(); return; } st.pos += to > st.pos ? 1 : -1; placeTokens(); sStep(); setTimeout(step, RM ? 0 : 170); }; step(); }
+function glide(to, done){ st.pos = to; placeTokens(); var t = $("#board .me"); if (t && !RM){ t.classList.add("pop"); } setTimeout(done, RM ? 0 : 500); }
+function roll(){ if (busy || onStop() || st.pos >= END) return; busy = true;
+  var r = rnd(6), d = $("#die"); st.lastRoll = r; st.rolls++; if (d){ d.innerHTML = dieFace(r); d.classList.remove("roll"); void d.offsetWidth; d.classList.add("roll"); }
+  tone([60 + r * 2], 0.12, "square", 0, false, null, 0.05);
+  var cap = playerCap(), to = Math.min(st.pos + r, cap, END);
+  paintSide();
+  setTimeout(function(){
+    walk(to, function(){
+      var s = onStop();
+      addLog("You rolled " + r + (s ? " and stopped at a challenge square." : to >= END ? " and reached square 50!" : " and moved to square " + to + "."));
+      save();
+      if (!s && to < END && (LAD[to] || SNK[to])){ setTimeout(function(){ hazard(to); }, RM ? 0 : 350); return; }
+      busy = false; paintSide(); if (s) sGood(); });
+  }, RM ? 0 : 450); }
+
+/* ---------- snakes and ladders: Fact or glitch? ---------- */
+function pickFact(){ var pool = [];
+  stops.forEach(function(s){ if (!st.solved[s.id] && !teacher) return; s.facts.forEach(function(f, k){ pool.push({s: s, k: k, f: f, key: s.id + k}); }); });
+  if (!pool.length) stops[0].facts.forEach(function(f, k){ pool.push({s: stops[0], k: k, f: f, key: stops[0].id + k}); });
+  var fresh = pool.filter(function(p){ return !st.used[p.key]; }); if (!fresh.length){ st.used = {}; fresh = pool; }
+  var recent = fresh.filter(function(p){ return p.s.i === Math.max.apply(null, fresh.map(function(x){ return x.s.i; })); });
+  var list = Math.random() < 0.6 ? recent : fresh; return list[Math.floor(Math.random() * list.length)]; }
+function hazard(sq, preview){ var isL = !!LAD[sq], dest = isL ? LAD[sq] : SNK[sq], P = pickFact();
+  cur = {name: "hazard"}; busy = true;
+  var head = isL ? '<div class="bigicon" aria-hidden="true">🪜</div><h2>A ladder! Climb to square ' + dest + "?</h2>" + speaker(SVG.bot, "Patch, the repair bot", "This ladder only works if you can tell a fact from a glitch. Is this statement true?")
+    : '<div class="bigicon" aria-hidden="true">🐍</div><h2>Snake on square ' + sq + "!</h2>" + speaker(SVG.glitch, "The Glitch", "Sssss. Tell me if this is true, or slide all the way down to square " + dest + ".");
+  show(head + '<p class="claim">“' + P.f[0] + '”</p><div class="answers two"><button type="button" class="ans" data-v="1" data-focus>✅ Fact</button><button type="button" class="ans" data-v="0">⚡ Glitch</button></div><p class="feedback" id="hfb" aria-live="polite"></p><div class="btns" id="hgo" hidden></div>',
+    function(){ $$(".ans", screen).forEach(function(b){ b.onclick = function(){
+      $$(".ans", screen).forEach(function(x){ x.disabled = true; });
+      var ok = (b.dataset.v === "1") === P.f[1]; b.classList.add(ok ? "right" : "wrong"); if (!ok){ var other = $$(".ans", screen).filter(function(x){ return x !== b; })[0]; other.classList.add("right"); }
+      $("#hfb").textContent = P.f[2];
+      if (!preview){ st.used[P.key] = 1; st.haz.push({t: isL ? "ladder" : "snake", sq: sq, q: P.f[0], ok: ok}); }
+      var move = (isL && ok) || (!isL && !ok), label;
+      if (isL) label = ok ? "Climb the ladder to square " + dest : "Stay on square " + sq;
+      else label = ok ? "Dodge the snake" : "Slide down to square " + dest;
+      if (ok) sGood(); else sBad();
+      var g = $("#hgo"); g.hidden = false; g.innerHTML = '<button class="btn gold" id="hcont" data-focus>' + label + "</button>"; $("#hcont").focus();
+      on("hcont", function(){ if (preview){ busy = false; board(); return; }
+        if (move){ addLog(isL ? "🪜 You climbed the ladder from " + sq + " to " + dest + "!" : "🐍 The Glitch bit! You slid from " + sq + " down to " + dest + ".");
+          save(); board(); busy = true; setTimeout(function(){ if (isL) sClimb(); else sSlide(); glide(dest, function(){ busy = false; save(); paintSide(); }); }, RM ? 0 : 420); }
+        else { addLog(isL ? "🪜 You missed the ladder and stayed on square " + sq + "." : "🐍 You dodged the snake on square " + sq + "!"); busy = false; save(); board(); } });
+    }; }); }, {cls: "center"}); }
+
+function intro(i){ var s = stops[i];
+  if (solved(s) || st.read[s.id] || st.miss[s.id]) return notes(i);
+  cur = {name: "intro", i: i};
+  show('<div class="bigicon">' + s.icon + '</div><h2>Square ' + s.sq + ": " + s.title + '</h2><p class="lede">You enter ' + s.place.toLowerCase() + '. Read the notes to the end and finish every activity, then face The Glitch to win this square’s letter.</p>' +
+    '<div class="btns"><button class="btn gold" id="go" data-focus>Open the notes</button><button class="btn ghost" id="back">Back to the board</button></div>',
+    function(){ on("go", function(){ notes(i); }); on("back", board); }, {cls: "center"}); }
+
+/* ---------- notes ---------- */
+function notes(i, opts){ var s = stops[i]; opts = opts || {};
+  cur = {name: "notes", i: i};
+  show('<article class="program" id="notes-' + s.id + '"><div class="ptop"><span>' + s.icon + " Square " + s.sq + ": " + s.place + "</span><span>Notes " + (i + 1) + " of " + NL + "</span></div><h2>" + s.title + "</h2>" + s.tpl.innerHTML +
+    '<div class="endmark" aria-hidden="true"></div><div class="gate" id="gate"></div></article>',
+    function(){ initInteractives(screen); gateUI(); if (opts.focus){ var el = passageEl(s); setTimeout(function(){ go(el, true); }, RM ? 0 : 50); } },
+    {cls: "notes", keepScroll: !!opts.focus});
+}
+function passageEl(s){ var m = st.miss[s.id]; return m ? document.getElementById(s.bank[m.q][3]) : null; }
+function ready(s){ return teacher || (st.end[s.id] && (st.read[s.id] || 0) >= s.need && activitiesDone(s)); }
+function ck(ok, text){ return '<p class="gl"><span class="ck' + (ok ? " yes" : "") + '">' + (ok ? "✓" : "○") + "</span> " + text + "</p>"; }
+function gateUI(){
+  if (cur.name !== "notes") return; var s = stops[cur.i], g = $("#gate"); if (!g) return;
+  var html, here = st.pos === s.sq;
+  if (solved(s)) html = '<p class="lbl">🔓 Challenge won! This square’s letter: <span class="letter">' + L.code[s.i] + '</span></p><div class="btns"><button class="btn gold" id="gboard">Back to the board</button>' + (teacher ? '<button class="btn" id="gchal">Preview the challenge</button>' : "") + "</div>";
+  else if (st.miss[s.id]){ var m = st.miss[s.id];
+    html = '<p class="lbl">⚡ You slid back 3 squares. Reread before you try again.</p><p>You missed: <b>“' + esc(s.bank[m.q][0]) + '”</b></p><p>The answer is in the <mark>highlighted</mark> part of these notes.</p>' +
+      ck(false, "Reread the highlighted part (" + fmt(m.need - (m.seen || 0)) + " left)") + '<div class="meter"><span style="width:' + Math.min(100, (m.seen || 0) / m.need * 100) + '%"></span></div><div class="btns"><button class="btn" id="gshow">Show me the highlighted part</button></div>'; }
+  else if (ready(s) && !here) html = '<p class="lbl">🎲 Roll your way back</p><p>You have reread the notes. Go back to the board and roll to reach square ' + s.sq + ' again. Then you will get new questions.</p><div class="btns"><button class="btn gold" id="gboard" data-focus>Back to the board</button></div>';
+  else if (ready(s)) html = '<p class="lbl">🐍 You are ready to face The Glitch!</p><div class="btns"><button class="btn pink" id="gchal" data-focus>Face the challenge</button><button class="btn" id="gboard">Back to the board</button></div>';
+  else { var t = st.read[s.id] || 0, tr = triesDone(s), ls = listensDone(s), ds = discsDone(s);
+    html = '<p class="lbl">🔒 The challenge opens when you finish everything in these notes.</p>' +
+      ck(st.end[s.id], "Scroll through all the notes") +
+      ck(t >= s.need, "Spend at least " + fmt(s.need) + " reading" + (t >= s.need ? "" : " (" + fmt(s.need - t) + " left)")) +
+      ck(tr[0] === tr[1], "Finish the Try it activity (" + tr[0] + " of " + tr[1] + ")") +
+      (s.listens.length ? ck(ls === s.listens.length, "Open the video or listening example and press its button when you finish") : "") +
+      (s.discs.length ? ck(ds === s.discs.length, "Write an answer to the 💬 question (at least a full sentence)") : "") +
+      '<div class="meter"><span style="width:' + Math.min(100, t / s.need * 100) + '%"></span></div><div class="btns"><button class="btn" id="gboard">Back to the board</button></div>'; }
+  if (g.dataset.html !== html){ g.dataset.html = html; g.innerHTML = html; on("gboard", board); on("gchal", function(){ challenge(s.i); }); on("gshow", function(){ go(passageEl(s), true); }); }
+  $$(".missed.lm", screen).forEach(function(x){ x.classList.remove("missed", "lm"); });
+  var pe = passageEl(s); if (pe && !solved(s)) pe.classList.add("missed", "lm");
+}
+
+/* ---------- challenge ---------- */
+function drawSet(s, must){ var rest = shuffle(s.bank.map(function(_, k){ return k; }).filter(function(k){ return k !== must; }));
+  st.set[s.id] = shuffle((must === undefined ? rest : [must].concat(rest)).slice(0, DRAW)); save(); return st.set[s.id]; }
+function challenge(i){ var s = stops[i], idx = st.set[s.id] || drawSet(s);
+  cur = {name: "challenge", i: i}; ask(s, idx, 0); }
+function ask(s, idx, n){
+  var b = s.bank[idx[n]], opts = shuffle([b[1]].concat(b[2]));
+  var pips = '<div class="pips">' + idx.map(function(_, k){ return '<span class="pip' + (k < n ? " on" : "") + '"></span>'; }).join("") + "</div>";
+  show('<p class="progress">' + s.icon + " Square " + s.sq + " challenge: question " + (n + 1) + " of " + idx.length + "</p>" + pips + speaker(SVG.glitch, "The Glitch", b[0]) +
+    '<div class="answers">' + opts.map(function(o){ return '<button type="button" class="ans" data-ok="' + (o === b[1] ? 1 : 0) + '">' + o + "</button>"; }).join("") + "</div>",
+    function(){ $$(".ans", screen).forEach(function(btn){ btn.onclick = function(){
+      $$(".ans", screen).forEach(function(x){ x.disabled = true; });
+      if (btn.dataset.ok === "1"){ btn.classList.add("right"); sGood();
+        setTimeout(function(){ if (n + 1 < idx.length) ask(s, idx, n + 1); else { if (!teacher){ st.solved[s.id] = true; delete st.set[s.id]; addLog("You won the letter " + L.code[s.i] + "!"); save(); } won(s); } }, RM ? 150 : 500);
+      } else { btn.classList.add("wrong"); sBad();
+        if (!teacher){ st.wrong[s.id] = (st.wrong[s.id] || 0) + 1; delete st.set[s.id];
+          var tmp = document.createElement("div"); tmp.innerHTML = s.tpl.innerHTML; var pe = tmp.querySelector("#" + b[3]);
+          st.miss[s.id] = {q: idx[n], seen: 0, need: rereadNeed(pe || tmp)}; st.pos = Math.max(0, s.sq - 3); addLog("A wrong answer slid you back to square " + st.pos + "."); save(); }
+        setTimeout(function(){ jam(s, b); }, RM ? 150 : 600); }
+    }; }); }, {cls: "center", instant: n > 0});
+}
+function jam(s, b){ cur = {name: "jam", i: s.i};
+  show('<h2>Slide back 3 squares!</h2>' + speaker(SVG.glitch, "The Glitch", s.taunt) + '<p class="lede">You missed: <b>“' + b[0] + '”</b></p><p>The answer is <mark>highlighted</mark> in the notes. Reread it until the timer finishes, then roll back to square ' + s.sq + ' for new questions.</p>' +
+    '<div class="btns"><button class="btn gold" id="go" data-focus>Reread the notes</button></div>',
+    function(){ on("go", function(){ notes(s.i, {focus: true}); }); }, {cls: "center"}); }
+function won(s){ cur = {name: "won", i: s.i}; sWin();
+  show('<div class="bigicon">' + s.icon + '</div><h2>You cleared ' + s.place.toLowerCase() + '!</h2><p class="lede">Your letter of the password: <span class="letter">' + L.code[s.i] + "</span></p>" +
+    '<div class="btns"><button class="btn gold" id="go" data-focus>Back to the board</button></div>', function(){ on("go", board); }, {cls: "center"}); }
+
+/* ---------- finale + results ---------- */
+function finale(){ cur = {name: "finale"};
+  if (!teacher && (st.pos < END || !stops.every(solved))) return board();
+  show('<div class="bossrow">' + SVG.glitch + '<div class="bubble"><span class="who">The Glitch</span>Sssss. You made it to square 50, but the stage stays scrambled forever unless you know the password. And you never will!</div></div>' +
+    '<p class="lede">Your letters spell the password. Type it to reboot the Digital Stage.</p><div class="code">' + L.code.split("").map(function(c){ return "<span>" + c + "</span>"; }).join("") + '</div>' +
+    '<form id="pwf" class="pwf" onsubmit="return false"><input id="pw" autocomplete="off" aria-label="Password" placeholder="Password" data-focus><button class="btn pink" id="pwgo">Reboot!</button></form><p class="feedback" id="pwfb"></p>',
+    function(){ var f = function(){ if ($("#pw").value.trim().toUpperCase() === L.code){ st.done = true; save(); results(); } else { sBad(); $("#pwfb").textContent = "Access denied. Check the letters you found and try again."; } };
+      on("pwgo", f); }, {cls: "center"}); }
+function results(){ cur = {name: "results"}; sWin();
+  var hs = hazStats();
+  var rows = stops.map(function(s, i){ return "<tr><td>" + (i + 1) + ". " + s.title + "</td><td>" + L.code[i] + "</td><td>" + (st.wrong[s.id] || 0) + "</td><td>" + (teacher ? "—" : grade(s)) + "</td></tr>"; }).join("");
+  var avg = Math.round(stops.reduce(function(a, s){ return a + grade(s); }, 0) / stops.length);
+  show('<h1 class="big"><span>' + L.code + '!</span></h1><p class="lede">You type the password, and the screen flashes. Songs play again, paintings bloom back into color, and the dancers finish their steps. The Glitch shrinks into a single harmless pixel. Twenty-first-century art is digital, and now it is safe.</p>' +
+    '<p class="lede">You reached square 50 in <b>' + st.rolls + " rolls</b>. You climbed " + hs.lu + " of " + hs.lt + " ladders and dodged " + hs.sd + " of " + hs.stt + " snakes.</p>" +
+    '<div class="program"><h3>Your grades</h3><div class="tablewrap"><table><thead><tr><th>Challenge square</th><th>Letter</th><th>Wrong answers</th><th>Grade</th></tr></thead><tbody>' + rows +
+    '<tr><td colspan="3"><b>Overall average</b></td><td><b>' + (teacher ? "—" : avg) + "</b></td></tr></tbody></table></div>" +
+    '<p class="sm">Your rolls, ladders, and snakes do not change your grade.</p>' +
+    '<h3>Now take your graded quiz in Canvas</h3><ol><li>In this Canvas module, open the quiz <b>“' + L.final + '.”</b></li><li>Question 1 asks for the password you just used.</li><li>Keep this page open in another tab during the quiz, so you can use the Words to Know below.</li><li>Then press <b>Submit</b> at the top of the game to send your answers to your teacher.</li></ol>' +
+    '<h3>📖 Words to Know</h3>' + wordsBlock() + "</div>" +
+    '<div class="btns"><button class="btn gold" id="sub">Submit my work</button><button class="btn ghost" id="back">Back to the board</button></div>',
+    function(){ initWords(screen); on("sub", submit); on("back", board); }, {cls: "center"}); }
+function wordsBlock(){ return '<input type="search" class="wsearch" placeholder="Search the words…" aria-label="Search the Words to Know"><dl class="words">' + $("#tpl-words").innerHTML + '</dl><p class="sm wnone" hidden>No words match your search.</p>'; }
+function initWords(root){ var ws = $(".wsearch", root); if (!ws) return;
+  ws.addEventListener("input", function(){ var q = ws.value.trim().toLowerCase(), n = 0;
+    $$("dl.words > div", root).forEach(function(d){ var v = !q || d.textContent.toLowerCase().indexOf(q) > -1; d.hidden = !v; if (v) n++; }); $(".wnone", root).hidden = n > 0; }); }
+function wordsScreen(){ cur = {name: "words"};
+  show('<div class="program"><h2>📖 Words to Know</h2>' + wordsBlock() + '</div><div class="btns"><button class="btn gold" id="back">Back to the board</button></div>', function(){ initWords(screen); on("back", st.token === undefined ? title : board); }); }
+
+/* ---------- submit ---------- */
+function cleanTxt(el){ return (el ? el.textContent || "" : "").replace(/\s+/g, " ").trim(); }
+function buildReport(){
+  var name = lsGet(KEY + "-name").trim(), cls = lsGet(KEY + "-class").trim(), R = [];
+  R.push(L.title + " (board game)"); R.push("Student: " + (name || "(no name)") + (cls ? "   Class: " + cls : "")); R.push("Date: " + new Date().toLocaleString()); R.push("");
+  var right = 0, total = 0, box = document.createElement("div");
+  stops.forEach(function(s){ box.innerHTML = s.tpl.innerHTML;
+    $$(".tryit", box).forEach(function(t){ R.push("== " + cleanTxt($(".lh", t)) + " (Square " + s.sq + ") =="); var S = st.ti[t.id] || {};
+      $$("li", t).forEach(function(li, i){ total++; var r = S[i] || {};
+        var res = r.done ? (r.first === "ok" ? "correct (first try)" : "correct (after rereading)") : (r.first === "miss" ? "not finished (missed once)" : "(not answered)");
+        if (r.done && r.first === "ok") right++; R.push("- " + cleanTxt($(".txt", li)) + "  ->  " + res); }); R.push(""); }); });
+  R.push("Try it items correct on the first try: " + right + " of " + total); R.push("");
+  var n = stops.filter(function(s){ return st.solved[s.id]; }).length, hs = hazStats();
+  R.push("== Board game: " + n + " of " + NL + " letters found" + (st.done ? " (password entered!)" : "") + " ==");
+  R.push("Game piece: " + (st.token !== undefined ? me().n : "(not chosen)") + "   Square: " + st.pos + "   Rolls: " + st.rolls);
+  stops.forEach(function(s){ R.push("Square " + s.sq + " (" + s.title + "): " + (st.solved[s.id] ? "letter won" : "not won yet") + ", reading time " + fmt(st.read[s.id] || 0) + ", video/listening " + (listensDone(s) === s.listens.length ? "done" : "not done") + ", wrong tries " + (st.wrong[s.id] || 0) + (st.solved[s.id] ? ", grade " + grade(s) + "/100" : "")); });
+  R.push(n === NL ? "Overall game grade: " + Math.round(stops.reduce(function(a, s){ return a + grade(s); }, 0) / NL) + "/100" : "Overall grade: not available until all " + NL + " letters are found");
+  R.push(""); R.push("== Fact or glitch? (ladders and snakes, not graded) ==");
+  R.push("Ladders climbed: " + hs.lu + " of " + hs.lt + "   Snakes dodged: " + hs.sd + " of " + hs.stt);
+  st.haz.forEach(function(h){ R.push("- " + (h.t === "ladder" ? "Ladder" : "Snake") + " on square " + h.sq + ": “" + h.q + "”  ->  " + (h.ok ? "correct" : "incorrect")); });
+  R.push(""); R.push("== Written answers ==");
+  stops.forEach(function(s){ box.innerHTML = s.tpl.innerHTML; $$(".discuss", box).forEach(function(d){ var a = lsGet(KEY + "-disc-" + d.dataset.k);
+    R.push("Q: " + cleanTxt($("p", d))); R.push("A: " + (a.trim() || "(no answer)")); R.push(""); }); });
+  return R.join("\n");
+}
+window.buildReport = buildReport;
+function submit(){ cur = {name: "submit"};
+  show('<div class="program"><h2>📤 Submit your work</h2><p>Type your name and class, then copy, download, or email your answers. The report includes your challenges, Try it activities, reading times, grades, ladders and snakes, and written answers.</p>' +
+    '<div class="form"><label>Name<input id="stName" autocomplete="name"></label><label>Class<input id="stClass"></label></div>' +
+    '<div class="btns"><button type="button" class="btn pink" id="stCopy">Copy my answers</button><button type="button" class="btn" id="stDown">Download</button><button type="button" class="btn" id="stMail">Email my teacher</button><button type="button" class="btn" id="stShow">Show my answers</button></div>' +
+    '<p class="sm" id="stMsg" aria-live="polite"></p><textarea id="stOut" hidden readonly></textarea><p class="sm">After you copy or download, paste or upload your answers in the Canvas assignment for this lesson.</p>' +
+    '<div class="btns"><button type="button" class="btn ghost2" id="stReset">Start over</button></div></div><div class="btns"><button class="btn gold" id="back">Back to the board</button></div>',
+    function(){
+      var nm = $("#stName"), cl = $("#stClass"), out = $("#stOut"), msg = $("#stMsg");
+      nm.value = lsGet(KEY + "-name"); cl.value = lsGet(KEY + "-class");
+      nm.addEventListener("input", function(){ try { localStorage.setItem(KEY + "-name", nm.value); } catch(e){} });
+      cl.addEventListener("input", function(){ try { localStorage.setItem(KEY + "-class", cl.value); } catch(e){} });
+      function need(){ if (!nm.value.trim()){ msg.textContent = "Type your name first."; nm.focus(); return false; } return true; }
+      on("stShow", function(){ if (!need()) return; out.value = buildReport(); out.hidden = false; msg.textContent = "Here are your answers. Use a button above to send them."; });
+      on("stCopy", function(){ if (!need()) return; out.value = buildReport(); out.hidden = false; out.select();
+        var done = function(){ msg.textContent = "Copied! Now paste your answers into the Canvas assignment."; };
+        var fb = function(){ try { document.execCommand("copy"); done(); } catch(e){ msg.textContent = "Select the text in the box and copy it with Ctrl+C (or Cmd+C)."; } };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(out.value).then(done, fb); else fb(); });
+      on("stDown", function(){ if (!need()) return; var txt = buildReport(); out.value = txt; out.hidden = false;
+        try { var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([txt], {type: "text/plain"})); a.download = ("21st-Century Arts - " + nm.value.trim()).replace(/[^\w\- ]+/g, "") + ".txt";
+          document.body.appendChild(a); a.click(); a.remove(); msg.textContent = "Downloaded! Upload the file to the Canvas assignment."; } catch(e){ msg.textContent = "The download was blocked. Use Copy instead."; } });
+      on("stMail", function(){ if (!need()) return; var txt = buildReport(); out.value = txt; out.hidden = false;
+        var body = txt.length > 1800 ? txt.slice(0, 1800) + "\n...(the report continues; please also use Copy and paste the rest)" : txt;
+        window.location.href = "mailto:" + TEACHER_EMAIL + "?subject=" + encodeURIComponent(L.title + " answers: " + nm.value.trim()) + "&body=" + encodeURIComponent(body);
+        msg.textContent = "Your email app should open. If it doesn’t, use Copy instead."; });
+      on("stReset", function(){ if (!confirm("Start over? This clears all your progress and answers in this game.")) return;
+        try { Object.keys(localStorage).forEach(function(k){ if (k.indexOf(KEY) === 0) localStorage.removeItem(k); }); } catch(e){} location.reload(); });
+      on("back", st.token === undefined ? title : board);
+    });
+}
+
+/* ---------- labs and activities inside notes ---------- */
+function synthNote(a, when, midi, dur, type, vol, dest){ var o = a.createOscillator(), g = a.createGain(), t = a.currentTime + 0.05 + when; o.type = type; o.frequency.value = mf(midi);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.03); g.gain.setValueAtTime(vol, t + Math.max(0.04, dur - 0.08)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g).connect(dest || a.destination); o.start(t); o.stop(t + dur + 0.02); return o; }
+var BEAT_ROWS = [{n: "Kick", f: function(t){ kick(t, 0.8); }}, {n: "Snare", f: function(t){ noise(t, 0.14, 1800, 0.6); }}, {n: "Hi-hat", f: function(t){ noise(t, 0.04, 8000, 0.35, "highpass"); }}, {n: "Bass", f: function(t, k){ var a = AC(); synthNote(a, t, [36,36,43,41][Math.floor(k / 2) % 4], 0.2, "square", 0.07); }}];
+var DEMO = [[1,0,0,0,1,0,0,0],[0,0,1,0,0,0,1,0],[1,1,1,1,1,1,1,1],[1,0,0,1,0,0,1,0]];
+var SUSANNA = [[60,.5],[62,.5],[64,1],[67,1],[67,1.5],[69,.5],[67,1],[64,1],[60,1.5],[62,.5],[64,1],[64,1],[62,1],[60,1],[62,2]];
+function initInteractives(root){
+  $$(".explorer", root).forEach(function(ex){ var cards = $$(".card", ex), i = 0, prev = $(".prev", ex), next = $(".next", ex), cnt = $(".count", ex);
+    function sh(){ cards.forEach(function(c, k){ c.classList.toggle("on", k === i); }); cnt.textContent = (i + 1) + " of " + cards.length; prev.disabled = i === 0; next.disabled = i === cards.length - 1; }
+    prev.onclick = function(){ if (i > 0){ i--; sh(); } }; next.onclick = function(){ if (i < cards.length - 1){ i++; sh(); } }; sh(); });
+  $$(".listen", root).forEach(function(l){ var k = l.dataset.k, b = $(".heard", l); if (!b) return;
+    b.dataset.t = b.dataset.t || b.textContent;
+    var paint = function(){ var v = !!(st.heard[k] || teacher); b.classList.toggle("on", v); b.textContent = v ? "✓ Done" : b.dataset.t; b.setAttribute("aria-pressed", v ? "true" : "false"); };
+    var link = $("a", l); if (link) link.addEventListener("click", function(){ l.dataset.opened = "1"; });
+    b.onclick = function(){ if (!l.dataset.opened && !st.heard[k]){ flash("Open the link first, then press this button when you finish."); return; } st.heard[k] = st.heard[k] ? 0 : 1; save(); paint(); gateUI(); }; paint(); });
+  $$(".discuss", root).forEach(function(d){ var ta = $("textarea", d), key = KEY + "-disc-" + d.dataset.k;
+    ta.value = lsGet(key); ta.addEventListener("input", function(){ try { localStorage.setItem(key, ta.value); } catch(e){} }); });
+  $$(".tryit", root).forEach(renderTry);
+  /* beat grid */
+  $$(".beat", root).forEach(function(c){ var g = $(".beatgrid", c), pat = BEAT_ROWS.map(function(){ return [0,0,0,0,0,0,0,0]; }), timer = null, k = 0, pb = $(".bplay", c);
+    try { var saved = JSON.parse(lsGet(KEY + "-beat") || "null"); if (saved) pat = saved; } catch(e){}
+    function draw(){ g.innerHTML = BEAT_ROWS.map(function(r, i){ return '<span class="bl">' + r.n + "</span>" + pat[i].map(function(v, j){ return '<button type="button" class="pad' + (v ? " on" : "") + (timer && j === (k + 7) % 8 ? " now" : "") + '" data-r="' + i + '" data-c="' + j + '" aria-pressed="' + (v ? "true" : "false") + '" aria-label="' + r.n + " step " + (j + 1) + '"></button>'; }).join(""); }).join("");
+      $$(".pad", g).forEach(function(p){ p.onclick = function(){ var r = +p.dataset.r, j = +p.dataset.c; pat[r][j] = pat[r][j] ? 0 : 1; try { localStorage.setItem(KEY + "-beat", JSON.stringify(pat)); } catch(e){} draw(); }; }); }
+    function stop(){ clearInterval(timer); timer = null; pb.textContent = "▶ Play"; draw(); }
+    pb.onclick = function(){ if (timer) return stop(); AC(); k = 0; pb.textContent = "■ Stop";
+      var stepF = function(){ var j = k % 8; BEAT_ROWS.forEach(function(r, i){ if (pat[i][j]) r.f(0, j); }); k++; draw(); };
+      stepF(); timer = setInterval(stepF, 230); };
+    $(".bclear", c).onclick = function(){ pat = BEAT_ROWS.map(function(){ return [0,0,0,0,0,0,0,0]; }); try { localStorage.setItem(KEY + "-beat", JSON.stringify(pat)); } catch(e){} draw(); };
+    $(".bdemo", c).onclick = function(){ pat = DEMO.map(function(r){ return r.slice(); }); try { localStorage.setItem(KEY + "-beat", JSON.stringify(pat)); } catch(e){} draw(); };
+    stoppers.push(stop); draw(); });
+  /* auto-tune */
+  $$(".tune", root).forEach(function(c){ var MEL = [60,62,64,65,67,65,64,62,60], OFF = [0.35,-0.4,0.3,-0.45,0.4,-0.3,0.45,-0.35,0.25], out = $(".out", c);
+    var DESC = {raw: "Natural: every note starts a little sharp or flat and wobbles before it settles.", fix: "Gently corrected: the notes slide smoothly to the right pitch. You can barely hear the fix.", robot: "Robot effect: each note snaps instantly to the exact pitch. That jump is the sound of “Believe.”"};
+    $$(".tn", c).forEach(function(b){ b.onclick = function(){ var a = AC(); if (!a) return; var v = b.dataset.v, beat = 0.42, t0 = a.currentTime + 0.05;
+      var o = a.createOscillator(), g = a.createGain(), lfo = a.createOscillator(), lg = a.createGain(), f = a.createBiquadFilter();
+      o.type = "sawtooth"; f.type = "lowpass"; f.frequency.value = 1800; lfo.frequency.value = 5.5; lg.gain.value = v === "robot" ? 0 : 4;
+      lfo.connect(lg).connect(o.frequency); o.connect(f).connect(g).connect(a.destination);
+      g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.09, t0 + 0.05);
+      MEL.forEach(function(m, i){ var t = t0 + i * beat, target = mf(m), start = mf(m + OFF[i]);
+        if (v === "robot"){ o.frequency.setValueAtTime(target, t); }
+        else if (v === "fix"){ o.frequency.setValueAtTime(start, t); o.frequency.exponentialRampToValueAtTime(target, t + 0.12); }
+        else { o.frequency.setValueAtTime(start, t); o.frequency.linearRampToValueAtTime(mf(m + OFF[i] * 0.6), t + beat * 0.9); } });
+      var end = t0 + MEL.length * beat; g.gain.setValueAtTime(0.09, end - 0.1); g.gain.exponentialRampToValueAtTime(0.0001, end);
+      o.start(t0); lfo.start(t0); o.stop(end + 0.05); lfo.stop(end + 0.05); out.textContent = DESC[v];
+      stoppers.push(function(){ try { o.stop(); lfo.stop(); } catch(e){} }); }; }); });
+  /* remix */
+  $$(".remix", root).forEach(function(c){ var out = $(".out", c), DESC = {orig: "The original 1848 melody, played plainly.", fast: "Sped up: the same melody, faster and higher, the way many TikTok remixes sound.", slow: "Slow and low: the melody pitched down and stretched out.", beat: "The original melody over a trap-style beat with a booming kick and fast hi-hats."};
+    $$(".rx", c).forEach(function(b){ b.onclick = function(){ var a = AC(); if (!a) return; var v = b.dataset.v, beat = v === "fast" ? 0.2 : v === "slow" ? 0.46 : 0.3, sh = v === "fast" ? 5 : v === "slow" ? -7 : 0, t = 0;
+      SUSANNA.forEach(function(x){ synthNote(a, t * beat, x[0] + sh + 12, x[1] * beat * 0.95, v === "beat" ? "square" : "triangle", v === "beat" ? 0.06 : 0.14); t += x[1]; });
+      if (v === "beat"){ var total = t * beat, step = beat / 2; for (var k = 0, x = 0; x < total; k++, x += step){ noise(x, 0.03, 9000, 0.25, "highpass"); if (k % 2) noise(x + step / 2, 0.02, 9000, 0.15, "highpass"); if (k % 8 === 0 || k % 8 === 3) kick(x, 0.9); if (k % 8 === 4) noise(x, 0.15, 1800, 0.55); } }
+      out.textContent = DESC[v]; }; }); });
+  /* choir */
+  $$(".choir", root).forEach(function(c){ var V = [[72,72,74,72],[67,69,67,67],[64,65,65,64],[48,53,55,48]];
+    $$(".layer", c).forEach(function(b){ b.onclick = function(){ var v = b.getAttribute("aria-pressed") !== "true"; b.setAttribute("aria-pressed", v ? "true" : "false"); }; });
+    $$(".cs", c).forEach(function(b){ b.onclick = function(){ var a = AC(); if (!a) return; var lag = b.dataset.v === "lag", on = $$(".layer", c).filter(function(x){ return x.getAttribute("aria-pressed") === "true"; }).map(function(x){ return +x.dataset.l; });
+      if (!on.length){ flash("Turn on at least one voice first."); return; }
+      on.forEach(function(vi){ var d = lag ? [0, 0.28, 0.12, 0.45][vi] : 0; V[vi].forEach(function(m, k){ synthNote(a, d + k * 0.8, m, 0.78, "triangle", 0.1); synthNote(a, d + k * 0.8, m + 12, 0.78, "sine", 0.03); }); }); }; }); });
+  /* singing machine */
+  $$(".sing", root).forEach(function(c){ var inp = $(".singin", c), out = $(".out", c), F = {a: [800, 1200], e: [450, 1900], i: [300, 2300], o: [500, 850], u: [330, 750], y: [300, 2300]}, SC = [60,62,64,67,69,72,74,76];
+    $(".sgo", c).onclick = function(){ var a = AC(); if (!a) return; var vs = (inp.value.toLowerCase().match(/[aeiouy]/g) || []).slice(0, 12);
+      if (!vs.length){ out.textContent = "Type a word with at least one vowel."; return; }
+      vs.forEach(function(v, k){ var t = a.currentTime + 0.05 + k * 0.38, o = a.createOscillator(), g = a.createGain(), m = SC[(k * 3 + v.charCodeAt(0)) % SC.length];
+        o.type = "sawtooth"; o.frequency.value = mf(m - 12); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.35, t + 0.04); g.gain.setValueAtTime(0.35, t + 0.28); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.36);
+        o.connect(g); F[v].forEach(function(fr){ var bp = a.createBiquadFilter(), bg = a.createGain(); bp.type = "bandpass"; bp.frequency.value = fr; bp.Q.value = 9; bg.gain.value = 0.6; g.connect(bp).connect(bg).connect(a.destination); });
+        o.start(t); o.stop(t + 0.4); });
+      out.textContent = "Singing the vowels: " + vs.join(" · ").toUpperCase(); }; });
+  /* adaptive */
+  $$(".adapt", root).forEach(function(c){ var state = "explore", timer = null, k = 0, pb = $(".aplay", c), out = $(".out", c);
+    var LAY = {explore: ["pad", "melody"], danger: ["pad", "drums", "bass", "alarm"], win: ["fanfare", "drums", "bass"]};
+    var NAMES = {pad: "soft pad", melody: "flute melody", drums: "drums", bass: "pulsing bass", alarm: "danger strings", fanfare: "victory fanfare"};
+    function paintS(){ $$(".ast", c).forEach(function(b){ b.setAttribute("aria-pressed", b.dataset.s === state ? "true" : "false"); }); out.textContent = "Layers playing: " + (timer ? LAY[state].map(function(x){ return NAMES[x]; }).join(", ") : "none yet (press Play)"); }
+    function step(){ var a = AC(); if (!a) return; var j = k % 16, ly = LAY[state];
+      if (ly.indexOf("pad") > -1 && j % 8 === 0){ var ch = [[57,60,64],[53,57,60]][Math.floor(k / 8) % 2]; ch.forEach(function(m){ synthNote(a, 0, m, 1.7, "sine", 0.04); }); }
+      if (ly.indexOf("melody") > -1 && j % 2 === 0){ var ml = [76,74,72,74,76,79,76,74][(j / 2) % 8]; synthNote(a, 0, ml, 0.4, "triangle", 0.06); }
+      if (ly.indexOf("drums") > -1){ if (j % 4 === 0) kick(0, 0.7); if (j % 8 === 4) noise(0, 0.12, 1800, 0.5); noise(0, 0.03, 8000, 0.15, "highpass"); }
+      if (ly.indexOf("bass") > -1 && j % 2 === 0) synthNote(a, 0, state === "win" ? [48,48,55,55,53,53,48,48][(j / 2) % 8] : 45, 0.2, "square", 0.06);
+      if (ly.indexOf("alarm") > -1 && j % 4 === 0) synthNote(a, 0, j % 8 === 0 ? 69 : 70, 0.45, "sawtooth", 0.035);
+      if (ly.indexOf("fanfare") > -1 && j % 4 === 0) [72,76,79].forEach(function(m, q){ synthNote(a, q * 0.06, m + (j % 8 === 4 ? 2 : 0), 0.5, "square", 0.035); });
+      k++; }
+    function stop(){ clearInterval(timer); timer = null; pb.textContent = "▶ Play"; paintS(); }
+    pb.onclick = function(){ if (timer) return stop(); AC(); k = 0; pb.textContent = "■ Stop"; step(); timer = setInterval(step, 220); paintS(); };
+    $$(".ast", c).forEach(function(b){ b.onclick = function(){ state = b.dataset.s; paintS(); }; });
+    stoppers.push(stop); paintS(); });
+}
+function tiState(id){ st.ti[id] = st.ti[id] || {}; return st.ti[id]; }
+function answerTry(t, li, choice, btn){
+  var S = tiState(t.id), i = +li.dataset.i, rec = S[i] = S[i] || {};
+  if (rec.done || st.tlock[t.id]) return;
+  if (choice === li.dataset.a){ rec.done = true; rec.first = rec.first || "ok"; btn.classList.add("right"); sGood(); save(); renderTry(t); gateUI(); }
+  else { rec.first = "miss"; btn.classList.add("wrong"); sBad();
+    $$("button", t).forEach(function(x){ x.disabled = true; });
+    $(".tfb", t).textContent = "Not quite. Reread the highlighted part; the buttons come back when the timer finishes.";
+    var el = document.getElementById(li.dataset.p);
+    if (!teacher){ st.tlock[t.id] = {i: i, p: li.dataset.p, seen: 0, need: rereadNeed(el)}; save(); }
+    setTimeout(function(){ renderTry(t); go(el, true); }, RM ? 100 : 700); }
+}
+function renderTry(t){
+  var items = $$("li", t), S = tiState(t.id), lock = st.tlock[t.id], fb = $(".tfb", t), all = true;
+  items.forEach(function(li, i){ li.dataset.i = i; });
+  $$(".missed.tl", screen).forEach(function(x){ if (x.dataset.tl === t.id){ x.classList.remove("missed", "tl"); delete x.dataset.tl; } });
+  if (lock){ var pel = document.getElementById(lock.p); if (pel){ pel.classList.add("missed", "tl"); pel.dataset.tl = t.id; } }
+  items.forEach(function(li, i){ var o = $(".opts", li), rec = S[i] || {}; if (!rec.done) all = false;
+    if (!li.dataset.order) li.dataset.order = shuffle(li.dataset.opts.split("|")).join("|");
+    li.classList.toggle("ok", !!rec.done);
+    o.innerHTML = li.dataset.order.split("|").map(function(c){ return '<button type="button" class="btn' + (rec.done && c === li.dataset.a ? " right" : "") + '"' + (rec.done || lock ? " disabled" : "") + ">" + c + "</button>"; }).join("");
+    $$("button", o).forEach(function(btn){ btn.onclick = function(){ answerTry(t, li, btn.textContent, btn); }; }); });
+  fb.textContent = lock ? "Not quite. Reread the highlighted part; the buttons come back when the timer finishes." : all ? "All correct! 🎉" : "";
+}
+
+document.addEventListener("keydown", function(e){ if (e.key === "Escape") $("#modal").classList.remove("show"); });
+
+/* ---------- HUD, progress, pill, clock ---------- */
+function hud(){
+  $("#slots").innerHTML = stops.map(function(s, i){ var g = solved(s); return '<span class="slot' + (g ? " got" : "") + '" title="' + esc(s.title) + '">' + (g ? L.code[i] : s.icon) + "</span>"; }).join("");
+  var n = stops.filter(solved).length;
+  $("#pfill").style.width = Math.round(n / stops.length * 100) + "%"; $("#pct").textContent = n + " of " + NL + " letters";
+}
+var pill = $("#pill"), pillGo = null;
+pill.onclick = function(){ if (pillGo) pillGo(); };
+function tickUI(){ gateUI(); }
+var tick = 0;
+setInterval(function(){
+  var active = document.visibilityState === "visible", pillOn = false;
+  if (active && !teacher){
+    if (cur.name === "notes"){ var s = stops[cur.i];
+      if (!st.solved[s.id]){ st.read[s.id] = (st.read[s.id] || 0) + 1;
+        var em = $(".endmark", screen); if (!st.end[s.id] && em && em.getBoundingClientRect().top < window.innerHeight) st.end[s.id] = true; } }
+    stops.forEach(function(s){ var m = st.miss[s.id]; if (!m || pillOn) return;
+      var here = cur.name === "notes" && cur.i === s.i, el = here ? passageEl(s) : null, vis = here && visible(el);
+      if (vis) m.seen = (m.seen || 0) + 1;
+      pillOn = true; pill.hidden = false;
+      pill.textContent = vis ? "📖 Reread the highlighted part: " + fmt(m.need - m.seen) + " left" : "⏸ Reread timer paused (" + fmt(m.need - (m.seen || 0)) + " left). Tap here to go to the highlighted part.";
+      pillGo = function(){ if (here) go(el, true); else notes(s.i, {focus: true}); };
+      if (m.seen >= m.need){ if (el){ el.classList.remove("missed", "lm"); el.classList.add("reviewed"); }
+        drawSet(s, m.q); delete st.miss[s.id]; save(); pill.hidden = true; pillOn = false; } });
+    if (!pillOn && cur.name === "notes") $$(".tryit", screen).forEach(function(t){ var lk = st.tlock[t.id]; if (!lk || pillOn) return;
+      var el = document.getElementById(lk.p), vis = visible(el); if (vis) lk.seen++;
+      pillOn = true; pill.hidden = false; pill.textContent = vis ? "📖 Reread the highlighted part: " + fmt(lk.need - lk.seen) + " left" : "⏸ Reread timer paused (" + fmt(lk.need - lk.seen) + " left). Tap here to go to the highlighted part.";
+      pillGo = function(){ go(el, true); };
+      if (lk.seen >= lk.need){ delete st.tlock[t.id]; save(); renderTry(t); $(".tfb", t).textContent = "Try again!"; pill.hidden = true; pillOn = false; } });
+  }
+  if (!pillOn && !flashT){ pill.hidden = true; pillGo = null; }
+  if (++tick % 5 === 0) save();
+  tickUI(); hud();
+}, 1000);
+window.addEventListener("beforeunload", save);
+document.addEventListener("visibilitychange", save);
+
+/* ---------- buttons ---------- */
+$("#boardBtn").onclick = function(){ if (busy && cur.name === "hazard") return; st.token === undefined ? title() : board(); }; $("#wordsBtn").onclick = function(){ if (cur.name === "hazard") return; wordsScreen(); }; $("#submitBtn").onclick = function(){ if (cur.name === "hazard") return; submit(); };
+$("#goTop").onclick = function(){ window.scrollTo({top: 0, behavior: RM ? "auto" : "smooth"}); };
+$("#goBoard").onclick = function(){ board(); };
+$("#exitBtn").onclick = function(){ if (cur.name === "hazard") return; $("#modal").classList.add("show"); $("#stayBtn").focus(); };
+$("#stayBtn").onclick = function(){ $("#modal").classList.remove("show"); };
+$("#leaveBtn").onclick = function(){ $("#modal").classList.remove("show"); save(); title(); };
+window.__game = {board: board, notes: notes, challenge: challenge, finale: finale, results: results, submit: submit, hazard: hazard, st: function(){ return st; }, cur: function(){ return cur; }, roll: roll};
+
+function padTop(){ var tb = $(".topbar"); $(".wrap2").style.paddingTop = (tb.offsetHeight + 8) + "px"; document.documentElement.style.scrollPaddingTop = (tb.offsetHeight + 10) + "px"; }
+padTop(); window.addEventListener("resize", padTop);
+if (teacher){ if (st.token === undefined) st.token = 0; board(); } else title();
+hud();
+})();
+</script>
+</body></html>
