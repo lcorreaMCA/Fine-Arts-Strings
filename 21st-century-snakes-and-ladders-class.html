@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>21st-Century Arts: Snakes and Ladders: Team Edition</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bungee&display=swap" rel="stylesheet"><style>
+:root{color-scheme:light;--bg:#eef0fa;--surface:#ffffff;--ink:#1c1f3b;--muted:#545a7a;--line:#cfd4ea;--night:#262a66;--deep:#1a1d4d;--butter:#ffe6a1;--mint:#bceae5;--peach:#ffcdb9;--sky:#cad7ff;--pink:#d92f73;--gold:#ffc23d;--snake:#2c9c57;--spot:#a6e36f;--wood:#c9772f;--accent:#3b3fa8;--ok:#1f7a45;--ok-soft:#d8f2e2;--red:#b3263c;--red-soft:#f8dde2;--hl:#fff176;
+--display:"Bungee","Arial Black","Trebuchet MS",sans-serif;--body:"Atkinson Hyperlegible","Segoe UI",Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#11132e;--surface:#1c1f42;--ink:#e8eaf8;--muted:#a9aecb;--line:#343869;--accent:#a9adff;--ok:#7fd6a0;--ok-soft:#1d3a2c;--red:#ff8a9c;--red-soft:#4a1c26}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#11132e;--surface:#1c1f42;--ink:#e8eaf8;--muted:#a9aecb;--line:#343869;--accent:#a9adff;--ok:#7fd6a0;--ok-soft:#1d3a2c;--red:#ff8a9c;--red-soft:#4a1c26}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px);scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18.5px;line-height:1.6}
+h1,h2,h3,h4{font-family:var(--display);font-weight:400;line-height:1.15}
+h2{font-size:clamp(24px,3.8vw,34px);margin:.2em 0 .5em;color:var(--accent)}
+h3{font-size:21px;color:var(--accent);margin:1.2em 0 .4em}
+h4{font-size:18px;margin:.2em 0 .5em}
+a{color:var(--pink)}
+p{margin:.7em 0}
+.sm{font-size:15.5px;color:var(--muted)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+/* top bar */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:50;padding-top:env(safe-area-inset-top,0px);background:var(--deep);color:#e8eaf8;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.topbar .in{max-width:940px;margin:0 auto;padding:8px 18px;display:flex;align-items:center;gap:12px;font-size:15px}
+.topbar .t{font-family:var(--display);color:var(--gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar .pbar{flex:1;height:10px;border-radius:2px;background:rgba(255,255,255,.12);overflow:hidden;min-width:60px}
+.topbar .pbar i{display:block;height:100%;width:0;background:repeating-linear-gradient(90deg,var(--gold) 0 10px,#ffd877 10px 12px);transition:width .5s}
+.topbar .pct{white-space:nowrap;font-weight:700}
+.teacherbar{background:var(--gold);color:#1c1f3b;font-size:15px;padding:8px 18px;text-align:center;font-weight:700}
+.teacherbar a{color:#1c1f3b}
+/* stage */
+.wrap2{max-width:940px;margin:0 auto;padding:64px 10px 30px}
+.stage{position:relative;border-radius:14px;overflow:hidden;background:var(--night);background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:22px 22px;border:5px solid var(--deep);box-shadow:0 10px 28px rgba(20,22,60,.35);color:#eceefb}
+.hud{position:relative;z-index:2;display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 10px;background:rgba(0,0,0,.25);border-bottom:2px solid rgba(255,255,255,.08)}
+.slots{display:flex;gap:4px;flex-wrap:wrap}
+.slot{width:32px;height:34px;border-radius:4px;display:grid;place-items:center;background:rgba(255,255,255,.06);border:1.5px dashed rgba(255,255,255,.35);font-size:15px}
+.slot.got{border:2px solid var(--gold);background:var(--pink);font-family:var(--display);font-size:18px;color:#fff}
+.hud .sp{flex:1}
+.hbtn{font:700 15px var(--body);background:rgba(255,255,255,.08);color:#eceefb;border:1.5px solid rgba(255,255,255,.28);border-radius:6px;padding:5px 11px;cursor:pointer}
+.hbtn:hover{background:rgba(255,194,61,.22)}
+#screen{position:relative;z-index:1;min-height:520px;padding:22px 20px 26px}
+#screen.center{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#screen.center .lede{max-width:640px}
+#screen h2{color:var(--gold)}
+.stage .wipe{position:absolute;inset:0;z-index:3;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(26,29,77,.96) 0 6px,rgba(38,42,102,.96) 6px 12px);transform:scaleY(0);transform-origin:top;transition:transform .3s ease-in}
+.stage.closing .wipe{transform:scaleY(1)}
+.big{font-size:clamp(40px,8.5vw,84px);color:#fff;margin:.05em 0;line-height:.95;display:flex;flex-direction:column;align-items:center}
+.big span:first-child{color:var(--spot);text-shadow:0 5px 0 var(--snake)}
+.big span:last-child{color:var(--gold);text-shadow:0 5px 0 var(--wood)}
+.big .amp{font-size:.45em;color:var(--pink);text-shadow:none;margin:.1em 0}
+.tagline{font-family:var(--display);letter-spacing:.04em;color:#c9cdf5;margin:.3em 0 0;font-size:18px}
+.lede{font-size:20px}
+.date{color:#c9cdf5;margin:0;font-style:italic}
+.btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:16px 0 4px}
+.btn{font:700 16px var(--body);padding:8px 16px;border-radius:6px;border:2px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer}
+.btn:hover{background:rgba(59,63,168,.08)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.right{background:var(--ok-soft);border-color:var(--ok);color:var(--ink)}
+.btn.wrong{background:var(--red-soft);border-color:var(--red);color:var(--ink)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#1c1f3b;font-family:var(--display);font-weight:400;font-size:17px;padding:10px 22px;box-shadow:0 4px 0 #b9821a}
+.btn.gold:hover{background:#ffd264}
+.btn.pink{background:var(--pink);border-color:var(--pink);color:#fff;font-family:var(--display);font-weight:400;font-size:17px;padding:10px 22px;box-shadow:0 4px 0 #8f1748}
+.btn.ghost{border-color:rgba(255,255,255,.55);color:#eceefb}
+.btn.ghost:hover{background:rgba(255,255,255,.08)}
+.btn.ghost2{border-color:var(--line);color:var(--muted);font-size:14px}
+/* speaker */
+.speaker{display:flex;gap:16px;align-items:center;text-align:left;max-width:660px;margin:12px auto 0}
+.speaker svg{flex:0 0 112px;width:112px;height:124px}
+.bubble{background:#fffdf3;color:#1c1f3b;border-radius:10px;padding:14px 18px;font-size:18.5px;position:relative;border:3px solid var(--deep);box-shadow:4px 4px 0 rgba(0,0,0,.25)}
+.bubble .who{font-family:var(--display);color:var(--pink);font-size:14px;display:block}
+@media (max-width:600px){.speaker{flex-direction:column;text-align:center}.speaker svg{flex-basis:auto;width:90px;height:100px}}
+.how{text-align:left;max-width:660px;margin:14px auto;background:rgba(0,0,0,.22);border-radius:10px;padding:12px 18px 12px 38px}
+.how li{margin:.35em 0}
+.how mark{color:#1c1f3b}
+/* tokens */
+.tokpick{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:16px 0}
+.tok{font:inherit;background:#fffdf3;color:#1c1f3b;border:3px solid var(--deep);border-radius:10px;padding:10px 16px;cursor:pointer;min-width:122px;display:flex;flex-direction:column;align-items:center;box-shadow:0 4px 0 var(--deep)}
+.tok .e{font-size:44px;line-height:1.1}
+.tok b{font-family:var(--display);font-weight:400;font-size:16px}
+.tok:hover{border-color:var(--gold);box-shadow:0 4px 0 var(--deep),0 0 0 4px rgba(255,194,61,.45)}
+/* board */
+#screen.boardscr{padding:16px 14px 22px}
+.bwrap{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:16px;align-items:start}
+@media (max-width:760px){.bwrap{grid-template-columns:1fr}}
+.board{background:var(--deep);border-radius:10px;padding:8px;border:3px solid #10123a;box-shadow:inset 0 0 0 2px rgba(255,255,255,.08)}
+.grid{position:relative;display:grid;gap:3px}
+.cell{position:relative;border-radius:4px;background:var(--butter);color:#2a2c55;border:0;padding:0;font:inherit;display:block;min-height:0}
+.cell.c0{background:var(--butter)}.cell.c1{background:var(--mint)}.cell.c2{background:var(--peach)}.cell.c3{background:var(--sky)}
+.cell .n{position:absolute;left:3px;top:1px;font-size:clamp(9px,1.4vw,12.5px);font-weight:700;opacity:.7}
+.cell.special,.cell.finish{z-index:3}
+.cell.special{background:var(--pink);color:#fff;cursor:pointer;box-shadow:inset 0 0 0 3px var(--gold)}
+.cell.special .n{opacity:.9}
+.cell.special .si{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(15px,2.6vw,26px)}
+.cell.special.done{background:#7a2a86}
+.cell.special.done .si{font-family:var(--display);color:var(--gold);font-size:clamp(17px,2.8vw,28px)}
+.cell.finish{background:repeating-conic-gradient(#fff 0 25%,#1c1f3b 0 50%) 0 0/14px 14px;box-shadow:inset 0 0 0 3px var(--gold)}
+.cell.finish .n{background:var(--gold);color:#1c1f3b;border-radius:3px;padding:0 3px;opacity:1}
+.cell.finish .si{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(15px,2.6vw,26px)}
+.cell .toks{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;font-size:clamp(18px,3.2vw,30px);line-height:1}
+.cell:has(.me){z-index:4}
+.cell .toks span.me{filter:drop-shadow(0 2px 0 #fff) drop-shadow(0 3px 2px rgba(0,0,0,.5));animation:bob 1.4s ease-in-out infinite}
+.toks span.me.pop{animation:pop .5s ease-out}
+@keyframes bob{50%{transform:translateY(-3px)}}
+@keyframes pop{0%{transform:scale(.2)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
+.over{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;overflow:visible;opacity:.95}
+.ladder{filter:drop-shadow(0 3px 2px rgba(0,0,0,.4))}
+.ladder .rail{stroke:var(--wood);stroke-width:9;stroke-linecap:round}
+.ladder .rung{stroke:#e59a55;stroke-width:6;stroke-linecap:round}
+.snake .body{fill:none;stroke:var(--snake);stroke-width:20;stroke-linecap:round;filter:drop-shadow(0 3px 2px rgba(0,0,0,.35))}
+.snake .spots{fill:none;stroke:var(--spot);stroke-width:8;stroke-linecap:butt;stroke-dasharray:8 14}
+.snake .head{fill:var(--snake);stroke:#14532d;stroke-width:3}
+.snake .eye{fill:#fff;stroke:#1c1f3b;stroke-width:2}
+.snake .tongue{fill:none;stroke:#e02e4d;stroke-width:3.5;stroke-linecap:square}
+.startpad{margin-top:6px;border-radius:4px;background:rgba(255,255,255,.08);border:2px dashed rgba(255,255,255,.3);display:flex;align-items:center;gap:10px;padding:4px 10px;min-height:40px;position:relative}
+.startpad .si{font-family:var(--display);color:var(--gold);font-size:15px}
+.startpad .toks{position:static;display:flex;font-size:26px}
+.side{background:rgba(0,0,0,.26);border-radius:10px;padding:12px 14px}
+.die{width:82px;height:82px;margin:4px auto 8px;border-radius:12px;background:#fffdf3;border:3px solid var(--deep);display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);padding:10px;box-shadow:0 5px 0 #10123a}
+.die i{width:13px;height:13px;border-radius:2px;background:var(--pink);place-self:center;visibility:hidden}
+.die.roll{animation:shake .5s}
+@keyframes shake{20%{transform:rotate(-14deg) scale(1.05)}50%{transform:rotate(12deg)}80%{transform:rotate(-6deg)}}
+.side .btn{width:100%;margin:4px 0}
+.next{font-size:16px;margin:8px 0;background:rgba(255,255,255,.07);border-radius:6px;padding:8px 10px}
+.next b{color:var(--gold)}
+.stats{font-size:15px;line-height:1.55;margin:8px 0;color:#d4d7f6}
+.stats b{color:var(--gold)}
+.log{font-size:14.5px;line-height:1.4;max-height:160px;overflow:auto;margin:8px 0 0;padding:0;list-style:none}
+.log li{padding:3px 0;border-bottom:1px dashed rgba(255,255,255,.15)}
+@media (max-width:760px){.side{display:grid;grid-template-columns:96px 1fr;gap:4px 14px;align-items:start}.side .die{grid-row:span 3;margin:0}.side .log{grid-column:1/-1}}
+/* hazard */
+.claim{font-size:clamp(20px,3vw,25px);font-weight:700;background:#fffdf3;color:#1c1f3b;border-radius:8px;padding:12px 18px;max-width:620px;border-left:8px solid var(--gold);margin:16px auto 0}
+.answers.two{flex-direction:row;justify-content:center;max-width:460px}
+.answers.two .ans{flex:1;text-align:center;font-family:var(--display);font-weight:400}
+/* notes */
+#screen.notes{padding:14px 10px 20px}
+.program{background:var(--surface);color:var(--ink);border-radius:10px;padding:16px 26px 22px;max-width:780px;margin:0 auto;box-shadow:0 6px 0 rgba(0,0,0,.25);border:2px solid var(--line);text-align:left}
+@media (max-width:600px){.program{padding:12px 14px 18px}}
+.program h2{color:var(--accent)!important}
+.ptop{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:15px;color:var(--muted);border-bottom:2px dotted var(--line);padding-bottom:6px;margin-bottom:6px}
+.bigicon{font-size:58px;line-height:1}
+.endmark{height:2px}
+.listen,.conn,.explorer,.discuss,.tryit,.lab{border-radius:8px;padding:12px 16px;margin:18px 0}
+.lh{font-family:var(--display);font-size:16.5px;margin:0 0 4px;color:var(--accent)}
+.listen{background:rgba(59,63,168,.07);border:1px solid var(--accent)}
+.listen .who{font-size:15px;color:var(--muted)}
+.listen .lf{margin:.4em 0 0;font-weight:700;font-size:16px}
+.listen ul{margin:.2em 0 .2em 1.1em;padding:0;font-size:17px}
+.listen .heard{margin-top:6px}
+.listen .heard.on{background:var(--ok-soft);border-color:var(--ok);color:var(--ink)}
+.conn{background:rgba(255,194,61,.15);border-left:6px solid var(--gold)}
+.conn p:last-child{margin-bottom:0}
+.explorer{background:var(--bg);border:1px solid var(--line)}
+.explorer .card{display:none}.explorer .card.on{display:block}
+.explorer .card h4{color:var(--pink);font-size:22px}
+.exnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px}
+.exnav .count{font-size:15px;color:var(--muted)}
+.discuss{background:var(--bg);border:1px dashed var(--muted)}
+.discuss p{margin:0 0 6px;font-weight:700}
+.discuss textarea{width:100%;font:inherit;font-size:17px;padding:8px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.lab{background:rgba(44,156,87,.08);border:2px solid var(--snake)}
+.lab .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.lab .btn[aria-pressed="true"]{background:var(--accent);color:#fff}
+.lab .out{min-height:1.3em}
+.singin{font:inherit;padding:7px 12px;border-radius:6px;border:2px solid var(--line);background:var(--surface);color:var(--ink);width:min(260px,100%)}
+.beatgrid{display:grid;grid-template-columns:64px repeat(8,minmax(0,1fr));gap:5px;align-items:center;max-width:520px;margin:8px 0}
+.beatgrid .bl{font-size:14px;font-weight:700}
+.pad{aspect-ratio:1;border-radius:4px;border:2px solid var(--line);background:var(--surface);cursor:pointer;padding:0}
+.pad:nth-of-type(4n+1){border-color:var(--muted)}
+.pad.on{background:var(--pink);border-color:var(--pink)}
+.pad.now{outline:3px solid var(--gold);outline-offset:1px}
+/* try it */
+.tryit{background:var(--bg);border:2px solid var(--pink)}
+.tryit ol{padding-left:1.2em;margin:6px 0}
+.tryit li{margin:12px 0}
+.tryit .opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.tryit li.ok .txt::after{content:" ✓";color:var(--ok);font-weight:700}
+.tryit .tfb{font-weight:700;color:var(--pink);min-height:1.2em}
+.tryit[data-mode="keys"] .opts .btn{border-radius:6px;min-width:64px;background:var(--surface);color:var(--ink);border:2px solid var(--line);border-bottom-width:5px;padding:7px 14px}
+.tryit[data-mode="keys"] .opts .btn:hover:not(:disabled){border-color:var(--accent)}
+.tryit[data-mode="keys"] .opts .btn.right{background:var(--ok-soft);border-color:var(--ok)}
+.tryit[data-mode="keys"] .opts .btn.wrong{background:var(--red-soft);border-color:var(--red)}
+.gate{margin-top:24px;border-radius:8px;border:2px solid var(--line);padding:14px 18px;background:var(--bg)}
+.gate .lbl{font-family:var(--display);font-size:17px;color:var(--accent);margin:0 0 6px}
+.gate .gl{margin:4px 0;font-size:17px}
+.gate .ck{display:inline-block;width:1.3em;font-weight:700}
+.gate .ck.yes{color:var(--ok)}
+.gate .letter{font-family:var(--display);font-size:30px;color:var(--pink);padding:0 6px}
+.meter{height:10px;border-radius:2px;background:var(--line);overflow:hidden;margin:8px 0}
+.meter span{display:block;height:100%;background:var(--pink);width:0}
+mark,.missed{background:var(--hl)!important;color:#1c1f3b!important;box-shadow:0 0 0 4px var(--hl);border-radius:3px}
+.missed *{color:#1c1f3b!important}
+.reviewed{transition:background 2s;background:var(--ok-soft)}
+/* challenge */
+.progress{font-size:15px;color:#c9cdf5;margin:0}
+.pips{display:flex;gap:6px;justify-content:center;margin:8px 0}
+.pip{width:14px;height:14px;border-radius:2px;border:2px solid var(--gold)}
+.pip.on{background:var(--gold)}
+.answers{display:flex;flex-direction:column;gap:10px;width:100%;max-width:580px;margin:16px auto 0}
+.ans{font:700 18px var(--body);text-align:left;padding:12px 16px;border-radius:8px;border:3px solid var(--deep);background:#fffdf3;color:#1c1f3b;cursor:pointer;box-shadow:0 4px 0 #10123a}
+.ans:hover:not(:disabled){background:#fff1c4}
+.ans.right{background:#cfeedb;border-color:#1f7a45}
+.ans.wrong{background:#f8dde2;border-color:#b3263c}
+.ans:disabled{cursor:default}
+.letter{font-family:var(--display);font-size:44px;color:var(--gold);padding:0 8px}
+.feedback{min-height:1.3em;font-weight:700;color:#ffe3a3;max-width:620px}
+/* table */
+.tablewrap{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:16px;min-width:520px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:var(--bg)}
+/* finale */
+.bossrow{display:flex;gap:14px;align-items:center;max-width:660px;text-align:left}
+.bossrow svg{flex:0 0 130px;width:130px;height:144px}
+@media (max-width:600px){.bossrow{flex-direction:column;text-align:center}}
+.code{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+.code span{width:38px;height:46px;border-radius:4px;border:2px solid var(--gold);display:grid;place-items:center;font-family:var(--display);font-size:24px;color:#fff;background:var(--pink)}
+.pwf{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.pwf input{font:700 20px var(--body);padding:8px 14px;border-radius:6px;border:3px solid var(--gold);background:#fffdf3;color:#1c1f3b;letter-spacing:.12em;width:220px}
+.pwf input::placeholder{letter-spacing:0;color:#6b6e8a}
+/* words */
+.wsearch{width:100%;font:inherit;padding:8px 12px;border-radius:6px;border:2px solid var(--line);background:var(--surface);color:var(--ink);margin:6px 0 10px}
+dl.words{margin:0}
+dl.words > div{padding:6px 0;border-bottom:1px solid var(--line)}
+dl.words dt{font-weight:700;color:var(--accent)}
+dl.words dd{margin:0}
+/* submit form */
+.form{display:flex;gap:12px;flex-wrap:wrap}
+.form label{display:flex;flex-direction:column;font-weight:700;font-size:16px;flex:1;min-width:180px}
+.form input{font:inherit;padding:8px 10px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+#stOut{width:100%;min-height:200px;font:14px/1.4 Consolas,monospace;margin-top:8px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.program .btns{justify-content:flex-start}
+/* modal, pill, footer */
+.modal{position:fixed;inset:0;z-index:80;background:rgba(10,12,40,.6);display:none;align-items:center;justify-content:center;padding:20px}
+.modal.show{display:flex}
+.modal .card{background:var(--surface);color:var(--ink);border-radius:10px;padding:18px 22px;max-width:420px;text-align:center;border:4px solid var(--deep)}
+.pill{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:var(--deep);color:#eceefb;border:2px solid var(--gold);border-radius:6px;padding:8px 16px;font-size:15px;cursor:pointer;max-width:92vw;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+footer{text-align:center;font-size:14px;color:var(--muted);padding:10px 16px 26px}
+.floatbtns{position:fixed;right:12px;bottom:calc(64px + env(safe-area-inset-bottom,0px));z-index:55;display:none;flex-direction:column;gap:6px}
+body.reading .floatbtns{display:flex}
+.floatbtns button{font:700 14px var(--body);border-radius:6px;border:2px solid var(--gold);background:var(--deep);color:#eceefb;padding:6px 12px;cursor:pointer}
+
+/* artwork images */
+figure.art{margin:14px 0 4px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px}
+figure.art img{display:block;width:100%;height:auto;max-height:360px;object-fit:contain;border-radius:4px;background:#11132e}
+figure.art figcaption{font-size:15px;color:var(--muted);margin-top:6px;line-height:1.45}
+figure.art .credit{display:block;font-size:13.5px}
+figure.art .imgfail{display:none;font-size:15px;margin:4px 0}
+figure.art.noimg img{display:none}
+figure.art.noimg .imgfail{display:block}
+.seeart{margin:10px 0 0;font-weight:700}
+.explorer .card figure.art{margin-top:8px}
+
+.listen .hmsg{margin:6px 0 0;font-weight:700;color:var(--pink);min-height:0}
+.listen .hmsg:empty{display:none}
+
+.pad.drum.on{background:var(--pink);border-color:var(--pink)}
+.pad.bass.on{background:#7a2a86;border-color:#7a2a86}
+.pad.gtr.on{background:#c9772f;border-color:#c9772f}
+.pad.keys.on{background:#3b3fa8;border-color:#3b3fa8}
+.pad.str.on{background:#2c9c57;border-color:#2c9c57}
+.bmsg{font-weight:700;color:var(--ok);margin:4px 0 0}
+.bmsg:empty{display:none}
+
+#screen{min-height:620px}
+.setup{max-width:620px;width:100%;margin:10px auto 0;text-align:left}
+.tm{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.22);border-left:6px solid var(--tc);border-radius:8px;padding:6px 10px;margin:8px 0}
+.tm .e{font-size:30px}
+.tm input[id^="tn"]{flex:1;font:700 18px var(--body);padding:6px 10px;border-radius:6px;border:2px solid rgba(255,255,255,.3);background:#fffdf3;color:#1c1f3b}
+.tm .sm{color:#d4d7f6;white-space:nowrap}
+.opt{display:block;margin:10px 0;color:#eceefb}
+.opt select{font:inherit;padding:4px 8px;border-radius:6px}
+.bwrap{grid-template-columns:minmax(0,1fr) 270px}
+.turn{display:flex;gap:10px;align-items:center;background:var(--tc);color:#fff;border-radius:8px;padding:8px 12px;margin-bottom:8px;box-shadow:0 4px 0 rgba(0,0,0,.3)}
+.turn .e{font-size:34px}.turn small{display:block;font-size:13px;opacity:.9}.turn b{font-family:var(--display);font-weight:400;font-size:20px}
+.score{min-width:0;font-size:15px;margin:10px 0;color:#eceefb}
+.score th,.score td{border-color:rgba(255,255,255,.18);padding:4px 6px}
+.score th{background:rgba(255,255,255,.08)}
+.score tr.on td{background:rgba(255,194,61,.18);font-weight:700}
+.tools{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tools .btn{width:auto;color:#c9cdf5;border-color:rgba(255,255,255,.3);font-size:13px;padding:4px 8px}
+.cell .toks{display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:0 2px;font-size:clamp(14px,2.2vw,24px)}
+.toks span.tk{border-radius:50%;outline:3px solid var(--tc);background:rgba(255,255,255,.75);line-height:1.1;padding:1px}
+.toks span.tk.cur{outline-width:4px;transform:scale(1.15)}
+.ov{position:fixed;inset:0;z-index:70;background:rgba(10,12,40,.72);display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto}
+.ov[hidden]{display:none}
+.qcard{background:var(--night);color:#eceefb;border:5px solid var(--deep);border-radius:14px;max-width:860px;width:100%;padding:18px 22px;box-shadow:0 10px 30px rgba(0,0,0,.5);text-align:center}
+.qhead{display:flex;align-items:center;gap:12px;background:var(--tc);border-radius:8px;padding:8px 12px;text-align:left;color:#fff}
+.qhead .e{font-size:34px}.qhead small{display:block;font-size:13px}.qhead b{font-family:var(--display);font-weight:400;font-size:clamp(16px,2.4vw,22px)}
+.qt{margin-left:auto;font-family:var(--display);font-size:26px;background:rgba(0,0,0,.25);border-radius:6px;padding:2px 10px}
+.qt.low{background:#b3263c}
+.qcard .bubble{font-size:clamp(20px,2.8vw,28px)}
+.qcard .ans{font-size:clamp(18px,2.4vw,24px)}
+.ans .lt{display:inline-block;font-family:var(--display);font-weight:400;color:var(--pink);margin-right:6px}
+.qcard .feedback{margin:12px auto 0;font-size:20px;max-width:none}
+</style></head>
+<body>
+<div class="topbar"><div class="in"><span class="t">Snakes &amp; Ladders: The Digital Stage · Team Edition</span></div></div>
+<div class="wrap2" style="max-width:1200px"><div class="stage" id="stage"><div id="screen" aria-live="polite"></div></div></div>
+<div class="ov" id="ov" hidden role="dialog" aria-modal="true"></div>
+<footer>Fine Arts Survey, Mount Carmel Academy. Press the space bar to roll.</footer>
+<script>
+window.SVGS = {"bot": "<svg viewBox=\"0 0 150 170\" aria-hidden=\"true\"><rect x=\"70\" y=\"4\" width=\"10\" height=\"22\" fill=\"#cad7ff\"/><rect x=\"62\" y=\"0\" width=\"26\" height=\"12\" rx=\"3\" fill=\"#ffc23d\"/><rect x=\"22\" y=\"24\" width=\"106\" height=\"78\" rx=\"10\" fill=\"#cad7ff\" stroke=\"#1a1d4d\" stroke-width=\"5\"/><rect x=\"36\" y=\"38\" width=\"78\" height=\"46\" rx=\"6\" fill=\"#1a1d4d\"/><rect x=\"50\" y=\"50\" width=\"16\" height=\"16\" fill=\"#a6e36f\"/><rect x=\"84\" y=\"50\" width=\"16\" height=\"16\" fill=\"#a6e36f\"/><rect x=\"60\" y=\"72\" width=\"30\" height=\"5\" fill=\"#a6e36f\"/><rect x=\"10\" y=\"50\" width=\"12\" height=\"26\" rx=\"3\" fill=\"#d92f73\"/><rect x=\"128\" y=\"50\" width=\"12\" height=\"26\" rx=\"3\" fill=\"#d92f73\"/><rect x=\"40\" y=\"106\" width=\"70\" height=\"52\" rx=\"8\" fill=\"#ffe6a1\" stroke=\"#1a1d4d\" stroke-width=\"5\"/><rect x=\"54\" y=\"118\" width=\"14\" height=\"14\" fill=\"#d92f73\"/><rect x=\"74\" y=\"118\" width=\"22\" height=\"6\" fill=\"#1a1d4d\"/><rect x=\"74\" y=\"128\" width=\"16\" height=\"6\" fill=\"#1a1d4d\"/><path d=\"M40 122 l-22 18 M110 122 l22 -18\" stroke=\"#1a1d4d\" stroke-width=\"7\" stroke-linecap=\"round\"/><circle cx=\"16\" cy=\"142\" r=\"7\" fill=\"#ffc23d\"/><circle cx=\"134\" cy=\"102\" r=\"7\" fill=\"#ffc23d\"/></svg>", "glitch": "<svg viewBox=\"0 0 150 170\" aria-hidden=\"true\"><path d=\"M96 86 v20 h-58 v22 h82 v22 h-92\" fill=\"none\" stroke=\"#2c9c57\" stroke-width=\"18\"/><path d=\"M96 86 v20 h-58 v22 h82 v22 h-92\" fill=\"none\" stroke=\"#a6e36f\" stroke-width=\"5\" stroke-dasharray=\"6 10\"/><rect x=\"58\" y=\"22\" width=\"76\" height=\"66\" fill=\"#2c9c57\" stroke=\"#14532d\" stroke-width=\"4\"/><rect x=\"68\" y=\"34\" width=\"18\" height=\"18\" fill=\"#fff\"/><rect x=\"106\" y=\"34\" width=\"18\" height=\"18\" fill=\"#fff\"/><rect x=\"74\" y=\"40\" width=\"9\" height=\"9\" fill=\"#d92f73\"/><rect x=\"112\" y=\"40\" width=\"9\" height=\"9\" fill=\"#d92f73\"/><rect x=\"72\" y=\"64\" width=\"48\" height=\"8\" fill=\"#14532d\"/><rect x=\"80\" y=\"72\" width=\"8\" height=\"9\" fill=\"#fff\"/><rect x=\"104\" y=\"72\" width=\"8\" height=\"9\" fill=\"#fff\"/><path d=\"M134 62 h8 l6 -6 M142 62 l6 6\" stroke=\"#e02e4d\" stroke-width=\"4\" fill=\"none\"/><rect x=\"44\" y=\"12\" width=\"10\" height=\"10\" fill=\"#ff5ea8\"/><rect x=\"136\" y=\"10\" width=\"8\" height=\"8\" fill=\"#5ee3ff\"/><rect x=\"36\" y=\"84\" width=\"8\" height=\"8\" fill=\"#ffc23d\"/><rect x=\"128\" y=\"100\" width=\"10\" height=\"6\" fill=\"#5ee3ff\"/></svg>"};
+window.LESSON = {"end": 50, "ladders": {"8": 11, "20": 23, "29": 32}, "snakes": {"17": 4, "25": 15, "37": 24, "44": 27, "48": 35}, "stops": [{"id": "digital", "title": "Welcome to the digital age", "icon": "🌐", "sq": 5, "bank": [["What is contemporary art?", "Art made by living artists in our own time", ["Art made only on computers", "Art from the 1900s"], "dig-2"], ["What does streaming mean?", "Playing music or video straight from the internet instead of owning a copy", ["Recording music in a stream or river", "Buying a CD at a store"], "dig-1"], ["Which came first?", "MTV music videos (1981)", ["YouTube (2005)", "Spotify (2008)"], "dig-1"], ["In what year did the first iPhone arrive?", "2007", ["2001", "2015"], "dig-1"], ["Which is an example of technology as a STAGE for art?", "A song going viral online", ["A laptop used as a studio", "Asking who owns a copied file"], "dig-3"], ["Which is an example of technology as a TOOL for art?", "One laptop used as a whole recording studio", ["A song spreading on a video site", "A concert streamed to the world"], "dig-3"], ["Which question does new technology raise?", "If a computer helps make a song, who is the artist?", ["How do you tune a violin?", "Who built the first piano?"], "dig-3"], ["What do the 🔗 boxes in this game show?", "Connections from music to visual art, theater, or dance", ["Links to buy music", "Hints for the final password"], "dig-4"], ["What is an algorithm in a streaming app?", "Step-by-step computer rules that recommend what you hear next", ["A kind of digital microphone", "A playlist made by a radio DJ"], "dig-5"], ["What did Liz Pelly find about Spotify’s recommendations in 2018?", "They repeated the gender bias of playlists that featured mostly men", ["They only recommended classical music", "They played every artist equally"], "dig-5"], ["Where does Tuan Andrew Nguyen make art with Vietnamese communities?", "Around the world, including in Louisiana", ["Only inside a computer", "Only in museums in Paris"], "dig-6"]], "facts": [["Spotify began streaming music in 2008.", true, "Fact! Spotify started streaming in 2008."], ["Contemporary art means art made before 1900.", false, "Glitch! Contemporary art is art made by living artists in our own time."], ["YouTube opened in 2005.", true, "Fact! YouTube opened in 2005."], ["MTV began playing music videos after 2000.", false, "Glitch! MTV began in 1981."], ["In 2013 the most popular 1% of recordings earned most of the streaming money.", true, "Fact! One report found they earned 84% of it."], ["Streaming apps recommend songs completely at random.", false, "Glitch! They use algorithms based on what people play and skip."]]}, {"id": "studio", "title": "The bedroom studio", "icon": "🎛️", "sq": 12, "bank": [["What is a DAW?", "Software for recording, editing, and mixing music", ["A kind of electric guitar", "A video-sharing website"], "stu-1"], ["What is a loop?", "A short musical pattern that repeats", ["A cable that connects speakers", "The last note of a song"], "stu-2"], ["What does a MIDI controller do?", "Sends notes from a keyboard or pads to the computer", ["Records sound with a microphone", "Streams songs to your phone"], "stu-2"], ["What is a producer?", "The person who shapes how a recording sounds", ["The person who sells concert tickets", "The fastest singer in a band"], "stu-3"], ["Where did Billie Eilish and Finneas record her first album?", "In Finneas’s small bedroom", ["In a famous London studio", "In a concert hall"], "stu-3"], ["What did Billie Eilish win in 2020, at age 18?", "The four biggest Grammy Awards in one night", ["An award for best music video", "A prize for classical music"], "stu-3"], ["What did Steve Lacy use to make the beat for “PRIDE.”?", "His iPhone", ["A grand piano", "A big recording studio"], "stu-4"], ["What did David Hockney paint with in 2020?", "An iPad", ["Spray paint", "Oil paint on canvas"], "stu-5"], ["What do set designers use AutoCAD, SketchUp, and Vectorworks for?", "Building 3D models of a stage set on the computer", ["Recording singers", "Selling theater tickets"], "stu-5"], ["How did AI help finish the Beatles song “Now and Then”?", "It separated John Lennon’s real voice from the piano on an old tape", ["It wrote new lyrics", "It made a fake Lennon voice"], "stu-6"], ["What did “Now and Then” win in 2025?", "The Grammy for Best Rock Performance", ["An Oscar", "Nothing"], "stu-6"]], "facts": [["A DAW is software for recording, editing, and mixing music.", true, "Fact! GarageBand and Ableton Live are DAWs."], ["Billie Eilish recorded her first album in a big Hollywood studio.", false, "Glitch! She and Finneas recorded it in his small bedroom."], ["MIDI is a computer language for music invented in 1983.", true, "Fact! MIDI lets keyboards and computers talk to each other."], ["David Hockney stopped painting when computers arrived.", false, "Glitch! He started painting on an iPhone and an iPad."], ["The Beatles’ “Now and Then” used AI to fake John Lennon’s voice.", false, "Glitch! AI separated his real voice from an old tape. Nothing was faked."]]}, {"id": "tune", "title": "Tuned by machine", "icon": "🎤", "sq": 19, "bank": [["What is pitch correction?", "Software that moves a singer’s notes until they are exactly in tune", ["A way to make songs louder", "Tuning a piano by ear"], "tun-1"], ["Who invented Auto-Tune?", "Andy Hildebrand", ["T-Pain", "Romanthony"], "tun-1"], ["What was Andy Hildebrand’s job before Auto-Tune?", "Using math to study sound waves underground to find oil", ["Singing in a rock band", "Building pianos"], "tun-1"], ["Which singer made the robotic Auto-Tune sound his trademark in the 2000s?", "T-Pain", ["Jay-Z", "Finneas"], "tun-3"], ["What was Jay-Z’s 2009 song “D.O.A.” about?", "The “death” of Auto-Tune", ["The birth of hip-hop", "A virtual choir"], "tun-3"], ["What was the vocoder first invented for?", "Sending voices over telephone lines", ["Tuning orchestras", "Recording movies"], "tun-4"], ["What is glitch art?", "Art made by breaking digital files on purpose and using the errors", ["Paintings of computers", "Photos edited to look perfect"], "tun-5"], ["How did Daft Punk use Auto-Tune on “One More Time” (2000)?", "As an effect that made Romanthony’s voice sound like a synthesizer", ["To hide every mistake so no one could hear it", "They did not use any effects"], "tun-3"]], "facts": [["Auto-Tune was released in 1997.", true, "Fact! Andy Hildebrand released it in 1997."], ["Auto-Tune can only make voices sound like robots.", false, "Glitch! Used gently, it fixes small mistakes you can barely hear."], ["The vocoder was invented in the 1930s.", true, "Fact! It came from Bell Labs in the 1930s."], ["Glitch artists work hard to remove every digital error.", false, "Glitch! Glitch artists break files on purpose and use the errors."], ["Daft Punk used heavy Auto-Tune on purpose in “One More Time.”", true, "Fact! They treated Romanthony’s voice like a synthesizer."]]}, {"id": "viral", "title": "Gone viral: remix and the internet", "icon": "🔁", "sq": 26, "bank": [["What is a remix?", "A new version of a song with a changed beat, parts, or singers", ["Two songs played at the same time by accident", "A live concert recording"], "vir-1"], ["What is a mashup?", "Two or more songs combined into one track", ["A song with no words", "A dance made on TikTok"], "vir-1"], ["How did “Old Town Road” begin?", "Lil Nas X bought a beat online for about $30", ["A record company hired an orchestra", "He wrote it for a movie"], "vir-2"], ["Whose banjo music is sampled in the “Old Town Road” beat?", "Nine Inch Nails", ["Billy Ray Cyrus", "Kraftwerk"], "vir-2"], ["Where did “Old Town Road” spread first?", "On TikTok", ["On the radio", "In a movie theater"], "vir-3"], ["Why did Billboard take the song off its country chart?", "It said the song was not country enough", ["The song was too long", "The singer was too young"], "vir-3"], ["How long was “Old Town Road” number one on the Billboard Hot 100?", "19 weeks", ["1 week", "52 weeks"], "vir-3"], ["Why are Nine Inch Nails members listed as songwriters of “Old Town Road”?", "The beat uses their music, so they get credit", ["They sang on the remix", "They bought the song"], "vir-4"], ["What happened after the New York Times told Jalaiah Harmon’s story?", "She performed the “Renegade” at the NBA All-Star Game", ["She stopped dancing", "TikTok banned the dance"], "vir-5"], ["In 2018, eight of YouTube’s ten most-watched music videos were in which language?", "Spanish", ["English", "Korean"], "vir-6"], ["Which remix did Beyoncé perform with J Balvin at Coachella in 2018?", "“Mi Gente”", ["“Old Town Road”", "“Renegade”"], "vir-6"]], "facts": [["Lil Nas X paid about $30 for the “Old Town Road” beat.", true, "Fact! He bought it online from the producer YoungKio."], ["A mashup is one song played very fast.", false, "Glitch! A mashup combines two or more songs into one track."], ["“Old Town Road” spent 19 weeks at number one.", true, "Fact! In 2019 that was a record."], ["Jalaiah Harmon was already a famous pop singer when she created the “Renegade.”", false, "Glitch! She was a 14-year-old dancer from the Atlanta area, and at first few people knew her name."], ["In 2018 most of YouTube’s top ten music videos were in Spanish.", true, "Fact! Eight of the ten were in Spanish."]]}, {"id": "choir", "title": "Together, apart", "icon": "🎶", "sq": 33, "bank": [["What is a virtual choir?", "Singers who record separately, joined together by an editor", ["A choir of robots", "A choir that only sings online games’ music"], "cho-2"], ["What gave Eric Whitacre the idea for a virtual choir?", "A video of a young woman singing his music alone at her webcam", ["A TV talent show", "A broken microphone"], "cho-1"], ["How many singers were in the first Virtual Choir (2010)?", "185", ["12", "17,572"], "cho-2"], ["What does Lux Aurumque mean?", "Light and gold", ["Sing gently", "Voices together"], "cho-2"], ["What did each singer watch while recording?", "A video of Whitacre conducting", ["The other singers live", "A karaoke screen with lyrics only"], "cho-2"], ["How many singers sang in Virtual Choir 6 (2020)?", "17,572", ["185", "1,200"], "cho-3"], ["Why don’t virtual choirs sing together live on a video call?", "Latency: the internet delay makes singers fall out of time", ["Video calls cannot play music", "It is against the law"], "cho-4"], ["How did millions of people see Hamilton at home in 2020?", "A filmed version came out on Disney+", ["It was played on the radio", "Every theater stayed open"], "cho-5"], ["What is the digital divide?", "The gap between people who have reliable internet and people who do not", ["A split screen on a video call", "The delay in a virtual choir"], "cho-5"]], "facts": [["The first Virtual Choir had 185 singers from 12 countries.", true, "Fact! It sang Lux Aurumque in 2010."], ["Latency is a kind of microphone.", false, "Glitch! Latency is the tiny delay as sound travels across the internet."], ["Broadway was closed for 18 months during the pandemic.", true, "Fact! It closed in March 2020 and reopened in September 2021."], ["Virtual choir singers all sing at the same moment on one video call.", false, "Glitch! They record separately, and an editor lines them up."], ["A 2025 study found that most rural audience members in Nigeria had reliable internet.", false, "Glitch! Only 22% of the rural people surveyed did. That gap is the digital divide."]]}, {"id": "ai", "title": "Artificial voices", "icon": "🤖", "sq": 40, "bank": [["What is Vocaloid?", "Singing software that sings typed-in words in a voice built from a real singer", ["A robot that plays the violin", "A video game"], "ai-1"], ["Who is Hatsune Miku?", "A Vocaloid voice with a cartoon character, released in 2007", ["A real Japanese pop singer", "The inventor of Auto-Tune"], "ai-1"], ["Who made Hatsune Miku famous?", "Fans who wrote and posted songs for her", ["A Hollywood movie studio", "The Grammy Awards"], "ai-2"], ["How does Hatsune Miku appear at her concerts?", "Projected onto a clear screen, like a hologram", ["As a robot on stage", "Only as a voice with no picture"], "ai-2"], ["How do AI systems learn to make art and music?", "By studying huge amounts of existing art, music, and writing", ["By taking art classes", "By copying one single song"], "ai-3"], ["Why have many artists objected to AI tools?", "Their work was used to train AI without permission or payment", ["AI tools are too slow", "AI only makes black-and-white pictures"], "ai-3"], ["What is Holly+?", "Holly Herndon’s AI “digital twin” of her own voice", ["A new streaming app", "A Grammy category"], "ai-4"], ["What did the Recording Academy decide in 2023?", "Only human creators can be nominated for a Grammy", ["AI songs win a special prize", "Grammys will be voted on by AI"], "ai-4"], ["What was Refik Anadol’s Unsupervised?", "An ever-changing AI “painting” made from MoMA’s collection", ["A sculpture of a robot", "A play about computers"], "ai-5"], ["When was the earliest known recording of a computer playing music made?", "1951, in Manchester, England", ["2007, in Japan", "1843, in London"], "ai-0"], ["What was “Heart on My Sleeve” (2023)?", "A song with AI voice clones of Drake and the Weeknd", ["Hatsune Miku’s first hit", "A virtual choir piece"], "ai-6"], ["Why was “Heart on My Sleeve” pulled from streaming services?", "Universal Music Group, the stars’ record company, made a copyright claim", ["Drake sang it badly", "It was too long"], "ai-6"], ["What did Robert Laidlow train the AI for Techno-utopia on?", "BBC Radio 3 recordings of one orchestra, used with permission", ["Every song on the internet", "Recordings of Hatsune Miku"], "ai-7"], ["What problem does Robert Laidlow point out about copyright?", "Most recordings are owned by record companies, not by the artists", ["AI cannot read sheet music", "Orchestras refuse to be recorded"], "ai-7"], ["What are the three ways AI shows up in the arts?", "As a repair tool, a creative partner, or a fake copy", ["As a singer, a drummer, or a painter", "As a ticket, a stage, or a screen"], "ai-8"], ["Why did Hollywood actors strike in 2023, in part?", "Studios wanted to scan actors and reuse their digital copies", ["Theaters ran out of popcorn", "Movies became too short"], "ai-9"], ["What happened to Jason Allen’s AI image after it won at the Colorado State Fair?", "The U.S. Copyright Office refused to protect it", ["It was painted over", "It won an Oscar"], "ai-9"], ["What did Deezer find about AI songs in 2026?", "More than half of daily uploads were AI, but few people listened to them", ["No one uploads AI songs", "AI songs were most of what people played"], "ai-9"]], "facts": [["Hatsune Miku’s voice was built from the voice of the actress Saki Fujita.", true, "Fact! Vocaloid voices start with recordings of a real singer."], ["Hatsune Miku is a real person who sings in disguise.", false, "Glitch! She is a software voice with a cartoon character."], ["In 2023 the Recording Academy said only human creators can be nominated for Grammys.", true, "Fact! AI can help, but people must do a meaningful part of the work."], ["Refik Anadol’s Unsupervised was painted by hand with oil paint.", false, "Glitch! An AI trained on MoMA’s collection created it."], ["People were making music with dice games back in the 1700s.", true, "Fact! Musical dice games chose which bars came next."], ["Drake and the Weeknd recorded “Heart on My Sleeve” together.", false, "Glitch! Their voices were faked with AI, and they had nothing to do with it."], ["A painting by the robot Ai-Da sold for more than $1 million in 2024.", true, "Fact! Its portrait of Alan Turing sold for $1.08 million at Sotheby’s."], ["Since the 2023 strike, studios can copy any actor with AI for free.", false, "Glitch! They need the actor’s clear permission and must pay them."]]}, {"id": "worlds", "title": "Step inside the art", "icon": "🎮", "sq": 46, "bank": [["What is immersive art?", "Art that surrounds you, so you step inside it", ["Art you can only see underwater", "Paintings hung in a frame"], "wor-1"], ["What is teamLab Borderless?", "Rooms of projected digital art that respond to visitors", ["A concert hall for orchestras", "A video game about Tokyo"], "wor-1"], ["What is adaptive music?", "Game music that changes as you play", ["Music that never changes", "Music played only at the end of a game"], "wor-2"], ["How do composers usually build adaptive music?", "In layers that the game turns on and off", ["By improvising live during each game", "By choosing notes with dice"], "wor-2"], ["Whose score was the first video game soundtrack nominated for a Grammy?", "Austin Wintory’s, for Journey", ["Stephanie Economou’s, for Assassin’s Creed", "Finneas’s, for bad guy"], "wor-3"], ["Who won the first Grammy for video game music, in 2023?", "Stephanie Economou", ["Austin Wintory", "Eric Whitacre"], "wor-3"], ["What did Wayne McGregor train an AI on?", "Videos from his dance company’s 25-year archive", ["Every song by Billie Eilish", "Paintings in MoMA"], "wor-4"], ["What does Living Archive do?", "Suggests new dance movements in McGregor’s style", ["Plays music for dancers", "Records the audience"], "wor-4"], ["Why does a person still run the control desk for automated stage machinery?", "Live actors never do exactly the same thing every night", ["The machines are too heavy", "The audience asks for it"], "wor-5"], ["What made Björk’s Biophilia (2011) special?", "Each song came with an app where you play with the music and visuals", ["It had no songs", "It was only on vinyl"], "wor-7"], ["Where did Travis Scott give a concert in 2020?", "Inside the video game Fortnite", ["On the Moon", "In a museum"], "wor-7"], ["How were the ABBAtars in ABBA Voyage made?", "With motion capture of the real band members", ["By painting them by hand", "With puppets"], "wor-7"]], "facts": [["teamLab Borderless opened in Tokyo in 2018.", true, "Fact! Its digital artworks move from room to room."], ["Adaptive music always sounds exactly the same.", false, "Glitch! It changes as you play the game."], ["Journey was the first video game score nominated for a Grammy.", true, "Fact! Austin Wintory’s score was nominated in 2013."], ["The Grammys have never given an award for video game music.", false, "Glitch! They added one in 2023, won by Stephanie Economou."], ["In interactive theater, sensors can let performers trigger sounds and images by moving.", true, "Fact! Their movements control the media."], ["Björk’s Biophilia app became the first downloadable app in MoMA’s collection.", true, "Fact! MoMA added it in 2014."], ["ABBA performs ABBA Voyage live on stage in person every night.", false, "Glitch! Digital ABBAtars perform, made with motion capture, alongside a real live band."]]}]};
+</script>
+<script>
+(function(){
+var L = window.LESSON, stops = L.stops, END = L.end, LAD = L.ladders, SNK = L.snakes, KEY = "snakes-21st-century-class-v1";
+var $ = function(s, r){ return (r || document).querySelector(s); }, $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+var RM = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+function esc(t){ return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); }
+var SQ = {}; stops.forEach(function(s, i){ s.i = i; SQ[s.sq] = i; });
+var TOK = ["🎧", "🎸", "🎹", "🎮"], COLORS = ["#d92f73", "#c9772f", "#3b3fa8", "#2c9c57"];
+
+/* ---------- state ---------- */
+var G = null;
+function load(){ try { G = JSON.parse(localStorage.getItem(KEY) || "null"); } catch(e){ G = null; } }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(G)); } catch(e){} }
+function newGame(names, timer){ G = {teams: names.map(function(n, i){ return {name: n, tok: TOK[i], color: COLORS[i], pos: 0, cleared: {}, right: 0, wrong: 0, rolls: 0}; }), turn: 0, timer: timer, used: {}, fused: {}, log: [], over: false, last: 1}; save(); }
+function team(){ return G.teams[G.turn]; }
+function addLog(t){ G.log.unshift(t); G.log = G.log.slice(0, 8); }
+
+/* ---------- sound ---------- */
+var ac = null, soundOn = true;
+function AC(){ try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); if (ac.state === "suspended") ac.resume(); } catch(e){} return ac; }
+function tone(notes, dur, type, gap, vol){ if (!soundOn) return; var a = AC(); if (!a) return;
+  notes.forEach(function(n, k){ var t = a.currentTime + 0.02 + k * gap, o = a.createOscillator(), g = a.createGain(); o.type = type || "triangle"; o.frequency.value = 440 * Math.pow(2, (n - 69) / 12);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol || 0.15, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + dur); o.connect(g).connect(a.destination); o.start(t); o.stop(t + dur + 0.05); }); }
+var sGood = function(){ tone([67,71,74,79], 0.18, "triangle", 0.08); }, sBad = function(){ tone([50,49,48], 0.35, "sawtooth", 0.12, 0.1); },
+    sStep = function(){ tone([84], 0.05, "square", 0, 0.03); }, sWin = function(){ tone([60,64,67,72,76,79,84], 0.3, "triangle", 0.09); },
+    sClimb = function(){ tone([60,62,64,65,67,69,71,72], 0.12, "square", 0.07, 0.05); }, sSlide = function(){ tone([84,79,74,69,64,59,54], 0.12, "sawtooth", 0.07, 0.06); };
+
+/* ---------- board ---------- */
+var COLS = 10;
+function cols(){ return window.innerWidth < 700 ? 5 : 10; }
+function rc(n){ var c = COLS, rows = END / c, r = Math.floor((n - 1) / c), k = (n - 1) % c; return {row: rows - 1 - r, col: r % 2 === 0 ? k : c - 1 - k}; }
+function ladderSVG(a, b){ var dx = b.x - a.x, dy = b.y - a.y, len = Math.sqrt(dx * dx + dy * dy), ux = dx / len, uy = dy / len, px = -uy * 15, py = ux * 15, h = "", s0 = {x: a.x + ux * 18, y: a.y + uy * 18}, s1 = {x: b.x - ux * 18, y: b.y - uy * 18};
+  h += '<line class="rail" x1="' + (s0.x + px) + '" y1="' + (s0.y + py) + '" x2="' + (s1.x + px) + '" y2="' + (s1.y + py) + '"/><line class="rail" x1="' + (s0.x - px) + '" y1="' + (s0.y - py) + '" x2="' + (s1.x - px) + '" y2="' + (s1.y - py) + '"/>';
+  var n = Math.max(2, Math.round((len - 36) / 26)); for (var k = 0; k <= n; k++){ var t = k / n, x = s0.x + (s1.x - s0.x) * t, y = s0.y + (s1.y - s0.y) * t; h += '<line class="rung" x1="' + (x + px) + '" y1="' + (y + py) + '" x2="' + (x - px) + '" y2="' + (y - py) + '"/>'; }
+  return '<g class="ladder">' + h + "</g>"; }
+function snakeSVG(hd, tl, k){ var dx = tl.x - hd.x, dy = tl.y - hd.y, len = Math.sqrt(dx * dx + dy * dy), px = -dy / len, py = dx / len, w = Math.min(46, 18 + len * 0.08), sg = k % 2 ? 1 : -1,
+  c1 = {x: hd.x + dx * 0.3 + px * w * sg, y: hd.y + dy * 0.3 + py * w * sg}, c2 = {x: hd.x + dx * 0.7 - px * w * sg, y: hd.y + dy * 0.7 - py * w * sg}, d = "M" + hd.x + " " + hd.y + " C" + c1.x + " " + c1.y + " " + c2.x + " " + c2.y + " " + tl.x + " " + tl.y, ang = Math.atan2(c1.y - hd.y, c1.x - hd.x) * 180 / Math.PI + 180;
+  return '<g class="snake"><path class="body" d="' + d + '"/><path class="spots" d="' + d + '"/><g transform="translate(' + hd.x + " " + hd.y + ") rotate(" + ang + ')"><rect class="head" x="-17" y="-14" width="30" height="28" rx="6"/><rect class="eye" x="-6" y="-10" width="7" height="7"/><rect class="eye" x="-6" y="3" width="7" height="7"/><path class="tongue" d="M13 0 h10 l5 -5 M23 0 l5 5"/></g></g>'; }
+function boardHTML(){ COLS = cols(); var c = COLS, rows = END / c, h = "", ctr = function(n){ var p = rc(n); return {x: p.col * 100 + 50, y: p.row * 100 + 50}; }, ov = "", k = 0;
+  for (var n = 1; n <= END; n++){ var p = rc(n), i = SQ[n], s = i !== undefined ? stops[i] : null, cls = "cell c" + ((p.row + p.col) % 4), inner = '<span class="n">' + n + "</span>";
+    if (n === END){ cls = "cell finish"; inner += '<span class="si">🏁</span>'; } else if (s){ cls = "cell special"; inner += '<span class="si">' + s.icon + "</span>"; }
+    h += '<div class="' + cls + '" style="grid-row:' + (p.row + 1) + ";grid-column:" + (p.col + 1) + '" data-n="' + n + '">' + inner + '<span class="toks"></span></div>'; }
+  Object.keys(LAD).forEach(function(b){ ov += ladderSVG(ctr(+b), ctr(LAD[b])); }); Object.keys(SNK).forEach(function(s){ ov += snakeSVG(ctr(+s), ctr(SNK[s]), k++); });
+  return '<div class="grid" style="grid-template-columns:repeat(' + c + ',1fr);grid-template-rows:repeat(' + rows + ',1fr);aspect-ratio:' + c + "/" + rows + '">' + h + '<svg class="over" viewBox="0 0 ' + c * 100 + " " + rows * 100 + '" aria-hidden="true">' + ov + '</svg></div><div class="startpad" data-n="0"><span class="si">▶ Start</span><span class="toks"></span></div>'; }
+function placeTokens(){ $$("#board .toks").forEach(function(t){ t.innerHTML = ""; });
+  G.teams.forEach(function(t, i){ var c = $('#board [data-n="' + Math.min(t.pos, END) + '"] .toks'); if (c) c.insertAdjacentHTML("beforeend", '<span class="me tk' + (i === G.turn ? " cur" : "") + '" style="--tc:' + t.color + '" title="' + esc(t.name) + '">' + t.tok + "</span>"); }); }
+function dieFace(n){ var on = {1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]}[n] || []; return [0,1,2,3,4,5,6,7,8].map(function(k){ return '<i style="visibility:' + (on.indexOf(k) > -1 ? "visible" : "hidden") + '"></i>'; }).join(""); }
+function nextStop(t){ for (var i = 0; i < stops.length; i++) if (!t.cleared[stops[i].id]) return stops[i]; return null; }
+function cap(t){ var s = nextStop(t); return s && s.sq >= t.pos ? s.sq : END; }
+
+/* ---------- screens ---------- */
+var screen = $("#screen"), busy = false;
+function setup(){ var saved = G && !G.over;
+  screen.className = "center";
+  screen.innerHTML = '<p class="date">Class game for 2 to 4 teams</p><h1 class="big"><span>Snakes</span><span class="amp">&amp;</span><span>Ladders</span></h1><p class="tagline">The Digital Stage · Team Edition</p>' +
+    '<div class="setup"><p class="lede">Name the teams. Teams take turns rolling; every pink square is a team question about 21st-century arts and technology.</p>' +
+    [0,1,2,3].map(function(i){ return '<label class="tm" style="--tc:' + COLORS[i] + '"><span class="e">' + TOK[i] + '</span><input id="tn' + i + '" value="Team ' + (i + 1) + '" maxlength="20" aria-label="Team ' + (i + 1) + ' name"><span class="sm">' + (i < 2 ? "" : '<input type="checkbox" id="tu' + i + '" checked> playing') + "</span></label>"; }).join("") +
+    '<label class="opt">Time to answer each question: <select id="tsel"><option value="0">No timer</option><option value="30" selected>30 seconds</option><option value="45">45 seconds</option><option value="60">60 seconds</option></select></label></div>' +
+    '<div class="btns"><button class="btn gold" id="start">Start a new game</button>' + (saved ? '<button class="btn ghost" id="resume">Continue the saved game</button>' : "") + '<button class="btn ghost" id="rules">How to play</button></div>';
+  $("#start").onclick = function(){ var names = [0,1,2,3].filter(function(i){ return i < 2 || $("#tu" + i).checked; }).map(function(i){ return $("#tn" + i).value.trim() || "Team " + (i + 1); });
+    newGame(names, +$("#tsel").value); AC(); board(); };
+  if (saved) $("#resume").onclick = board;
+  $("#rules").onclick = rules; }
+function rules(){ screen.className = "center";
+  screen.innerHTML = '<h2>How to play</h2><ol class="how"><li>Teams take turns. On your turn, one team member presses <b>Roll the die</b>.</li>' +
+    '<li>The seven pink squares are <b>challenge squares</b>. Every team must stop on each one, even if it rolled more.</li>' +
+    '<li>On a challenge square, The Glitch asks your team a question. Talk it over, then choose one answer. Right: you clear that square and score a point. Wrong: slide back 3 squares and try again with a new question when you return.</li>' +
+    '<li>🪜 Land at the foot of a ladder? Answer <b>Fact or glitch?</b> correctly to climb. 🐍 Land on a snake’s head? Answer correctly to dodge it, or slide down.</li>' +
+    '<li>The first team to reach square 50 wins. If time runs out, the team farthest along wins; ties go to the team with more correct answers.</li>' +
+    '<li>Respect the timer, and only one answer per team!</li></ol><div class="btns"><button class="btn gold" id="back">Back</button></div>';
+  $("#back").onclick = function(){ G && !G.over && $("#board") === null && G.teams ? setup() : setup(); }; }
+function board(){ screen.className = "boardscr";
+  screen.innerHTML = '<div class="bwrap"><div class="board" id="board" role="group" aria-label="Game board">' + boardHTML() + '</div><div class="side" id="side"></div></div>';
+  placeTokens(); side(); }
+window.addEventListener("resize", function(){ if ($("#board") && cols() !== COLS && !busy) board(); });
+function side(){ var t = team(), html = '<div class="turn" style="--tc:' + t.color + '"><span class="e">' + t.tok + '</span><span><small>Now playing</small><b>' + esc(t.name) + "</b></span></div>" +
+    '<div class="die" id="die" aria-hidden="true">' + dieFace(G.last) + '</div><button class="btn gold" id="roll"' + (busy || G.over ? " disabled" : "") + ">Roll the die</button>";
+  html += '<table class="score"><thead><tr><th>Team</th><th>Square</th><th>✓</th></tr></thead><tbody>' + G.teams.map(function(x, i){ return '<tr class="' + (i === G.turn ? "on" : "") + '"><td><span style="color:' + x.color + '">●</span> ' + x.tok + " " + esc(x.name) + "</td><td>" + x.pos + "</td><td>" + x.right + "</td></tr>"; }).join("") + "</tbody></table>";
+  html += '<ul class="log" aria-live="polite">' + G.log.slice(0, 4).map(function(l){ return "<li>" + l + "</li>"; }).join("") + "</ul>";
+  html += '<div class="tools"><button class="btn ghost2" id="skip">Skip turn</button><button class="btn ghost2" id="endg">End game</button><button class="btn ghost2" id="snd">' + (soundOn ? "🔊 Sound on" : "🔈 Sound off") + "</button></div>";
+  $("#side").innerHTML = html; $("#roll").onclick = roll;
+  $("#skip").onclick = function(){ if (busy) return; addLog("⏭ " + esc(team().name) + " skipped a turn."); nextTurn(); };
+  $("#endg").onclick = function(){ if (busy) return; if (confirm("End the game now and show the winners?")) finish(); };
+  $("#snd").onclick = function(){ soundOn = !soundOn; side(); }; }
+function nextTurn(){ G.turn = (G.turn + 1) % G.teams.length; save(); placeTokens(); side(); }
+function walk(t, to, done){ var step = function(){ if (t.pos === to) return done(); t.pos += to > t.pos ? 1 : -1; placeTokens(); sStep(); setTimeout(step, RM ? 0 : 170); }; step(); }
+function roll(){ if (busy || G.over) return; busy = true; var t = team(), r = 1 + Math.floor(Math.random() * 6), d = $("#die"); G.last = r; t.rolls++;
+  d.innerHTML = dieFace(r); d.classList.remove("roll"); void d.offsetWidth; d.classList.add("roll"); $("#roll").disabled = true; tone([60 + r * 2], 0.12, "square", 0, 0.05);
+  var to = Math.min(t.pos + r, cap(t), END);
+  setTimeout(function(){ walk(t, to, function(){
+    var i = SQ[to], s = i !== undefined ? stops[i] : null;
+    addLog(t.tok + " " + esc(t.name) + " rolled " + r + ".");
+    if (to >= END){ save(); busy = false; return finish(t); }
+    if (s && !t.cleared[s.id]) return setTimeout(function(){ challenge(t, s); }, RM ? 0 : 350);
+    if (LAD[to] || SNK[to]) return setTimeout(function(){ hazard(t, to); }, RM ? 0 : 350);
+    busy = false; nextTurn(); }); }, RM ? 0 : 450); }
+
+/* ---------- question overlay ---------- */
+var tmr = null;
+function overlay(html, after){ var o = $("#ov"); o.innerHTML = '<div class="qcard">' + html + "</div>"; o.hidden = false; if (after) after(); var f = $("[data-focus]", o); if (f) f.focus(); }
+function closeOv(){ clearInterval(tmr); $("#ov").hidden = true; $("#ov").innerHTML = ""; }
+function startTimer(onEnd){ clearInterval(tmr); if (!G.timer) return; var left = G.timer, el = $("#qt"); el.hidden = false;
+  var paint = function(){ el.textContent = "⏱ " + left; el.classList.toggle("low", left <= 10); };
+  paint(); tmr = setInterval(function(){ left--; paint(); if (left <= 0){ clearInterval(tmr); onEnd(); } }, 1000); }
+function pickQ(s){ var used = G.used[s.id] || [], pool = s.bank.map(function(_, k){ return k; }).filter(function(k){ return used.indexOf(k) < 0; });
+  if (!pool.length){ used = []; pool = s.bank.map(function(_, k){ return k; }); } var q = pool[Math.floor(Math.random() * pool.length)]; used.push(q); G.used[s.id] = used; return q; }
+function answerButtons(opts, right){ return '<div class="answers">' + opts.map(function(o, k){ return '<button type="button" class="ans" data-ok="' + (o === right ? 1 : 0) + '"' + (k === 0 ? " data-focus" : "") + '><span class="lt">' + "ABC"[k] + "</span> " + o + "</button>"; }).join("") + "</div>"; }
+function challenge(t, s){ var b = s.bank[pickQ(s)], opts = shuffle([b[1]].concat(b[2]));
+  overlay('<div class="qhead" style="--tc:' + t.color + '"><span class="e">' + t.tok + '</span><span><small>' + esc(t.name) + '</small><b>' + s.icon + " Square " + s.sq + ": " + esc(s.title) + '</b></span><span class="qt" id="qt" hidden></span></div>' +
+    '<div class="speaker">' + window.SVGS.glitch + '<div class="bubble"><span class="who">The Glitch asks</span>' + b[0] + "</div></div>" + answerButtons(opts, b[1]) + '<p class="feedback" id="fb" aria-live="polite"></p><div class="btns" id="go" hidden></div>',
+    function(){ var done = false, judge = function(btn){ if (done) return; done = true; clearInterval(tmr);
+        $$("#ov .ans").forEach(function(x){ x.disabled = true; if (x.dataset.ok === "1") x.classList.add("right"); });
+        var ok = btn && btn.dataset.ok === "1"; if (btn && !ok) btn.classList.add("wrong");
+        if (ok){ t.cleared[s.id] = true; t.right++; sGood(); $("#fb").textContent = "Correct! " + t.name + " clears square " + s.sq + " and scores a point.";
+          addLog("✅ " + esc(t.name) + " cleared square " + s.sq + "."); }
+        else { t.wrong++; sBad(); $("#fb").textContent = (btn ? "Not quite." : "Time’s up!") + " The answer is: " + b[1] + ". " + t.name + " slides back 3 squares.";
+          addLog("⚡ " + esc(t.name) + " missed square " + s.sq + " and slid back."); }
+        save(); var g = $("#go"); g.hidden = false; g.innerHTML = '<button class="btn gold" id="cont">Next team</button>'; $("#cont").focus();
+        $("#cont").onclick = function(){ closeOv(); if (!ok){ var to = Math.max(0, s.sq - 3); walk(t, to, function(){ busy = false; save(); nextTurn(); }); } else { busy = false; nextTurn(); } }; };
+      $$("#ov .ans").forEach(function(x){ x.onclick = function(){ judge(x); }; }); startTimer(function(){ judge(null); }); }); }
+function pickFact(){ var all = []; stops.forEach(function(s){ s.facts.forEach(function(f, k){ all.push({f: f, key: s.id + k}); }); });
+  var fresh = all.filter(function(p){ return !G.fused[p.key]; }); if (!fresh.length){ G.fused = {}; fresh = all; } var p = fresh[Math.floor(Math.random() * fresh.length)]; G.fused[p.key] = 1; return p.f; }
+function hazard(t, sq){ var isL = !!LAD[sq], dest = isL ? LAD[sq] : SNK[sq], f = pickFact();
+  overlay('<div class="qhead" style="--tc:' + t.color + '"><span class="e">' + t.tok + '</span><span><small>' + esc(t.name) + '</small><b>' + (isL ? "🪜 Ladder! Climb to square " + dest + "?" : "🐍 Snake on square " + sq + "!") + '</b></span><span class="qt" id="qt" hidden></span></div>' +
+    '<div class="speaker">' + (isL ? window.SVGS.bot : window.SVGS.glitch) + '<div class="bubble"><span class="who">' + (isL ? "Patch asks" : "The Glitch hisses") + "</span>" + (isL ? "Fact or glitch? Get it right to climb the ladder." : "Fact or glitch? Get it right, or slide down to square " + dest + ".") + "</div></div>" +
+    '<p class="claim">“' + f[0] + '”</p><div class="answers two"><button type="button" class="ans" data-v="1" data-focus>✅ Fact</button><button type="button" class="ans" data-v="0">⚡ Glitch</button></div><p class="feedback" id="fb" aria-live="polite"></p><div class="btns" id="go" hidden></div>',
+    function(){ var done = false, judge = function(btn){ if (done) return; done = true; clearInterval(tmr);
+        var ok = !!btn && (btn.dataset.v === "1") === f[1]; $$("#ov .ans").forEach(function(x){ x.disabled = true; if ((x.dataset.v === "1") === f[1]) x.classList.add("right"); else if (x === btn) x.classList.add("wrong"); });
+        $("#fb").textContent = (btn ? "" : "Time’s up! ") + f[2]; if (ok) sGood(); else sBad();
+        var move = (isL && ok) || (!isL && !ok), label = isL ? (ok ? "Climb to square " + dest : "Stay on square " + sq) : (ok ? "Dodge the snake" : "Slide down to square " + dest);
+        addLog(isL ? (ok ? "🪜 " + esc(t.name) + " climbed to " + dest + "." : "🪜 " + esc(t.name) + " missed the ladder.") : (ok ? "🐍 " + esc(t.name) + " dodged the snake." : "🐍 " + esc(t.name) + " slid to " + dest + "."));
+        var g = $("#go"); g.hidden = false; g.innerHTML = '<button class="btn gold" id="cont">' + label + "</button>"; $("#cont").focus();
+        $("#cont").onclick = function(){ closeOv(); if (move){ if (isL) sClimb(); else sSlide(); t.pos = dest; placeTokens(); } busy = false; save(); nextTurn(); }; };
+      $$("#ov .ans").forEach(function(x){ x.onclick = function(){ judge(x); }; }); startTimer(function(){ judge(null); }); }); }
+
+/* ---------- finish ---------- */
+function finish(winner){ G.over = true; save(); sWin(); closeOv();
+  var rank = G.teams.slice().sort(function(a, b){ return (b.pos - a.pos) || (b.right - a.right) || (a.wrong - b.wrong); }), first = winner || rank[0];
+  screen.className = "center";
+  screen.innerHTML = '<div class="bigicon">🏆</div><h1 class="big"><span>' + esc(first.name) + '</span></h1><p class="lede">' + (winner ? first.tok + " " + esc(first.name) + " reached square 50 and rebooted the Digital Stage!" : "Time’s up! " + esc(first.name) + " got the farthest.") + "</p>" +
+    '<div class="program"><h3>Final standings</h3><div class="tablewrap"><table><thead><tr><th>Place</th><th>Team</th><th>Square</th><th>Correct</th><th>Missed</th></tr></thead><tbody>' +
+    rank.map(function(x, i){ return "<tr><td>" + (i + 1) + "</td><td>" + x.tok + " " + esc(x.name) + "</td><td>" + x.pos + "</td><td>" + x.right + "</td><td>" + x.wrong + "</td></tr>"; }).join("") + "</tbody></table></div></div>" +
+    '<div class="btns"><button class="btn gold" id="again">New game</button></div>';
+  $("#again").onclick = setup; }
+
+document.addEventListener("keydown", function(e){ if (e.key === " " && $("#roll") && !$("#roll").disabled && $("#ov").hidden && document.activeElement.tagName !== "INPUT"){ e.preventDefault(); roll(); } });
+window.__class = {g: function(){ return G; }, roll: roll};
+load(); setup();
+})();
+</script>
+</body></html>
