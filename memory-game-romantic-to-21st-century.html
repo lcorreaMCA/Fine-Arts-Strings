@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Memory Game: Romantic Era to the 21st Century</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F1EC; --surface:#FFFFFF; --ink:#1E2A33; --muted:#566370; --line:#D8D4CB;
+  --blue:#2F6286; --blue-soft:#E3ECF3; --terra:#A9502B; --gold:#9A7630; --green:#3F7A55; --green-soft:#E3F0E7; --plum:#6E3A63; --red:#B23B3B; --red-soft:#F7E3E3;
+  --board:#1E2A33; --board-ink:#F3F1EC;
+  --serif:"Cormorant Garamond", Garamond, "Times New Roman", serif;
+  --sans:"Atkinson Hyperlegible", "Segoe UI", Arial, sans-serif;
+  color-scheme:light; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#151A1F; --surface:#1F262D; --ink:#E9EDF0; --muted:#A3AFBA; --line:#36414B;
+  --blue:#7DB0D6; --blue-soft:#1D2D3A; --terra:#E38D66; --gold:#D8B46A; --green:#7FC197; --green-soft:#1C3024; --plum:#C890BE; --red:#E58A8A; --red-soft:#3A2020;
+  --board:#0E1216; --board-ink:#E9EDF0; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#151A1F; --surface:#1F262D; --ink:#E9EDF0; --muted:#A3AFBA; --line:#36414B;
+  --blue:#7DB0D6; --blue-soft:#1D2D3A; --terra:#E38D66; --gold:#D8B46A; --green:#7FC197; --green-soft:#1C3024; --plum:#C890BE; --red:#E58A8A; --red-soft:#3A2020;
+  --board:#0E1216; --board-ink:#E9EDF0; color-scheme:dark; }
+*,*::before,*::after{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.5}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.wrap{max-width:980px;margin:0 auto;padding:18px 16px 40px}
+.screen{display:none} .screen.on{display:block}
+.center{text-align:center}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;font-size:14.5px;color:var(--muted)}
+.icon{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px;font-size:14.5px}
+/* title */
+.hero{background:var(--board);color:var(--board-ink);border-radius:16px;padding:44px 20px 40px;position:relative;overflow:hidden}
+.hero .tiles{display:flex;justify-content:center;gap:10px;margin-bottom:22px}
+.hero .tiles span{width:46px;height:60px;border-radius:8px;display:grid;place-items:center;font-family:var(--serif);font-size:28px;font-weight:700;color:#fff;transform:rotate(var(--r))}
+.kicker{font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin:0 0 4px}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(46px,10vw,88px);line-height:.95;margin:0}
+h1 small{display:block;font-size:.42em;letter-spacing:.3em;margin-top:6px}
+.sub{font-size:19px;margin:16px auto 26px;max-width:34ch;opacity:.9}
+.big{border:0;border-radius:999px;background:var(--gold);color:#1E2A33;font-weight:700;font-size:20px;padding:12px 34px;letter-spacing:.04em}
+.big:hover{filter:brightness(1.08)}
+/* setup */
+h2{font-family:var(--serif);font-weight:700;font-size:clamp(30px,5vw,40px);line-height:1.1;margin:10px 0 6px}
+.lead{color:var(--muted);margin:0 0 16px}
+.choices{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:22px}
+.choice{text-align:left;background:var(--surface);border:1.5px solid var(--line);border-left:6px solid var(--c,var(--blue));border-radius:10px;padding:12px 14px}
+.choice b{display:block;font-size:17px} .choice span{display:block;font-size:14.5px;color:var(--muted)}
+.choice[aria-pressed="true"]{border-color:var(--c,var(--blue));box-shadow:0 0 0 2px var(--c,var(--blue)) inset}
+.levels .choice{--c:var(--ink);border-left-width:1.5px}
+.go{display:flex;justify-content:flex-end}
+.btn{border:1.5px solid var(--blue);background:var(--blue);color:var(--surface);font-weight:700;border-radius:10px;padding:10px 20px}
+.btn.alt{background:var(--surface);color:var(--blue)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+/* countdown */
+.count{background:var(--board);color:var(--board-ink);border-radius:16px;min-height:360px;display:grid;place-items:center;text-align:center}
+.count div{font-family:var(--serif);font-weight:700;font-size:clamp(56px,12vw,110px);line-height:1}
+.count div.pop{animation:pop .9s ease-out}
+@keyframes pop{0%{transform:scale(.6);opacity:0}30%{transform:scale(1.08);opacity:1}100%{transform:scale(1)}}
+/* game */
+.hud{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 16px;margin-bottom:10px}
+.hud .name{font-weight:700}
+.stats{display:flex;gap:14px;font-size:15px;color:var(--muted)}
+.stats b{color:var(--ink)}
+.clock{font-variant-numeric:tabular-nums;font-weight:700;font-size:22px;background:var(--board);color:var(--board-ink);border-radius:8px;padding:2px 12px;min-width:84px;text-align:center}
+.clock.warn{background:var(--red);color:#fff}
+.timebar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:12px}
+.timebar span{display:block;height:100%;background:var(--gold);width:100%;transition:width 1s linear}
+.board{display:grid;gap:10px;grid-template-columns:repeat(var(--cols),1fr);perspective:1200px}
+.card{position:relative;border:0;padding:0;background:none;min-height:118px;transform-style:preserve-3d;transition:transform .4s cubic-bezier(.2,.7,.3,1)}
+.card.up,.card.done{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:10px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:8px 8px 8px;text-align:center;overflow:hidden}
+.back{background:var(--c);color:#fff;font-family:var(--serif);font-size:40px;font-weight:700;box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.back::before{content:"";position:absolute;inset:6px;border:1.5px solid rgba(255,255,255,.45);border-radius:7px}
+.front{transform:rotateY(180deg);background:var(--surface);border:2px solid var(--c);color:var(--ink)}
+.front .tag{position:absolute;top:5px;left:0;right:0;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.front .tx{font-size:14px;line-height:1.3;margin-top:10px;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.front.term .tx{font-weight:700;font-size:15px}
+.card.done .front{background:var(--green-soft);border-color:var(--green)}
+.card.done .front .tag{color:var(--green)}
+.card.miss .front{background:var(--red-soft);border-color:var(--red)}
+.read{margin-top:12px;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:10px 14px;min-height:72px;font-size:16px}
+.read p{margin:0 0 4px} .read .hint{color:var(--muted)}
+.read .ok{color:var(--green);font-weight:700} .read .no{color:var(--red);font-weight:700}
+/* end */
+.end{background:var(--board);color:var(--board-ink);border-radius:16px;padding:36px 20px;text-align:center}
+.end h2{font-size:clamp(48px,10vw,84px);margin:0}
+.end .sub{margin:10px auto 18px}
+.end .row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.end .btn{background:var(--gold);border-color:var(--gold);color:#1E2A33}
+.end .btn.alt{background:transparent;color:var(--board-ink);border-color:rgba(255,255,255,.5)}
+.score{display:flex;justify-content:center;gap:22px;flex-wrap:wrap;margin:6px 0 16px;font-size:16px}
+.score b{display:block;font-size:26px;font-variant-numeric:tabular-nums}
+.review{margin-top:18px}
+.review h3{font-size:19px;margin:0 0 8px}
+.review table{width:100%;border-collapse:collapse;background:var(--surface);font-size:15.5px;border:1px solid var(--line)}
+.review td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.review td:nth-child(2){font-weight:700;width:34%}
+.review td.m{width:2.2em;text-align:center;font-weight:700}
+.review tr.yes td.m{color:var(--green)} .review tr.no td.m{color:var(--red)}
+@media (max-width:640px){
+  .board{gap:7px}
+  .card{min-height:104px}
+  .front .tx{font-size:12px;-webkit-line-clamp:6} .front.term .tx{font-size:13px}
+  .back{font-size:30px}
+  .front .tag{font-size:9.5px}
+}
+@media (prefers-reduced-motion:reduce){.card{transition:none}.count div.pop{animation:none}.timebar span{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- TITLE -->
+<section class="screen on" id="s-title">
+  <div class="top"><span>Fine Arts Survey · Test review</span><button class="icon" id="snd" aria-pressed="true">🔊 Sound on</button></div>
+  <div class="hero center">
+    <div class="tiles" aria-hidden="true">
+      <span style="background:#A9502B;--r:-8deg">♪</span><span style="background:#6E3A63;--r:5deg">?</span><span style="background:#2F6286;--r:-3deg">♫</span><span style="background:#3F7A55;--r:7deg">?</span>
+    </div>
+    <p class="kicker">Romantic Era to the 21st Century</p>
+    <h1>MEMORY<small>GAME</small></h1>
+    <p class="sub">Find the pairs before the time runs out! Match each name or term to its clue.</p>
+    <button class="big" id="start">START!</button>
+  </div>
+</section>
+
+<!-- SETUP -->
+<section class="screen" id="s-setup">
+  <h2>Choose your board</h2>
+  <p class="lead">Each board deals new cards from one lesson, so you can play again and again.</p>
+  <div class="choices" id="boards"></div>
+  <h2>Choose your level</h2>
+  <div class="choices levels" id="levels"></div>
+  <div class="go"><button class="btn" id="ready" disabled>Play</button></div>
+</section>
+
+<!-- COUNTDOWN -->
+<section class="screen" id="s-count"><div class="count"><div id="cd">Ready?</div></div></section>
+
+<!-- GAME -->
+<section class="screen" id="s-game">
+  <div class="hud">
+    <span class="name" id="gname"></span>
+    <span class="stats"><span>Pairs <b id="pairs">0/0</b></span><span>Flips <b id="flips">0</b></span></span>
+    <span class="clock" id="clock" role="timer" aria-live="off">00:00</span>
+  </div>
+  <div class="timebar" aria-hidden="true"><span id="tbar"></span></div>
+  <div class="board" id="board"></div>
+  <div class="read" id="read" aria-live="polite"><p class="hint">Flip two cards. Find a name or term and the clue that goes with it.</p></div>
+</section>
+
+<!-- END -->
+<section class="screen" id="s-end">
+  <div class="end">
+    <h2 id="etitle">Finish!</h2>
+    <p class="sub" id="esub">Thanks for playing!</p>
+    <div class="score" id="escore"></div>
+    <div class="row">
+      <button class="btn" id="again">Play this board again</button>
+      <button class="btn alt" id="other">Choose another board</button>
+    </div>
+  </div>
+  <div class="review">
+    <h3>Study the pairs from this board</h3>
+    <table><tbody id="rev"></tbody></table>
+  </div>
+</section>
+
+</div>
+<script>
+var PAIRS = [{"d": "ra", "t": "Romanticism", "c": "Art movement that put emotion and imagination ahead of order and logic"}, {"d": "ra", "t": "Mary Shelley, Frankenstein (1818)", "c": "Began writing it at eighteen; often called the first science-fiction novel"}, {"d": "ra", "t": "The Brontë sisters and George Sand", "c": "Women writers who published under male pen names"}, {"d": "ra", "t": "Caspar David Friedrich", "c": "Tiny, lonely figures before huge skies; the feeling of awe is the sublime"}, {"d": "ra", "t": "John Constable", "c": "English painter who sketched clouds outdoors and painted the countryside, like The Hay Wain"}, {"d": "ra", "t": "J. M. W. Turner", "c": "English painter whose storms and sunsets melt into swirling, glowing light and color"}, {"d": "ra", "t": "Realism", "c": "Painting life as it really is, like Millet’s The Gleaners"}, {"d": "ra", "t": "Rosa Bonheur", "c": "Famous painter of animals; needed a police permit to wear trousers"}, {"d": "ra", "t": "Impressionism", "c": "Named after Claude Monet’s painting Impression, Sunrise; quick, colorful impressions of light"}, {"d": "ra", "t": "Berthe Morisot", "c": "A founding member of the Impressionists who showed her work in their first exhibition in 1874"}, {"d": "ra", "t": "Mary Cassatt", "c": "American Impressionist who painted women and children in tender, everyday moments"}, {"d": "ra", "t": "Melodrama", "c": "Popular plays with music throughout, a hero, a villain, and lots of spectacle"}, {"d": "ra", "t": "Henrik Ibsen, A Doll’s House", "c": "Realistic play; Nora leaves to find out who she really is"}, {"d": "ra", "t": "En pointe", "c": "Dancing on the very tips of the toes"}, {"d": "ra", "t": "Marie Taglioni, La Sylphide (1832)", "c": "First great Romantic ballerina; her bell-shaped white skirt became the Romantic tutu"}, {"d": "rm", "t": "Longer, louder, larger", "c": "How Romantic composers changed Classical forms like the symphony to express their feelings"}, {"d": "rm", "t": "Heart", "c": "Classical music spoke to the head. Romantic music spoke to the…"}, {"d": "rm", "t": "Long and sweeping", "c": "Melodies in Romantic music"}, {"d": "rm", "t": "Huge contrasts, from pppp to ffff", "c": "Dynamics in Romantic music"}, {"d": "rm", "t": "About 45 minutes or more", "c": "Length of a Romantic symphony"}, {"d": "rm", "t": "Close to 100 players", "c": "Size of the orchestra by the end of the Romantic period"}, {"d": "rm", "t": "Ludwig van Beethoven", "c": "The bridge from Classical to Romantic; kept composing after he became completely deaf"}, {"d": "rm", "t": "Fate motif", "c": "Short-short-short-LONG, the idea that opens Beethoven’s Fifth Symphony"}, {"d": "rm", "t": "Rubato", "c": "Slightly holding back or pushing forward the tempo to be more expressive"}, {"d": "rm", "t": "Franz Schubert", "c": "Master of the art song (solo voice and piano); wrote more than 600 songs, including The Erlking"}, {"d": "rm", "t": "Frédéric Chopin", "c": "Wrote almost only for the piano; Polish mazurkas and polonaises; dreamy nocturnes"}, {"d": "rm", "t": "Franz Liszt", "c": "Superstar pianist; his fans’ excitement was called Lisztomania"}, {"d": "rm", "t": "Louis Moreau Gottschalk", "c": "Pianist born in New Orleans; Bamboula was inspired by dances in Congo Square"}, {"d": "rm", "t": "Clara Schumann", "c": "One of the greatest pianists of the 1800s; toured for 61 years and composed"}, {"d": "rm", "t": "Fanny Mendelssohn Hensel", "c": "Wrote more than 450 pieces; some were published under her brother Felix’s name"}, {"d": "rm", "t": "Program music", "c": "Instrumental music that tells a story, like Berlioz’s Symphonie fantastique and its idée fixe"}, {"d": "rm", "t": "Nationalism", "c": "Love of homeland in music, as in Smetana’s The Moldau"}, {"d": "rm", "t": "Libretto", "c": "The words of an opera"}, {"d": "rm", "t": "Aria", "c": "A solo song in an opera about a character’s feelings"}, {"d": "rm", "t": "Soprano", "c": "The highest female voice"}, {"d": "rm", "t": "Leitmotif", "c": "A short musical idea for a character or object, used by Richard Wagner"}, {"d": "rm", "t": "Giuseppe Verdi", "c": "Most popular opera composer; his chorus “Va, pensiero” became a song of Italian independence"}, {"d": "rm", "t": "Avant-garde", "c": "French for “advance guard”: the boldest modern artists, who marched out in front"}, {"d": "mo", "t": "Modernism", "c": "A break with tradition, about 1890–1945, when old ways could not express a new world"}, {"d": "mo", "t": "Expressionism", "c": "Shows intense inner feelings, like Munch’s The Scream"}, {"d": "mo", "t": "Cubism", "c": "Picasso and Braque broke objects into flat, angular pieces seen from several angles at once"}, {"d": "mo", "t": "Abstract art", "c": "Shows moods, shapes, and colors instead of objects, like Kandinsky’s paintings"}, {"d": "mo", "t": "Claude Debussy", "c": "Brought Impressionism into music; misty sounds, new scales, love of tone color"}, {"d": "mo", "t": "Prelude to the Afternoon of a Faun", "c": "Debussy’s piece that opens with a dreamy solo flute"}, {"d": "mo", "t": "Whole-tone and pentatonic scales", "c": "Six notes all a whole step apart; five notes, like the black keys of a piano"}, {"d": "mo", "t": "Igor Stravinsky, The Rite of Spring", "c": "Ballet that caused a riot in Paris in 1913: pounding rhythms, clashing chords, stomping dancers"}, {"d": "mo", "t": "Serge Diaghilev and Vaslav Nijinsky", "c": "The impresario of the Ballets Russes; the dancer who choreographed The Rite"}, {"d": "mo", "t": "Arnold Schoenberg", "c": "Wrote atonal music (no home key) and invented the twelve-tone system"}, {"d": "mo", "t": "Sprechstimme", "c": "Halfway between speaking and singing, used in Pierrot lunaire"}, {"d": "mo", "t": "Dada", "c": "Art movement born in 1916 that celebrated nonsense and chance"}, {"d": "mo", "t": "Surrealism", "c": "Art movement that mixed reality with dreams and the unconscious mind"}, {"d": "mo", "t": "Neoclassicism", "c": "“Back to Bach”: old forms with modern sounds, like Stravinsky’s Pulcinella"}, {"d": "mo", "t": "Béla Bartók", "c": "Recorded folk songs in Hungarian villages; used the piano like a drum"}, {"d": "mo", "t": "Louis Armstrong, George Gershwin", "c": "New Orleans jazz star; Rhapsody in Blue opens with a clarinet glissando"}, {"d": "mo", "t": "William Grant Still", "c": "His Afro-American Symphony was the first work by a Black composer played by a major US orchestra"}, {"d": "mo", "t": "Florence Price", "c": "First Black woman to have a symphony played by a major American orchestra (Chicago, 1933)"}, {"d": "mo", "t": "Aaron Copland, Appalachian Spring", "c": "Ballet for Martha Graham that uses the Shaker hymn Simple Gifts"}, {"d": "jz", "t": "Congo Square", "c": "Where enslaved Africans and free people of color gathered on Sundays to drum and dance"}, {"d": "jz", "t": "Second line", "c": "In a New Orleans parade, the crowd dancing behind the brass band"}, {"d": "jz", "t": "Ragtime", "c": "Syncopated piano music made famous by Scott Joplin"}, {"d": "jz", "t": "Scott Joplin", "c": "The “King of Ragtime”"}, {"d": "jz", "t": "Blues", "c": "A 12-bar pattern with bent “blue notes,” grown from work songs and spirituals"}, {"d": "jz", "t": "Bessie Smith", "c": "The “Empress of the Blues”"}, {"d": "jz", "t": "Call and response", "c": "One voice answered by others, from West African music and church services"}, {"d": "jz", "t": "Syncopation and improvisation", "c": "Accents between the main beats; making up music on the spot"}, {"d": "jz", "t": "Louis Armstrong", "c": "Born in New Orleans in 1901; jazz’s first superstar; made scat singing famous"}, {"d": "jz", "t": "Swing", "c": "Big-band jazz people danced to in the 1930s and 1940s, led by Duke Ellington and Benny Goodman"}, {"d": "jz", "t": "Bebop", "c": "Fast, complex jazz for listening, led by Charlie Parker and Dizzy Gillespie"}, {"d": "jz", "t": "Book musical", "c": "A musical where the songs help tell the story"}, {"d": "jz", "t": "Vaudeville", "c": "A variety show of short acts like songs, comedy, and jugglers, with no story"}, {"d": "jz", "t": "Show Boat (1927)", "c": "Told a serious story about racism, with songs that fit the characters"}, {"d": "jz", "t": "Oklahoma! (1943)", "c": "Rodgers and Hammerstein; started Broadway’s Golden Age"}, {"d": "jz", "t": "“I Want” song", "c": "Early song where the main character tells us what they want most"}, {"d": "jz", "t": "West Side Story (1957)", "c": "Retells Shakespeare’s Romeo and Juliet with two New York gangs"}, {"d": "jz", "t": "Disney on Broadway", "c": "Beauty and the Beast (1994) was first; Julie Taymor directed The Lion King (1997)"}, {"d": "jz", "t": "Pluralism", "c": "Many styles existing at the same time, like a jungle where every kind of plant grows at once"}, {"d": "pm", "t": "Postmodernism", "c": "“After modernism”: mixing old and new styles, and museum art with pop culture"}, {"d": "pm", "t": "Piazza d’Italia (1978)", "c": "Postmodern plaza in New Orleans with Roman columns made of stainless steel and neon"}, {"d": "pm", "t": "John Cage, 4′33″ (1952)", "c": "The pianist plays nothing; the music is every sound in the room"}, {"d": "pm", "t": "Prepared piano", "c": "Cage put screws, bolts, and rubber between the strings"}, {"d": "pm", "t": "Chance music", "c": "Music where some choices are left to chance, like tossing coins or rolling dice"}, {"d": "pm", "t": "Minimalism", "c": "A few simple patterns repeated many times, changing slowly"}, {"d": "pm", "t": "Terry Riley, Steve Reich, Philip Glass", "c": "In C (53 phrases); Clapping Music; Einstein on the Beach"}, {"d": "pm", "t": "Pop Art", "c": "Everyday images from ads and comics in the museum"}, {"d": "pm", "t": "Andy Warhol and Roy Lichtenstein", "c": "32 soup-can paintings; giant comic-book frames with Ben-Day dots"}, {"d": "pm", "t": "Yayoi Kusama", "c": "Polka dots and mirror rooms that seem to go on forever"}, {"d": "pm", "t": "Collage, quotation, and sampling", "c": "Making something new from pieces of things that already exist"}, {"d": "pm", "t": "Hip-hop", "c": "Born at a 1973 party in the Bronx, where DJ Kool Herc repeated the drum “break”"}, {"d": "pm", "t": "Arvo Pärt", "c": "Slow, bell-like style called tintinnabuli (“little bells”)"}, {"d": "pm", "t": "Pauline Oliveros, Meredith Monk, Laurie Anderson", "c": "Deep Listening; voices used like an orchestra; the tape-bow violin and O Superman"}, {"d": "pm", "t": "Ellen Taaffe Zwilich", "c": "First woman to win the Pulitzer Prize for Music (1983)"}, {"d": "pm", "t": "Theatre of the Absurd", "c": "Beckett’s Waiting for Godot: Godot never arrives"}, {"d": "pm", "t": "Postmodern dance", "c": "Dances made from walking, running, and sitting at the Judson Dance Theater"}, {"d": "pm", "t": "Three questions about AI", "c": "Did the artists agree? Were they paid? Who gets the credit?"}, {"d": "c21", "t": "Three roles of technology in the arts", "c": "A tool for making art, a stage for sharing it, and a source of new questions"}, {"d": "c21", "t": "Streaming and algorithms", "c": "Playing music straight from the internet; computer rules that pick your next song"}, {"d": "c21", "t": "Digital audio workstation (DAW)", "c": "Software for recording, editing, and mixing music, like GarageBand"}, {"d": "c21", "t": "Loop and producer", "c": "A short repeating pattern; the person who shapes how a recording sounds"}, {"d": "c21", "t": "Billie Eilish", "c": "Recorded her first album in her brother’s bedroom; won the four biggest Grammys at 18"}, {"d": "c21", "t": "Auto-Tune", "c": "Software that moves a singer’s notes until they are exactly in tune"}, {"d": "c21", "t": "Sampling, remix, mashup", "c": "Borrowing a short piece of an older recording; a new version of a song; two songs combined"}, {"d": "c21", "t": "Lil Nas X, “Old Town Road”", "c": "Beat built from a sample of Nine Inch Nails banjo music; spread on TikTok"}, {"d": "c21", "t": "Credit", "c": "Naming who created a song, dance, or artwork, like Jalaiah Harmon’s “Renegade” dance"}, {"d": "c21", "t": "Virtual choir", "c": "Singers record their parts alone at home, and an editor joins them together into one group"}, {"d": "c21", "t": "Latency", "c": "The tiny internet delay that makes live singing on video calls fall apart"}, {"d": "c21", "t": "AI as a repair tool", "c": "Cleaned up John Lennon’s real voice for the Beatles’ “Now and Then”"}, {"d": "c21", "t": "AI as a creative partner", "c": "Holly Herndon’s Holly+, a digital twin of her own voice"}, {"d": "c21", "t": "AI as a fake copy", "c": "“Heart on My Sleeve” copied Drake’s and the Weeknd’s voices without asking"}, {"d": "c21", "t": "Adaptive music", "c": "Video game music that changes as you play"}, {"d": "c21", "t": "Immersive art", "c": "Art you step inside, like teamLab Borderless in Tokyo"}, {"d": "c21", "t": "David Hockney", "c": "Painted spring arriving at his home on an iPad"}, {"d": "bi", "t": "The supernatural", "c": "Big idea: Schubert’s The Erlking and Mary Shelley’s Frankenstein"}, {"d": "bi", "t": "Love of homeland", "c": "Big idea: Smetana’s The Moldau and Ireland’s Abbey Theatre"}, {"d": "bi", "t": "Moods and impressions", "c": "Big idea: Debussy’s Faun and Monet’s Impression, Sunrise"}, {"d": "bi", "t": "Inner feelings and anxiety", "c": "In music: Schoenberg’s Pierrot lunaire. In another art: Munch’s The Scream"}, {"d": "bi", "t": "Ancient and folk power", "c": "Big idea: The Rite of Spring and Nijinsky’s stomping dancers"}, {"d": "bi", "t": "Breaking things apart", "c": "In music: Schoenberg’s tone row. In another art: Picasso’s Cubism"}, {"d": "bi", "t": "Chance", "c": "In music: Cage’s Music of Changes. In another art: Cunningham’s coin tosses in dance"}, {"d": "bi", "t": "Repetition", "c": "Big idea: Reich’s Clapping Music and Warhol’s repeated soup cans"}, {"d": "bi", "t": "Everyday and popular", "c": "Big idea: Kool Herc’s drum breaks and Judson dancers walking"}, {"d": "bi", "t": "Technology", "c": "Big idea: Virtual Choir and Hockney’s iPad paintings"}];
+var BOARDS = [
+ {id:"ra", name:"Romantic arts", desc:"Literature, painting, theater, and dance", c:"#A9502B"},
+ {id:"rm", name:"Romantic music", desc:"Beethoven, Schubert, Chopin, Clara Schumann", c:"#6E3A63"},
+ {id:"mo", name:"Modernism", desc:"Debussy, Stravinsky, Schoenberg, Cubism", c:"#2F6286"},
+ {id:"jz", name:"Jazz and Broadway", desc:"Congo Square, Armstrong, the musical", c:"#9A7630"},
+ {id:"pm", name:"Postmodernism", desc:"Cage, minimalism, Pop Art, hip-hop", c:"#3F7A55"},
+ {id:"c21", name:"21st century", desc:"DAWs, Auto-Tune, sampling, AI", c:"#B23B3B"},
+ {id:"bi", name:"Big ideas", desc:"Ideas that connect music and the other arts", c:"#4A6A7A"},
+ {id:"all", name:"Mixed review", desc:"Cards from every lesson", c:"#1E2A33"}
+];
+var LEVELS = [
+ {id:"w", name:"Warm-up", pairs:6, secs:120, desc:"6 pairs · 2:00"},
+ {id:"c", name:"Challenge", pairs:8, secs:150, desc:"8 pairs · 2:30"},
+ {id:"e", name:"Expert", pairs:10, secs:180, desc:"10 pairs · 3:00"}
+];
+var KEY="fas-memory-romantic-21st";
+var best={}; try{best=JSON.parse(localStorage.getItem(KEY))||{};}catch(e){}
+function saveBest(){try{localStorage.setItem(KEY,JSON.stringify(best));}catch(e){}}
+var $=function(id){return document.getElementById(id);};
+var boardSel=null, levelSel=null, game=null, timer=null;
+
+/* sound */
+var ac=null, soundOn=true;
+function tone(notes,dur,type,gap){ if(!soundOn) return; try{ ac=ac||new (window.AudioContext||window.webkitAudioContext)(); notes.forEach(function(n,k){ var t=ac.currentTime+k*gap,o=ac.createOscillator(),g=ac.createGain(); o.type=type||"triangle"; o.frequency.value=440*Math.pow(2,(n-69)/12); g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.13,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+dur); o.connect(g).connect(ac.destination); o.start(t); o.stop(t+dur+0.05); }); }catch(e){} }
+var sFlip=function(){tone([76],0.08,"sine",0);}, sGood=function(){tone([72,76,79],0.16,"triangle",0.08);}, sBad=function(){tone([52,49],0.22,"sawtooth",0.12);}, sWin=function(){tone([67,72,76,79,84],0.28,"triangle",0.11);}, sTick=function(){tone([88],0.05,"square",0);};
+$("snd").onclick=function(){ soundOn=!soundOn; this.setAttribute("aria-pressed",soundOn); this.textContent=soundOn?"🔊 Sound on":"🔇 Sound off"; };
+
+function show(id){ document.querySelectorAll(".screen").forEach(function(s){s.classList.toggle("on",s.id===id);}); window.scrollTo(0,0); }
+function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;} return a; }
+function fmt(s){ s=Math.max(0,s); return ("0"+Math.floor(s/60)).slice(-2)+":"+("0"+(s%60)).slice(-2); }
+function esc(t){ return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+function bestTxt(b,l){ var v=best[b+"-"+l]; return v!=null ? "Your best: "+fmt(v) : ""; }
+
+/* setup */
+function buildSetup(){
+  $("boards").innerHTML=BOARDS.map(function(b){ var n=b.id==="all"?PAIRS.length:PAIRS.filter(function(p){return p.d===b.id;}).length;
+    return '<button class="choice" style="--c:'+b.c+'" data-b="'+b.id+'" aria-pressed="'+(boardSel===b.id)+'"><b>'+b.name+'</b><span>'+b.desc+' · '+n+' pairs</span></button>'; }).join("");
+  $("levels").innerHTML=LEVELS.map(function(l){ var bt=boardSel?bestTxt(boardSel,l.id):"";
+    return '<button class="choice" data-l="'+l.id+'" aria-pressed="'+(levelSel===l.id)+'"><b>'+l.name+'</b><span>'+l.desc+(bt?' · '+bt:'')+'</span></button>'; }).join("");
+  document.querySelectorAll("[data-b]").forEach(function(x){ x.onclick=function(){ boardSel=x.dataset.b; buildSetup(); }; });
+  document.querySelectorAll("[data-l]").forEach(function(x){ x.onclick=function(){ levelSel=x.dataset.l; buildSetup(); }; });
+  $("ready").disabled=!(boardSel&&levelSel);
+}
+$("start").onclick=function(){ buildSetup(); show("s-setup"); };
+$("ready").onclick=function(){ countdown(); };
+
+/* countdown: Ready? Steady? GO! */
+function countdown(){
+  show("s-count"); var steps=["Ready?","Steady?","GO!"], i=0;
+  function next(){ var el=$("cd"); el.textContent=steps[i]; el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop"); tone([i<2?67:79],0.18,"triangle",0); i++; if(i<steps.length) setTimeout(next,900); else setTimeout(deal,800); }
+  next();
+}
+
+/* game */
+function deal(){
+  var B=BOARDS.filter(function(b){return b.id===boardSel;})[0], L=LEVELS.filter(function(l){return l.id===levelSel;})[0];
+  var pool=boardSel==="all"?PAIRS:PAIRS.filter(function(p){return p.d===boardSel;});
+  var chosen=shuffle(pool).slice(0,Math.min(L.pairs,pool.length));
+  var cards=[]; chosen.forEach(function(p,i){ cards.push({k:i,kind:"term",text:p.t,p:p}); cards.push({k:i,kind:"clue",text:p.c,p:p}); });
+  cards=shuffle(cards);
+  game={B:B,L:L,chosen:chosen,cards:cards,open:[],found:{},flips:0,left:L.secs,busy:null,over:false};
+  var n=cards.length, wide=window.innerWidth>640;
+  var cols = n<=12 ? (wide?4:3) : n<=16 ? 4 : (wide?5:4);
+  var board=$("board"); board.style.setProperty("--cols",cols);
+  board.innerHTML=cards.map(function(c,i){
+    var col=B.c;
+    return '<button class="card" data-i="'+i+'" style="--c:'+col+'" aria-label="Card '+(i+1)+', face down"><span class="face back" aria-hidden="true">?</span><span class="face front '+c.kind+'"><span class="tag">'+(c.kind==="term"?"Term":"Clue")+'</span><span class="tx">'+esc(c.text)+'</span></span></button>';
+  }).join("");
+  board.querySelectorAll(".card").forEach(function(el){ el.onclick=function(){ flip(+el.dataset.i); }; });
+  $("gname").textContent=B.name+" · "+L.name;
+  $("read").innerHTML='<p class="hint">Flip two cards. Find a name or term and the clue that goes with it.</p>';
+  hud(); show("s-game");
+  clearInterval(timer); timer=setInterval(tick,1000);
+}
+function colorOf(d){ var b=BOARDS.filter(function(x){return x.id===d;})[0]; return b?b.c:"#2F6286"; }
+function hud(){
+  $("pairs").textContent=Object.keys(game.found).length+"/"+game.chosen.length;
+  $("flips").textContent=game.flips;
+  $("clock").textContent=fmt(game.left);
+  $("clock").classList.toggle("warn",game.left<=15);
+  $("tbar").style.width=(game.left/game.L.secs*100)+"%";
+}
+function tick(){ if(game.over) return; game.left--; if(game.left<=10&&game.left>0) sTick(); hud(); if(game.left<=0) end(false); }
+function cardEl(i){ return $("board").querySelector('[data-i="'+i+'"]'); }
+function closeOpen(){ game.open.forEach(function(j){ var e=cardEl(j); e.classList.remove("up","miss"); e.setAttribute("aria-label","Card "+(j+1)+", face down"); }); game.open=[]; }
+function flip(i){
+  if(game.over) return; var c=game.cards[i];
+  if(game.found[c.k]!=null || game.open.indexOf(i)>=0) return;
+  if(game.busy){ clearTimeout(game.busy); game.busy=null; closeOpen(); }
+  game.open.push(i); game.flips++; sFlip();
+  var el=cardEl(i); el.classList.add("up"); el.setAttribute("aria-label",(c.kind==="term"?"Name or term: ":"Clue: ")+c.text);
+  readPanel(); hud();
+  if(game.open.length===2){
+    var a=game.cards[game.open[0]], b=game.cards[game.open[1]];
+    if(a.k===b.k && a.kind!==b.kind){
+      game.found[a.k]=true; game.open.forEach(function(j){ var e=cardEl(j); e.classList.remove("up"); e.classList.add("done"); e.disabled=true; });
+      sGood(); readPanel(true, a.p); game.open=[]; hud();
+      if(Object.keys(game.found).length===game.chosen.length) setTimeout(function(){end(true);},700);
+    } else {
+      sBad(); game.open.forEach(function(j){ cardEl(j).classList.add("miss"); }); readPanel(false);
+      game.busy=setTimeout(function(){ game.busy=null; closeOpen(); }, 2200);
+    }
+  }
+}
+function readPanel(match,p){
+  var r=$("read");
+  if(match===true){ r.innerHTML='<p class="ok">✓ Match!</p><p><b>'+esc(p.t)+'</b>: '+esc(p.c)+'</p>'; return; }
+  var html=game.open.map(function(j){ var c=game.cards[j]; return '<p><b>'+(c.kind==="term"?"Name or term":"Clue")+':</b> '+esc(c.text)+'</p>'; }).join("");
+  if(match===false) html='<p class="no">✗ Not a pair. Try to remember where these cards are.</p>'+html;
+  r.innerHTML=html;
+}
+function end(won){
+  game.over=true; clearInterval(timer); if(game.busy){clearTimeout(game.busy);game.busy=null;}
+  var used=game.L.secs-game.left, k=boardSel+"-"+levelSel, rec=false;
+  if(won){ sWin(); if(best[k]==null||used<best[k]){ best[k]=used; saveBest(); rec=true; } } else sBad();
+  $("etitle").textContent=won?"Finish!":"Time’s up!";
+  $("esub").textContent=won?(rec?"New best time! Thanks for playing!":"Thanks for playing!"):"So close! Start over?";
+  $("escore").innerHTML='<span><b>'+Object.keys(game.found).length+'/'+game.chosen.length+'</b>pairs</span><span><b>'+fmt(used)+'</b>time</span><span><b>'+game.flips+'</b>flips</span>'+(best[k]!=null?'<span><b>'+fmt(best[k])+'</b>best time</span>':'');
+  $("again").textContent=won?"Play this board again":"Start over";
+  $("rev").innerHTML=game.chosen.map(function(p,i){ var y=game.found[i]; return '<tr class="'+(y?"yes":"no")+'"><td class="m">'+(y?"✓":"✗")+'</td><td>'+esc(p.t)+'</td><td>'+esc(p.c)+'</td></tr>'; }).join("");
+  show("s-end");
+}
+$("again").onclick=function(){ countdown(); };
+$("other").onclick=function(){ buildSetup(); show("s-setup"); };
+</script>
+</body>
+</html>
