@@ -1,0 +1,810 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flashcards: Romantic Era to the 21st Century</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#eef0f6; --surface:#ffffff; --ink:#1c1f33; --muted:#5b6078; --line:#d5d9e6;
+  --accent:#3b3a8f; --accent-ink:#ffffff; --good:#1f7a55; --again:#b4452f; --focus:#f2a33a;
+  --shadow:0 1px 2px rgba(28,31,51,.08),0 8px 24px rgba(28,31,51,.10);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#13152a; --surface:#1f2240; --ink:#eceefa; --muted:#a3a8c6; --line:#343862;
+  --accent:#9d9cf2; --accent-ink:#13152a; --good:#5fd0a0; --again:#f08a72; --focus:#f2b35a;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35); color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#13152a; --surface:#1f2240; --ink:#eceefa; --muted:#a3a8c6; --line:#343862;
+  --accent:#9d9cf2; --accent-ink:#13152a; --good:#5fd0a0; --again:#f08a72; --focus:#f2b35a;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35); color-scheme:dark;}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 "Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:44rem;margin:0 auto;padding:1.25rem 1rem 2.5rem}
+h1{font-family:Fraunces,Georgia,"Times New Roman",serif;font-size:clamp(1.5rem,4.5vw,2.1rem);line-height:1.15;margin:.2rem 0 .3rem}
+.lead{color:var(--muted);margin:0 0 1rem}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.decks{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem}
+.deck{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:.32rem .8rem;font-size:.9rem}
+.deck[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:.75rem;flex-wrap:wrap;margin-bottom:.6rem;font-size:.92rem;color:var(--muted)}
+.tally b{color:var(--ink)}
+.tally .k{color:var(--good)} .tally .a{color:var(--again)}
+.progress{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:1rem}
+.progress span{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
+.stage{perspective:1400px}
+.card{position:relative;width:100%;min-height:19rem;border:0;padding:0;background:none;text-align:center;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.2,.7,.3,1)}
+.card.flipped{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:.6rem;padding:2.2rem 1.5rem 1.6rem;background:var(--surface);border-radius:14px;box-shadow:var(--shadow);border-top:8px solid var(--deck,var(--accent));backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.back{transform:rotateY(180deg)}
+.label{position:absolute;top:.7rem;left:1rem;right:1rem;display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted)}
+.front .txt{font-family:Fraunces,Georgia,serif;font-size:clamp(1.45rem,5vw,2.05rem);line-height:1.2}
+.back .txt{font-size:clamp(1.05rem,3.6vw,1.25rem);line-height:1.5;max-width:34rem}
+.hint{font-size:.82rem;color:var(--muted)}
+.tag{display:inline-block;margin-left:.3rem;padding:.05rem .5rem;border-radius:999px;border:1px solid var(--line);font-size:.8rem;color:var(--muted)}
+.controls{display:grid;grid-template-columns:auto 1fr 1fr auto;gap:.5rem;margin-top:1rem}
+.controls button{border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:.65rem .8rem;min-height:2.9rem}
+.controls .again{border-color:var(--again);color:var(--again);font-weight:700}
+.controls .know{border-color:var(--good);color:var(--good);font-weight:700}
+.tools{display:flex;flex-wrap:wrap;gap:.5rem 1rem;margin-top:1.1rem;font-size:.9rem}
+.tools button{background:none;border:0;padding:.2rem 0;color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.done{display:none;text-align:center;background:var(--surface);border-radius:14px;box-shadow:var(--shadow);padding:2rem 1.5rem}
+.done h2{font-family:Fraunces,Georgia,serif;margin:.2rem 0 .5rem}
+.done .row{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;margin-top:1.1rem}
+.done .row button{border:0;border-radius:10px;padding:.65rem 1rem;background:var(--accent);color:var(--accent-ink);font-weight:700}
+.done .row button.alt{background:none;border:1.5px solid var(--line);color:var(--ink)}
+.keys{margin-top:1.4rem;font-size:.82rem;color:var(--muted)}
+kbd{font:inherit;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 .3rem;background:var(--surface)}
+@media (max-width:30rem){.controls{grid-template-columns:1fr 1fr}.controls .nav{order:3}}
+@media (prefers-reduced-motion:reduce){.card,.progress span{transition:none}}
+</style>
+</head>
+<body>
+<main>
+<h1>Flashcards: Romantic Era to the 21st Century</h1>
+<p class="lead">Fine Arts Survey test review. Tap a card to flip it, then sort it: “I know it” or “Study again.”</p>
+
+<div class="decks" id="decks" role="group" aria-label="Choose a deck"></div>
+
+<div class="bar">
+  <span id="pos">Card 1 of 0</span>
+  <span class="tally">✓ <b class="k" id="nk">0</b> know it &nbsp; ↻ <b class="a" id="na">0</b> study again</span>
+</div>
+<div class="progress" aria-hidden="true"><span id="prog"></span></div>
+
+<div id="study">
+  <div class="stage">
+    <button class="card" id="card" aria-live="polite">
+      <div class="face front"><div class="label"><span class="dk"></span><span>Front</span></div><div class="txt" id="ftxt"></div><div class="hint">Tap or press Space to flip</div></div>
+      <div class="face back"><div class="label"><span class="dk"></span><span>Back</span></div><div class="txt" id="btxt"></div></div>
+    </button>
+  </div>
+  <div class="controls">
+    <button class="nav" id="prev" aria-label="Previous card">←</button>
+    <button class="again" id="again">↻ Study again</button>
+    <button class="know" id="know">✓ I know it</button>
+    <button class="nav" id="next" aria-label="Next card">→</button>
+  </div>
+</div>
+
+<div class="done" id="done">
+  <h2>Deck finished!</h2>
+  <p id="donetxt"></p>
+  <div class="row">
+    <button id="redoAgain">Practice my “study again” cards</button>
+    <button class="alt" id="redoAll">Start this deck over</button>
+  </div>
+</div>
+
+<div class="tools">
+  <button id="shuffle">Shuffle</button>
+  <button id="reverse" aria-pressed="false">Show the answer side first</button>
+  <button id="reset">Clear my progress</button>
+</div>
+<p class="keys">Keyboard: <kbd>Space</kbd> flip · <kbd>←</kbd> <kbd>→</kbd> move · <kbd>K</kbd> I know it · <kbd>A</kbd> study again</p>
+</main>
+<script>
+const CARDS = [
+{
+"d": "Romantic: art, theater, dance",
+"f": "Romanticism",
+"b": "A movement in all the arts that valued emotion, imagination, and individuality more than order, balance, and logic. Classical artists spoke to the head; Romantic artists spoke to the heart."
+},
+{
+"d": "Romantic: art, theater, dance",
+"f": "Mary Shelley, <i>Frankenstein</i> (1818)",
+"b": "Began writing it at eighteen; often called the first science-fiction novel"
+},
+{
+"d": "Romantic: art, theater, dance",
+"f": "The Brontë sisters and George Sand",
+"b": "Women writers who published under male <b>pen names</b>"
+},
+{
+"d": "Romantic: art, theater, dance",
+"f": "Caspar David Friedrich",
+"b": "Tiny, lonely figures before huge skies; the feeling of awe is <b>the sublime</b>"
+},
+{
+"d": "Romantic: art, theater, dance",
+"f": "John Constable and J. M. W. Turner",
+"b": "Constable painted the English countryside; Turner painted swirling light and color"
+},
+{
+"d": "Romantic: art, theater, dance",
+"f": "Realism",
+"b": "Painting life as it really is, like Millet’s <i>The Gleaners</i>"
+},
+{
+"d": "Romantic: art, theater, dance",
+"f": "Rosa Bonheur",
+"b": "Famous painter of animals; needed a police permit to wear trousers"
+},
+{
+"d": "Romantic: art, theater, dance",
+"f": "Impressionism",
+"b": "Named after Claude <b>Monet’s</b> painting <b><i>Impression, Sunrise</i></b>; quick, colorful impressions of light"
+},
+{
+"d": "Romantic: art, theater, dance",
+"f": "Berthe Morisot and Mary Cassatt",
+"b": "Women Impressionists; Cassatt painted women and children"
+},
+{
+"d": "Romantic: art, theater, dance",
+"f": "Melodrama",
+"b": "Popular plays with music throughout, a hero, a villain, and lots of spectacle"
+},
+{
+"d": "Romantic: art, theater, dance",
+"f": "Henrik Ibsen, <i>A Doll’s House</i>",
+"b": "Realistic play; Nora leaves to find out who she really is"
+},
+{
+"d": "Romantic: art, theater, dance",
+"f": "En pointe",
+"b": "Dancing on the very tips of the toes"
+},
+{
+"d": "Romantic: art, theater, dance",
+"f": "Marie Taglioni, <i>La Sylphide</i> (1832)",
+"b": "First great Romantic ballerina; her bell-shaped white skirt became the <b>Romantic tutu</b>"
+},
+{
+"d": "Romantic: music",
+"f": "Longer, louder, larger",
+"b": "How Romantic composers changed Classical forms like the symphony to express their feelings"
+},
+{
+"d": "Romantic: music",
+"f": "Goal: Classical vs. Romantic",
+"b": "Classical: Order, balance, clarity: the head<br>Romantic: Emotion and self-expression: the heart"
+},
+{
+"d": "Romantic: music",
+"f": "Melody: Classical vs. Romantic",
+"b": "Classical: Short, balanced phrases<br>Romantic: Long, sweeping melodies"
+},
+{
+"d": "Romantic: music",
+"f": "Dynamics: Classical vs. Romantic",
+"b": "Classical: Dynamics from pp to ff<br>Romantic: Huge contrasts, from pppp to ffff"
+},
+{
+"d": "Romantic: music",
+"f": "Tempo: Classical vs. Romantic",
+"b": "Classical: Steady tempo<br>Romantic: Flexible tempo with <b>rubato</b>"
+},
+{
+"d": "Romantic: music",
+"f": "Length of a symphony: Classical vs. Romantic",
+"b": "Classical: Symphony of about 25 minutes<br>Romantic: Symphony of about 45 minutes or more"
+},
+{
+"d": "Romantic: music",
+"f": "Size of the orchestra: Classical vs. Romantic",
+"b": "Classical: Orchestra of about 20 to 60 players<br>Romantic: Close to 100 players by the end of the century"
+},
+{
+"d": "Romantic: music",
+"f": "Ludwig van Beethoven",
+"b": "The bridge from Classical to Romantic; kept composing after he became completely deaf"
+},
+{
+"d": "Romantic: music",
+"f": "Fate motif",
+"b": "Short-short-short-LONG, the idea that opens Beethoven’s Fifth Symphony"
+},
+{
+"d": "Romantic: music",
+"f": "Rubato",
+"b": "Slightly holding back or pushing forward the tempo to be more expressive"
+},
+{
+"d": "Romantic: music",
+"f": "Franz Schubert",
+"b": "Master of the <b>art song</b> (solo voice and piano); wrote more than 600 songs, including <i>The Erlking</i>"
+},
+{
+"d": "Romantic: music",
+"f": "Frédéric Chopin",
+"b": "Wrote almost only for the <b>piano</b>; Polish mazurkas and polonaises; dreamy <b>nocturnes</b>"
+},
+{
+"d": "Romantic: music",
+"f": "Franz Liszt",
+"b": "Superstar pianist; his fans’ excitement was called <b>Lisztomania</b>"
+},
+{
+"d": "Romantic: music",
+"f": "Louis Moreau Gottschalk",
+"b": "Pianist born in New Orleans; <i>Bamboula</i> was inspired by dances in Congo Square"
+},
+{
+"d": "Romantic: music",
+"f": "Clara Schumann",
+"b": "One of the greatest pianists of the 1800s; toured for 61 years and composed"
+},
+{
+"d": "Romantic: music",
+"f": "Fanny Mendelssohn Hensel",
+"b": "Wrote more than 450 pieces; some were published under her brother Felix’s name"
+},
+{
+"d": "Romantic: music",
+"f": "Program music",
+"b": "Instrumental music that tells a story, like Berlioz’s <i>Symphonie fantastique</i> and its <b>idée fixe</b>"
+},
+{
+"d": "Romantic: music",
+"f": "Nationalism",
+"b": "Love of one’s homeland, as in Smetana’s <i>The Moldau</i> (a Czech river) and Dvořák’s <i>New World Symphony</i>"
+},
+{
+"d": "Romantic: music",
+"f": "Opera words: libretto, aria, soprano",
+"b": "The words of an opera; a solo song about feelings; the highest female voice"
+},
+{
+"d": "Romantic: music",
+"f": "Leitmotif",
+"b": "A short musical idea for a character or object, used by <b>Richard Wagner</b>"
+},
+{
+"d": "Romantic: music",
+"f": "Giuseppe Verdi",
+"b": "Most popular opera composer; his chorus “Va, pensiero” became a song of Italian independence"
+},
+{
+"d": "Modernism",
+"f": "Avant-garde",
+"b": "French for “advance guard”: the boldest modern artists, who marched out in front"
+},
+{
+"d": "Modernism",
+"f": "Modernism",
+"b": "A break with tradition by artists who felt the old, pretty ways could not express a fast-changing world (about 1890–1945)"
+},
+{
+"d": "Modernism",
+"f": "Expressionism",
+"b": "Shows intense inner feelings, like Munch’s <i>The Scream</i>"
+},
+{
+"d": "Modernism",
+"f": "Cubism",
+"b": "<b>Picasso</b> and <b>Braque</b> broke objects into flat, angular pieces seen from several angles at once"
+},
+{
+"d": "Modernism",
+"f": "Abstract art",
+"b": "Shows moods, shapes, and colors instead of objects, like Kandinsky’s paintings"
+},
+{
+"d": "Modernism",
+"f": "Claude Debussy",
+"b": "Brought Impressionism into music; misty sounds, new scales, love of <b>tone color</b>"
+},
+{
+"d": "Modernism",
+"f": "<i>Prelude to the Afternoon of a Faun</i>",
+"b": "Debussy’s piece that opens with a dreamy solo <b>flute</b>"
+},
+{
+"d": "Modernism",
+"f": "Whole-tone and pentatonic scales",
+"b": "Six notes all a whole step apart; five notes, like the black keys of a piano"
+},
+{
+"d": "Modernism",
+"f": "Igor Stravinsky, <i>The Rite of Spring</i>",
+"b": "Ballet that caused a <b>riot</b> in Paris in 1913: pounding rhythms, clashing chords, stomping dancers"
+},
+{
+"d": "Modernism",
+"f": "Serge Diaghilev and Vaslav Nijinsky",
+"b": "The impresario of the Ballets Russes; the dancer who choreographed <i>The Rite</i>"
+},
+{
+"d": "Modernism",
+"f": "Arnold Schoenberg",
+"b": "Wrote <b>atonal</b> music (no home key) and invented the <b>twelve-tone system</b>"
+},
+{
+"d": "Modernism",
+"f": "Sprechstimme",
+"b": "Halfway between speaking and singing, used in <i>Pierrot lunaire</i>"
+},
+{
+"d": "Modernism",
+"f": "Dada and Surrealism",
+"b": "Dada celebrated nonsense and chance; Surrealism mixed reality with dreams"
+},
+{
+"d": "Modernism",
+"f": "Neoclassicism",
+"b": "“Back to Bach”: old forms with modern sounds, like Stravinsky’s <i>Pulcinella</i>"
+},
+{
+"d": "Modernism",
+"f": "Béla Bartók",
+"b": "Recorded folk songs in Hungarian villages; used the piano like a drum"
+},
+{
+"d": "Modernism",
+"f": "Louis Armstrong, George Gershwin",
+"b": "New Orleans jazz star; <i>Rhapsody in Blue</i> opens with a clarinet glissando"
+},
+{
+"d": "Modernism",
+"f": "William Grant Still",
+"b": "His <i>Afro-American Symphony</i> was the first work by a Black composer played by a major American orchestra"
+},
+{
+"d": "Modernism",
+"f": "Florence Price",
+"b": "First Black woman to have a symphony played by a major American orchestra (Chicago, 1933)"
+},
+{
+"d": "Modernism",
+"f": "Aaron Copland, <i>Appalachian Spring</i>",
+"b": "Ballet for Martha Graham that uses the Shaker hymn <i>Simple Gifts</i>"
+},
+{
+"d": "Jazz and Broadway",
+"f": "Congo Square",
+"b": "Where enslaved Africans and free people of color gathered on Sundays to drum and dance"
+},
+{
+"d": "Jazz and Broadway",
+"f": "Brass bands and the second line",
+"b": "Parade bands; the second line is the crowd dancing behind them"
+},
+{
+"d": "Jazz and Broadway",
+"f": "Ragtime",
+"b": "Syncopated piano music; <b>Scott Joplin</b> was the “King of Ragtime”"
+},
+{
+"d": "Jazz and Broadway",
+"f": "Blues",
+"b": "A <b>12-bar</b> pattern with bent “blue notes”; <b>Bessie Smith</b> was the “Empress of the Blues”"
+},
+{
+"d": "Jazz and Broadway",
+"f": "Call and response",
+"b": "One voice answered by others, from West African music and church services"
+},
+{
+"d": "Jazz and Broadway",
+"f": "Syncopation and improvisation",
+"b": "Accents between the main beats; making up music on the spot"
+},
+{
+"d": "Jazz and Broadway",
+"f": "Louis Armstrong",
+"b": "Born in New Orleans in 1901; jazz’s first superstar; made <b>scat singing</b> famous"
+},
+{
+"d": "Jazz and Broadway",
+"f": "Swing",
+"b": "Big-band jazz people danced to in the 1930s and 1940s, led by Duke Ellington and Benny Goodman"
+},
+{
+"d": "Jazz and Broadway",
+"f": "Bebop",
+"b": "Fast, complex jazz for listening, led by Charlie Parker and Dizzy Gillespie"
+},
+{
+"d": "Jazz and Broadway",
+"f": "Book musical",
+"b": "A musical where the songs help tell the story; <b>vaudeville</b> was a variety show with no story"
+},
+{
+"d": "Jazz and Broadway",
+"f": "<i>Show Boat</i> (1927)",
+"b": "Told a serious story about racism, with songs that fit the characters"
+},
+{
+"d": "Jazz and Broadway",
+"f": "<i>Oklahoma!</i> (1943)",
+"b": "Rodgers and Hammerstein; started Broadway’s Golden Age"
+},
+{
+"d": "Jazz and Broadway",
+"f": "“I Want” song",
+"b": "Early song where the main character says what they want most"
+},
+{
+"d": "Jazz and Broadway",
+"f": "<i>West Side Story</i> (1957)",
+"b": "Retells Shakespeare’s <b><i>Romeo and Juliet</i></b> with two New York gangs"
+},
+{
+"d": "Jazz and Broadway",
+"f": "Disney on Broadway",
+"b": "<i>Beauty and the Beast</i> (1994) was first; Julie Taymor directed <i>The Lion King</i> (1997)"
+},
+{
+"d": "Postmodernism",
+"f": "Pluralism",
+"b": "Many styles existing at the same time, like a jungle where every kind of plant grows at once"
+},
+{
+"d": "Postmodernism",
+"f": "Postmodernism",
+"b": "“After modernism”: mixing old and new styles, blurring museum art and popular culture, and asking “Who decides what counts as art?”"
+},
+{
+"d": "Postmodernism",
+"f": "Piazza d’Italia (1978)",
+"b": "Postmodern plaza in New Orleans with Roman columns made of stainless steel and neon"
+},
+{
+"d": "Postmodernism",
+"f": "John Cage, <i>4′33″</i> (1952)",
+"b": "The pianist plays nothing; the music is <b>every sound in the room</b>"
+},
+{
+"d": "Postmodernism",
+"f": "Prepared piano",
+"b": "Cage put screws, bolts, and rubber between the strings"
+},
+{
+"d": "Postmodernism",
+"f": "Chance music",
+"b": "Choices left to chance, like tossing coins; Merce Cunningham used chance in dance"
+},
+{
+"d": "Postmodernism",
+"f": "Minimalism",
+"b": "A few simple patterns <b>repeated many times, changing slowly</b>"
+},
+{
+"d": "Postmodernism",
+"f": "Terry Riley, Steve Reich, Philip Glass",
+"b": "<i>In C</i> (53 phrases); <i>Clapping Music</i>; <i>Einstein on the Beach</i>"
+},
+{
+"d": "Postmodernism",
+"f": "Pop Art",
+"b": "Everyday images from ads and comics in the museum"
+},
+{
+"d": "Postmodernism",
+"f": "Andy Warhol and Roy Lichtenstein",
+"b": "32 soup-can paintings; giant comic-book frames with Ben-Day dots"
+},
+{
+"d": "Postmodernism",
+"f": "Yayoi Kusama",
+"b": "Polka dots and mirror rooms that seem to go on forever"
+},
+{
+"d": "Postmodernism",
+"f": "Collage, quotation, and sampling",
+"b": "Making something new from pieces of things that already exist"
+},
+{
+"d": "Postmodernism",
+"f": "Hip-hop",
+"b": "Born at a 1973 party in the Bronx, where DJ Kool Herc repeated the drum “break”"
+},
+{
+"d": "Postmodernism",
+"f": "Arvo Pärt",
+"b": "Slow, bell-like style called <b>tintinnabuli</b> (“little bells”)"
+},
+{
+"d": "Postmodernism",
+"f": "Pauline Oliveros, Meredith Monk, Laurie Anderson",
+"b": "Deep Listening; voices used like an orchestra; the tape-bow violin and <i>O Superman</i>"
+},
+{
+"d": "Postmodernism",
+"f": "Ellen Taaffe Zwilich",
+"b": "First woman to win the Pulitzer Prize for Music (1983)"
+},
+{
+"d": "Postmodernism",
+"f": "Theatre of the Absurd",
+"b": "Beckett’s <i>Waiting for Godot</i>: Godot never arrives"
+},
+{
+"d": "Postmodernism",
+"f": "Postmodern dance",
+"b": "Judson Dance Theater made dances from ordinary walking, running, and sitting"
+},
+{
+"d": "21st century",
+"f": "Three questions to ask about AI in the arts",
+"b": "Did the artists agree? Were they paid? Who gets the credit?"
+},
+{
+"d": "21st century",
+"f": "Three roles of technology in the arts",
+"b": "A <b>tool</b> for making art, a <b>stage</b> for sharing it, and a source of <b>new questions</b>"
+},
+{
+"d": "21st century",
+"f": "Streaming and algorithms",
+"b": "Playing music straight from the internet; computer rules that pick your next song"
+},
+{
+"d": "21st century",
+"f": "Digital audio workstation (DAW)",
+"b": "Software for recording, editing, and mixing music, like GarageBand"
+},
+{
+"d": "21st century",
+"f": "Loop and producer",
+"b": "A short repeating pattern; the person who shapes how a recording sounds"
+},
+{
+"d": "21st century",
+"f": "Billie Eilish and Finneas",
+"b": "Recorded her first album in Finneas’s small bedroom"
+},
+{
+"d": "21st century",
+"f": "Auto-Tune",
+"b": "Pitch correction that moves a singer’s notes until they are exactly in tune; at its extreme it sounds robotic (T-Pain)"
+},
+{
+"d": "21st century",
+"f": "Sampling, remix, mashup",
+"b": "Borrowing a short piece of an older recording; a new version of a song; two songs combined"
+},
+{
+"d": "21st century",
+"f": "Lil Nas X, “Old Town Road”",
+"b": "Beat built from a <b>sample</b> of Nine Inch Nails banjo music; spread on TikTok"
+},
+{
+"d": "21st century",
+"f": "Credit",
+"b": "Naming who created a song, dance, or artwork, like Jalaiah Harmon’s “Renegade” dance"
+},
+{
+"d": "21st century",
+"f": "Eric Whitacre’s Virtual Choir",
+"b": "Singers record alone at home; an editor joins them into one choir"
+},
+{
+"d": "21st century",
+"f": "Latency",
+"b": "The tiny internet delay that makes live singing on video calls fall apart"
+},
+{
+"d": "21st century",
+"f": "AI as a repair tool",
+"b": "Cleaned up John Lennon’s real voice for the Beatles’ “Now and Then”"
+},
+{
+"d": "21st century",
+"f": "AI as a creative partner",
+"b": "Holly Herndon’s Holly+, a digital twin of her own voice"
+},
+{
+"d": "21st century",
+"f": "AI as a fake copy",
+"b": "“Heart on My Sleeve” copied Drake’s and the Weeknd’s voices without asking"
+},
+{
+"d": "21st century",
+"f": "Adaptive music",
+"b": "Video game music that changes as you play"
+},
+{
+"d": "21st century",
+"f": "Immersive art",
+"b": "Art you step inside, like teamLab Borderless in Tokyo"
+},
+{
+"d": "21st century",
+"f": "David Hockney",
+"b": "Painted spring arriving at his home on an iPad"
+},
+{
+"d": "Big ideas and women",
+"f": "Big idea: The supernatural",
+"b": "In music: Schubert’s <i>The Erlking</i><br>In another art: Mary Shelley’s <i>Frankenstein</i>; the sylph in <i>La Sylphide</i>"
+},
+{
+"d": "Big ideas and women",
+"f": "Big idea: Love of homeland",
+"b": "In music: Chopin’s polonaises; Smetana’s <i>The Moldau</i><br>In another art: Ireland’s Abbey Theatre and Irish folklore"
+},
+{
+"d": "Big ideas and women",
+"f": "Big idea: Moods and impressions",
+"b": "In music: Debussy’s <i>Prelude to the Afternoon of a Faun</i><br>In another art: Monet’s <i>Impression, Sunrise</i>"
+},
+{
+"d": "Big ideas and women",
+"f": "Big idea: Inner feelings and anxiety",
+"b": "In music: Schoenberg’s <i>Pierrot lunaire</i><br>In another art: Munch’s <i>The Scream</i>"
+},
+{
+"d": "Big ideas and women",
+"f": "Big idea: Ancient and folk power",
+"b": "In music: Stravinsky’s <i>The Rite of Spring</i><br>In another art: Nijinsky’s stomping, turned-in dancers"
+},
+{
+"d": "Big ideas and women",
+"f": "Big idea: Breaking things apart",
+"b": "In music: Schoenberg’s tone row<br>In another art: Picasso’s Cubism"
+},
+{
+"d": "Big ideas and women",
+"f": "Big idea: Chance",
+"b": "In music: Cage’s <i>Music of Changes</i><br>In another art: Cunningham’s coin tosses in dance"
+},
+{
+"d": "Big ideas and women",
+"f": "Big idea: Repetition",
+"b": "In music: Reich’s <i>Clapping Music</i><br>In another art: Judd’s identical boxes; Warhol’s repeated soup cans"
+},
+{
+"d": "Big ideas and women",
+"f": "Big idea: Everyday and popular",
+"b": "In music: Kool Herc’s drum breaks<br>In another art: Warhol’s soup cans; Judson dancers walking and running"
+},
+{
+"d": "Big ideas and women",
+"f": "Big idea: Technology",
+"b": "In music: DAWs, Auto-Tune, Virtual Choir<br>In another art: Hockney’s iPad paintings; teamLab’s digital rooms"
+},
+{
+"d": "Big ideas and women",
+"f": "Clara Schumann",
+"b": "Great pianist for 61 years; was told women could not compose <span class=tag>Music</span>"
+},
+{
+"d": "Big ideas and women",
+"f": "Fanny Mendelssohn Hensel",
+"b": "Her father called music “an ornament” for her; some songs were published under her brother’s name <span class=tag>Music</span>"
+},
+{
+"d": "Big ideas and women",
+"f": "Rosa Bonheur",
+"b": "Famous animal painter; needed a permit to wear trousers <span class=tag>Painting</span>"
+},
+{
+"d": "Big ideas and women",
+"f": "Marie Taglioni",
+"b": "First great Romantic ballerina <span class=tag>Dance</span>"
+},
+{
+"d": "Big ideas and women",
+"f": "Bessie Smith",
+"b": "The “Empress of the Blues” <span class=tag>Music</span>"
+},
+{
+"d": "Big ideas and women",
+"f": "Florence Price",
+"b": "First Black woman to have a symphony played by a major American orchestra <span class=tag>Music</span>"
+},
+{
+"d": "Big ideas and women",
+"f": "Yayoi Kusama",
+"b": "Polka dots and endless mirror rooms <span class=tag>Visual art</span>"
+},
+{
+"d": "Big ideas and women",
+"f": "Laurie Anderson",
+"b": "Invented the tape-bow violin; <i>O Superman</i> became a pop hit <span class=tag>Music</span>"
+},
+{
+"d": "Big ideas and women",
+"f": "Ellen Taaffe Zwilich",
+"b": "First woman to win the Pulitzer Prize for Music <span class=tag>Music</span>"
+}
+];
+const COLORS = {"Romantic: art, theater, dance":"#c0587a","Romantic: music":"#8a4fc4","Modernism":"#2f7fbf","Jazz and Broadway":"#d08a1c","Postmodernism":"#2f9a6a","21st century":"#3b8f9e","Big ideas and women":"#b5513a"};
+const DECKS = ["All cards", ...Object.keys(COLORS)];
+CARDS.forEach((c,i)=>c.id=i);
+const KEY = "fas-flashcards-romantic-21st";
+let st = {mark:{}};
+try { st = JSON.parse(localStorage.getItem(KEY)) || st; if(!st.mark) st.mark={}; } catch(e){}
+const save = ()=>{ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} };
+let deck = "All cards", order = [], pos = 0, reverse = false, onlyAgain = false;
+const $ = id=>document.getElementById(id);
+
+function build(){
+  let list = CARDS.filter(c=>deck==="All cards"||c.d===deck);
+  if (onlyAgain) list = list.filter(c=>st.mark[c.id]==="a");
+  order = list.map(c=>c.id); pos = 0;
+}
+function counts(){
+  const ids = CARDS.filter(c=>deck==="All cards"||c.d===deck).map(c=>c.id);
+  let k=0,a=0; ids.forEach(i=>{ if(st.mark[i]==="k")k++; else if(st.mark[i]==="a")a++; });
+  return {k,a,total:ids.length};
+}
+function render(){
+  const {k,a,total} = counts();
+  $("nk").textContent=k; $("na").textContent=a;
+  $("prog").style.width = (total? (k+a)/total*100 : 0)+"%";
+  document.querySelectorAll(".deck").forEach(b=>b.setAttribute("aria-pressed", b.dataset.d===deck));
+  if (pos >= order.length){
+    $("study").style.display="none"; $("done").style.display="block";
+    $("pos").textContent = order.length+" of "+order.length;
+    $("donetxt").textContent = a ? `You know ${k} of ${total} cards. ${a} ${a===1?"card needs":"cards need"} more practice.` : `You know all ${total} cards in this deck. Great work!`;
+    $("redoAgain").style.display = a ? "" : "none";
+    return;
+  }
+  $("study").style.display=""; $("done").style.display="none";
+  const c = CARDS[order[pos]];
+  const card = $("card"); card.classList.remove("flipped");
+  card.style.setProperty("--deck", COLORS[c.d]);
+  card.querySelectorAll(".face").forEach(f=>f.style.setProperty("--deck", COLORS[c.d]));
+  card.querySelectorAll(".dk").forEach(s=>s.textContent=c.d);
+  $("ftxt").innerHTML = reverse ? c.b : c.f;
+  $("btxt").innerHTML = reverse ? c.f : c.b;
+  card.querySelector(".front .txt").style.fontFamily = reverse ? "inherit" : "";
+  card.querySelector(".front .txt").style.fontSize = reverse ? "clamp(1.05rem,3.6vw,1.25rem)" : "";
+  card.querySelector(".back .txt").style.fontFamily = reverse ? "Fraunces,Georgia,serif" : "";
+  card.querySelector(".back .txt").style.fontSize = reverse ? "clamp(1.45rem,5vw,2.05rem)" : "";
+  $("pos").textContent = `Card ${pos+1} of ${order.length}` + (onlyAgain?" (study again)":"");
+  $("card").setAttribute("aria-label", "Card "+(pos+1)+". Press to flip.");
+}
+function flip(){ $("card").classList.toggle("flipped"); }
+function mark(v){ if(pos>=order.length)return; st.mark[order[pos]]=v; save(); pos++; render(); }
+function shuffle(){ for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];} pos=0; render(); }
+
+DECKS.forEach(d=>{
+  const b=document.createElement("button"); b.className="deck"; b.dataset.d=d;
+  const n = d==="All cards"?CARDS.length:CARDS.filter(c=>c.d===d).length;
+  b.textContent = `${d} (${n})`;
+  b.onclick=()=>{ deck=d; onlyAgain=false; build(); render(); };
+  $("decks").appendChild(b);
+});
+$("card").onclick=flip;
+$("know").onclick=()=>mark("k");
+$("again").onclick=()=>mark("a");
+$("next").onclick=()=>{ if(pos<order.length-1){pos++;render();} };
+$("prev").onclick=()=>{ if(pos>0){pos--;render();} };
+$("shuffle").onclick=shuffle;
+$("reverse").onclick=function(){ reverse=!reverse; this.setAttribute("aria-pressed",reverse); this.textContent = reverse?"Show the term side first":"Show the answer side first"; render(); };
+$("reset").onclick=()=>{ if(confirm("Clear all your “I know it” and “study again” marks?")){ st={mark:{}}; save(); onlyAgain=false; build(); render(); } };
+$("redoAgain").onclick=()=>{ onlyAgain=true; build(); shuffle(); };
+$("redoAll").onclick=()=>{ const ids=CARDS.filter(c=>deck==="All cards"||c.d===deck).map(c=>c.id); ids.forEach(i=>delete st.mark[i]); save(); onlyAgain=false; build(); render(); };
+document.addEventListener("keydown",e=>{
+  if(e.target.closest && e.target.closest(".tools,.decks,.done")) return;
+  if(e.key===" "){ if(e.target.tagName==="BUTTON") return; e.preventDefault(); if(pos<order.length) flip(); }
+  else if(e.key==="ArrowRight") $("next").click();
+  else if(e.key==="ArrowLeft") $("prev").click();
+  else if(e.key.toLowerCase()==="k") mark("k");
+  else if(e.key.toLowerCase()==="a") mark("a");
+});
+build(); render();
+</script>
+</body>
+</html>
